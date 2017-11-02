@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Notice Board" >
+        <menu>
+        <item
+            android:id="@+id/nav_notice_board"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/notice_board" />
+
+        <item
+            android:id="@+id/nav_complaint"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="complaint" />
+        <item
+            android:id="@+id/nav_news"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/new_updates" />
+            <item
+            android:id="@+id/nav_tourism"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/torisum" />
+        </menu>
+    </item>
+    <item android:title="Ward">
+        <menu>
+        <item
+            android:id="@+id/nav_ward"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="ward" />
+        <item
+            android:id="@+id/nav_praphag"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/prabhag" />
+        <item
+            android:id="@+id/nav_ward_member"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/ward_member" />
+        </menu>
+    </item>
+    <item android:title="User">
+        <menu>
+        <item
+            android:id="@+id/nav_registration"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/registration" />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/profile" />
+        <item
+            android:id="@+id/nav_suggestion"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/suggestion" />
+        <item
+            android:id="@+id/nav_change_password"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/change_pswd" />
+        <item
+            android:id="@+id/nav_feedback"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/feedback" />
+        <item
+            android:id="@+id/nav_forget_pswd"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/forget_pswd" />
+            </menu>
+    </item>
+
+
+    <item android:title="Contact">
+        <menu>
+            <item
+                android:id="@+id/nav_emgs_no"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/emegency_numbers" />
+            <item
+                android:id="@+id/nav_contact"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/contact" />
+        </menu>
+    </item>
+
+</menu>

@@ -1,0 +1,125 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="itg8.com.wmcapp.torisum.TorisumDetailsFragment">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/back_torisum"
+        android:scaleType="fitXY"/>
+
+    <itg8.com.wmcapp.widget.CustomFontTextView
+        android:id="@+id/lbl_place_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/img"
+        android:ellipsize="end"
+        android:inputType="text"
+        android:lines="2"
+        android:maxLines="2"
+        android:text="Place Name"
+        android:textAllCaps="true"
+        android:textColor="@color/colorBlack"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:font_value="ROBOTO_MEDIUM" />
+
+
+        <itg8.com.wmcapp.widget.CustomFontTextView
+            android:id="@+id/lbl_place_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="5"
+            android:layout_below="@+id/lbl_place_name"
+            android:maxLines="5"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:text="Short Description of this place Short Description of this placeShort Description of this place Short Description of this placeShort Description of this place..."
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            app:font_value="ROBOTO_REGULAR" />
+
+
+        <itg8.com.wmcapp.widget.CustomFontTextView
+            android:id="@+id/lbl_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/lbl_place_description"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:text="Open Until: 7 pm"
+            android:textColor="@color/colorGreen"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:font_value="ROBOTO_MEDIUM" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            style="@android:style/Widget.DeviceDefault.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lbl_place_description"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:numStars="5"
+            android:rating="3.5"
+            android:stepSize=".5" />
+
+
+        <itg8.com.wmcapp.widget.CustomFontTextView
+            android:id="@+id/lbl_reviews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lbl_place_description"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/ratingBar"
+            android:text=" 568 reviews"
+            android:textColor="@color/colorGray"
+            android:textSize="14sp"
+            app:font_value="ROBOTO_REGULAR" />
+
+        <LinearLayout
+            android:id="@+id/ll_navi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lbl_reviews"
+            android:orientation="horizontal">
+
+            <itg8.com.wmcapp.widget.CustomFontTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:drawablePadding="10dp"
+                android:drawableStart="@drawable/ic_directions_black_24dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                android:padding="10dp"
+                android:text="@s"
+                app:font_value="ROBOTO_REGULAR"/>
+        </LinearLayout>
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/ll_navi"
+            tools:context="itg8.com.wmcapp.MapsActivity" />
+
+
+    </RelativeLayout>
+
+
+</ScrollView>
