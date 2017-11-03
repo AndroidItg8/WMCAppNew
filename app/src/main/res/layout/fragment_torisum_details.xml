@@ -65,7 +65,6 @@
 
         <RatingBar
             android:id="@+id/ratingBar"
-            style="@android:style/Widget.DeviceDefault.RatingBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/lbl_place_description"
@@ -105,7 +104,6 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="14sp"
                 android:padding="10dp"
-                android:text="@s"
                 app:font_value="ROBOTO_REGULAR"/>
         </LinearLayout>
 

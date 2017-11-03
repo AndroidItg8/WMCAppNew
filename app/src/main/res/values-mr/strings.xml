@@ -1,0 +1,22 @@
+<resources>
+         <string name = "app_name"> WMC  </string>  
+         <string name = "title_home"> मुख्यपृष्ठ  </string>  
+         <string name = "title_dashboard"> डॅशबोर्ड  </string>  
+         <string name = "title_notifications"> सूचना  </string>  
+         <string name = "no_location_data_provided"> कोणतेही स्थान सापडले नाही  </string>  
+         <string name = "no_address_found"> ​​एकही स्थान सापडले नाही  </string>  
+         <string name = "address_found"> ​​पत्ता सापडला  </string>  
+         <string name = "service_not_available"> प्ले सेवा उपलब्ध नाही  </string>  
+         <string name = "invalid_lat_long_used"> अवैध की  </string>  
+
+         <string name = "hello_blank_fragment"> हॅलो रिक्त भाग  </string>  
+         <string name = "imgadd"> imgAdd  </string>  
+         <string name = "enter_description"> वर्णन प्रविष्ट करा  </string>  
+         <string name = "other_address"> पत्ता  </string>  
+         <string name = "rationale_no_permission"> कृपया पुढे जाण्यास परवानगी मंजूर करा.  </string>  
+         <string name = "rationale_call_permission"> कृपया कॉल परवानगी द्या  </string>  
+         <string name = "current_location"> वर्तमान स्थान  </string>  
+         <string name = "other_location"> दुसरा पत्ता  </string>  
+         <string name = "show_identity"> ओळख दर्शवा  </string>  
+         <string name = "hide_identity"> ओळख लपवा  </string>  
+</resources>

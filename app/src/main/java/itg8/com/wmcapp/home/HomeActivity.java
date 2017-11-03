@@ -9,14 +9,12 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import itg8.com.wmcapp.R;
-import itg8.com.wmcapp.common_method.BaseActivity;
-import itg8.com.wmcapp.common_method.CommonMethod;
+import itg8.com.wmcapp.common.BaseActivity;
 import itg8.com.wmcapp.complaint.ComplaintFragment;
 import itg8.com.wmcapp.signup.SignUpFragment;
 import itg8.com.wmcapp.torisum.TorisumFragment;

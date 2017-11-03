@@ -1,19 +1,20 @@
-package itg8.com.wmcapp.common_method;
+package itg8.com.wmcapp.common;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
-
-import itg8.com.wmcapp.R;
 
 /**
  * Created by Android itg 8 on 11/1/2017.
  */
 
 public class CommonMethod {
+
+    public static final String BASE_URL = "";
+    public static final String RECEIVER = "myReceiver";
+    public static final String LOCATION_DATA_EXTRA = "LocationDataExtras";
+    public static final int FAILURE_RESULT = 111;
+    public static final int SUCCESS_RESULT = 112;
+    public static final String RESULT_DATA_KEY = "resultJet";
 
     private static Typeface typeface;
 

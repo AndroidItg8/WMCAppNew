@@ -24,4 +24,25 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="torisum">Tourism</string>
     <string name="title_activity_maps">Map</string>
+
+    <!--from swappy-->
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="no_location_data_provided">No Location Found</string>
+    <string name="no_address_found">No Location Found</string>
+    <string name="address_found">Address found</string>
+    <string name="service_not_available">No play service available</string>
+    <string name="invalid_lat_long_used">Invalid key</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="imgadd">imgAdd</string>
+    <string name="enter_description">Enter Description</string>
+    <string name="other_address">Address</string>
+    <string name="rationale_no_permission">Please grant permission to further proceed.</string>
+    <string name="rationale_call_permission">Please provide call permission</string>
+    <string name="current_location">Current Location</string>
+    <string name="other_location">Other Location</string>
+    <string name="show_identity">Show Identity</string>
+    <string name="hide_identity">Hide Identity</string>
 </resources>

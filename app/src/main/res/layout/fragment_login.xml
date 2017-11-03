@@ -135,16 +135,13 @@
                 app:srcCompat="@drawable/ic_arrow_forward_black_24dp" />
 
 
-            <com.github.rahatarmanahmed.cpv.CircularProgressView
+            <android.support.v4.widget.CircleImageView
                 android:id="@+id/progressView"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="16dp"
                 android:visibility="gone"
-                app:cpv_animAutostart="true"
-                app:cpv_color="@color/colorAccent"
-                app:cpv_indeterminate="true"
-                app:cpv_thickness="2dp" />
+                />
         </FrameLayout>
 
         <LinearLayout

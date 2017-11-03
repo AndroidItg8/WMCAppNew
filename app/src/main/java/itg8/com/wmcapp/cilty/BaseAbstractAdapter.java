@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import itg8.com.wmcapp.common_method.CommonMethod;
+import itg8.com.wmcapp.common.CommonMethod;
 
 /**
  * Created by Android itg 8 on 11/1/2017.
