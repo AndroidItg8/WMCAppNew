@@ -319,6 +319,7 @@ public final class Prefs {
      * @see Editor#putStringSet(String, Set)
      * @see #putOrderedStringSet(String, Set)
      */
+    @SuppressLint("ObsoleteSdkInt")
     @SuppressWarnings("WeakerAccess")
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static void putStringSet(final String key, final Set<String> value) {
