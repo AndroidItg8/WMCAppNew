@@ -45,4 +45,5 @@
     <string name="other_location">Other Location</string>
     <string name="show_identity">Show Identity</string>
     <string name="hide_identity">Hide Identity</string>
+    <string name="logout">Logout</string>
 </resources>

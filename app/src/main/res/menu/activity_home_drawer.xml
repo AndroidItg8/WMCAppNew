@@ -24,46 +24,30 @@
     </item>
     <item android:title="Ward">
         <menu>
-        <item
-            android:id="@+id/nav_ward"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="ward" />
+
         <item
             android:id="@+id/nav_praphag"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/prabhag" />
-        <item
-            android:id="@+id/nav_ward_member"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/ward_member" />
+
         </menu>
     </item>
     <item android:title="User">
         <menu>
-        <item
-            android:id="@+id/nav_registration"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/registration" />
-        <item
-            android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/profile" />
+
         <item
             android:id="@+id/nav_suggestion"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/suggestion" />
-        <item
-            android:id="@+id/nav_change_password"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/change_pswd" />
+            <item
+                android:id="@+id/nav_emgs_no"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/emegency_numbers" />
         <item
             android:id="@+id/nav_feedback"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/feedback" />
-        <item
-            android:id="@+id/nav_forget_pswd"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/forget_pswd" />
+
             </menu>
     </item>
 
@@ -71,13 +55,18 @@
     <item android:title="Contact">
         <menu>
             <item
-                android:id="@+id/nav_emgs_no"
-                android:icon="@drawable/ic_menu_manage"
-                android:title="@string/emegency_numbers" />
+                android:id="@+id/nav_profile"
+                android:icon="@drawable/ic_menu_gallery"
+                android:title="@string/profile" />
             <item
                 android:id="@+id/nav_contact"
                 android:icon="@drawable/ic_menu_manage"
                 android:title="@string/contact" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/logout" />
+
         </menu>
     </item>
 
