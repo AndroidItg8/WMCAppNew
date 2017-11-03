@@ -1,13 +1,21 @@
 package itg8.com.wmcapp.news;
 
 
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.transition.Fade;
+import android.transition.TransitionInflater;
+import android.transition.TransitionSet;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,6 +32,8 @@ public class NewsFragment extends Fragment implements NewsAdapter.NewsItemClicke
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final long FADE_DEFAULT_TIME = 400;
+    private static final long MOVE_DEFAULT_TIME = 100;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     Unbinder unbinder;
@@ -31,6 +41,7 @@ public class NewsFragment extends Fragment implements NewsAdapter.NewsItemClicke
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private NewsDetailsFragment fragment;
 
 
     public NewsFragment() {
@@ -69,8 +80,8 @@ public class NewsFragment extends Fragment implements NewsAdapter.NewsItemClicke
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_news, container, false);
-        init();
         unbinder = ButterKnife.bind(this, view);
+        init();
         return view;
     }
 
@@ -85,8 +96,38 @@ public class NewsFragment extends Fragment implements NewsAdapter.NewsItemClicke
         unbinder.unbind();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onItemNewsClicked() {
+    public void onItemNewsClicked(int position, ImageView img) {
+        fragment = NewsDetailsFragment.newInstance(String.valueOf(position), "");
 
+        // 1. Exit for Previous Fragment
+        Fade exitFade = new Fade();
+        exitFade.setDuration(FADE_DEFAULT_TIME);
+        Fragment previousFragment = getFragmentManager().findFragmentById(R.id.frame_container);
+
+        previousFragment.setExitTransition(exitFade);
+
+
+        // 2. Shared Elements Transition
+        TransitionSet enterTransitionSet = new TransitionSet();
+        enterTransitionSet.addTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.move));
+        enterTransitionSet.setDuration(MOVE_DEFAULT_TIME);
+        enterTransitionSet.setStartDelay(FADE_DEFAULT_TIME);
+        fragment.setSharedElementEnterTransition(enterTransitionSet);
+
+        // 3. Enter Transition for New Fragment
+        Fade enterFade = new Fade();
+        enterFade.setStartDelay(MOVE_DEFAULT_TIME + FADE_DEFAULT_TIME);
+        enterFade.setDuration(FADE_DEFAULT_TIME);
+        fragment.setEnterTransition(enterFade);
+
+    FragmentManager fm =getFragmentManager();
+    img.setTransitionName(String.valueOf(position));
+    FragmentTransaction fragmentTransaction= fm.beginTransaction();
+        fragmentTransaction.addSharedElement(img, img.getTransitionName());
+        fragmentTransaction.replace(R.id.frame_container, fragment);
+        fragmentTransaction.addToBackStack(fragment.getClass().getSimpleName());
+        fragmentTransaction.commitAllowingStateLoss();
     }
 }

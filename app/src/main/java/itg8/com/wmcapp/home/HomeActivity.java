@@ -23,6 +23,7 @@ import itg8.com.wmcapp.common.CallType;
 import itg8.com.wmcapp.common.CommonCallback;
 import itg8.com.wmcapp.common.CustomDialogFragment;
 import itg8.com.wmcapp.complaint.ComplaintFragment;
+import itg8.com.wmcapp.news.NewsFragment;
 import itg8.com.wmcapp.prabhag.PrabhagFragment;
 import itg8.com.wmcapp.prabhag.WardMemberFragment;
 import itg8.com.wmcapp.prabhag.dummy.DummyContent;
@@ -110,6 +111,7 @@ public class HomeActivity extends BaseActivity
                 fragment = TorisumFragment.newInstance("", "");
                 break;
             case R.id.nav_news:
+                 fragment = NewsFragment.newInstance("", "");
                 break;
 
             case R.id.nav_praphag:

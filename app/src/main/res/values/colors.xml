@@ -12,6 +12,7 @@
     <color name="transparentBlackList">#32000000</color>
     <color name="colorFacebook">#385C8E</color>
     <color name="colorGoogle">#631109</color>
+    <color name="colorRed">#5563120a</color>
     <color name="bg_edittext_stroke_color">#c4c1c1</color>
     <color name="transparentBlackHalf">#5b000000</color>
 </resources>
