@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.board.NoticeBoardFragment;
 import itg8.com.wmcapp.common.BaseActivity;
 import itg8.com.wmcapp.common.CallType;
 import itg8.com.wmcapp.common.CommonCallback;
@@ -100,6 +101,7 @@ public class HomeActivity extends BaseActivity
         Fragment fragment = null;
         switch (item.getItemId()) {
             case R.id.nav_notice_board:
+                fragment = NoticeBoardFragment.newInstance("", "");
                 break;
             case R.id.nav_complaint:
                 fragment = ComplaintFragment.newInstance("", "");
@@ -109,22 +111,16 @@ public class HomeActivity extends BaseActivity
                 break;
             case R.id.nav_news:
                 break;
-            case R.id.nav_ward:
-                break;
-            case R.id.nav_praphag:
 
+            case R.id.nav_praphag:
+                isFrom = PRABHAG;
+               fragment= PrabhagFragment.newInstance(1);
                 break;
-            case R.id.nav_ward_member:
-                break;
-            case R.id.nav_registration:
-                break;
+
             case R.id.nav_profile:
                 fragment = ComplaintFragment.newInstance("", "");
                 break;
-            case R.id.nav_forget_pswd:
-                break;
-            case R.id.nav_change_password:
-                break;
+
             case R.id.nav_suggestion:
                 break;
             case R.id.nav_feedback:
@@ -143,11 +139,6 @@ public class HomeActivity extends BaseActivity
         return true;
     }
 
-
-    private void showPrabhag() {
-        isFrom = PRABHAG;
-        callFragment(PrabhagFragment.newInstance(1));
-    }
 
     private void showWard() {
         isFrom = WARD;

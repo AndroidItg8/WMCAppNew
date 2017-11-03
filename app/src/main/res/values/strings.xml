@@ -46,4 +46,8 @@
     <string name="show_identity">Show Identity</string>
     <string name="hide_identity">Hide Identity</string>
     <string name="logout">Logout</string>
+    <string name="invalid_email">Invalid Email</string>
+    <string name="invalid_pass">Invalid Password</string>
+    <string name="empty">Field is empty</string>
+    <string name="url_login">aaa</string>
 </resources>

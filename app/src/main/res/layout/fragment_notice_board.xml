@@ -1,0 +1,21 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorGrayLight"
+    tools:context="itg8.com.wmcapp.board.NoticeBoardFragment">
+
+
+        <include layout="@layout/layout_complaint"
+            android:id="@+id/includeComplaint"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/includeComplaint"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recyclerView"/>
+
+
+
+
+</RelativeLayout>

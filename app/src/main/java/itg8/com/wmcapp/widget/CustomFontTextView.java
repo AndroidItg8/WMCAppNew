@@ -53,10 +53,12 @@ public class CustomFontTextView extends TextView {
 
     public void setFont(Context context) {
 
+
         Typeface customFont = null;
         switch (fontType) {
             case ROBOTO_LIGHT:
                 customFont = Typeface.createFromAsset(context.getAssets(), "font/Roboto-Light.ttf");
+
                 break;
             case ROBOTO_REGULAR:
                 customFont = Typeface.createFromAsset(context.getAssets(), "font/Roboto-Regular.ttf");

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardUseCompatPadding="true"
+    app:cardPreventCornerOverlap="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/img_garbage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/bpkuti"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/customFontTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@drawable/bg_gradient"
+                android:gravity="center_vertical"
+                android:paddingBottom="10dp"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                android:maxLines="2"
+                android:lines="2"
+                android:ellipsize="end"
+                android:text="Notice Title"
+                android:textColor="@color/colorWhite"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/roboto_mono_thin"
+                />
+        </FrameLayout>
+            <itg8.com.wmcapp.widget.CustomFontTextView
+                android:id="@+id/lbl_title_only"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_gradient"
+                android:gravity="center_vertical"
+                android:paddingBottom="10dp"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                android:maxLines="1"
+                android:lines="1"
+                android:ellipsize="end"
+                android:visibility="visible"
+                android:text="Notice Title Only"
+                android:textColor="@color/colorWhite"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:font_value="ROBOTO_MEDIUM" />
+        </FrameLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <itg8.com.wmcapp.widget.CustomFontTextView
+            android:id="@+id/lbl_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_margin="08dp"
+            android:maxLines="3"
+            android:lines="3"
+            android:ellipsize="end"
+            android:visibility="visible"
+            android:text="Notice Title Only.Notice Title Only.Notice Title Only.Notice Title Only.Notice Title Only.Notice Title Only.Notice Title Only"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp"
+            android:textStyle="bold"
+           app:font_value="ROBOTO_LIGHT" />
+        <itg8.com.wmcapp.widget.CustomFontTextView
+            android:id="@+id/lbl_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lbl_description"
+            android:layout_margin="10dp"
+            android:layout_alignParentEnd="true"
+            android:textSize="14sp"
+            android:text="11-3-2017"
+            android:fontFamily="@font/roboto"
+            android:textColor="@color/colorGray"/>
+
+
+
+
+    </RelativeLayout>
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

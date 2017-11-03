@@ -8,6 +8,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:id="@+id/frame"
+        android:visibility="gone"
         android:layout_height="200dp">
 
         <ImageView

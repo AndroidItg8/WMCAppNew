@@ -11,7 +11,9 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -78,4 +80,7 @@ private Interceptor getHeader(final String header){
 
     }
 
+    public Call<ResponseBody> checkAuthentication(String url, String password, String username, String password1) {
+        return null;
+    }
 }

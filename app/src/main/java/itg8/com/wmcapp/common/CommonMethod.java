@@ -15,6 +15,7 @@ public class CommonMethod {
     public static final int FAILURE_RESULT = 111;
     public static final int SUCCESS_RESULT = 112;
     public static final String RESULT_DATA_KEY = "resultJet";
+    public static final String HEADER = "HEADER";
 
     private static Typeface typeface;
 

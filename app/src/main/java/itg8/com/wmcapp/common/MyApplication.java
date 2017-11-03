@@ -33,4 +33,7 @@ public class MyApplication extends Application{
     }
 
 
+    public Retro getRetroController() {
+        return null;
+    }
 }
