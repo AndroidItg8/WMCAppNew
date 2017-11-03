@@ -32,7 +32,7 @@ public class ComplaintFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private android.content.Context mContext;
+    private Context mContext;
     private ComplaintAdapter adapter;
 
 
@@ -46,7 +46,7 @@ public class ComplaintFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ComplaintFragment.
+     * @return A new instance of fragment AddComplaintFragment.
      */
     // TODO: Rename and change types and number of parameters
     public static ComplaintFragment newInstance(String param1, String param2) {
