@@ -23,12 +23,16 @@ import itg8.com.wmcapp.common.CallType;
 import itg8.com.wmcapp.common.CommonCallback;
 import itg8.com.wmcapp.common.CustomDialogFragment;
 import itg8.com.wmcapp.complaint.ComplaintFragment;
+import itg8.com.wmcapp.contact.ContactUsFragment;
+import itg8.com.wmcapp.emergency.EmergencyFragment;
+import itg8.com.wmcapp.feedback.FeedbackFragment;
 import itg8.com.wmcapp.news.NewsFragment;
 import itg8.com.wmcapp.prabhag.PrabhagFragment;
 import itg8.com.wmcapp.prabhag.WardMemberFragment;
 import itg8.com.wmcapp.prabhag.dummy.DummyContent;
 import itg8.com.wmcapp.prabhag.model.ContactModel;
 import itg8.com.wmcapp.signup.SignUpFragment;
+import itg8.com.wmcapp.suggestion.SuggestionFragment;
 import itg8.com.wmcapp.torisum.TorisumFragment;
 
 import static itg8.com.wmcapp.common.CallType.PRABHAG;
@@ -41,7 +45,7 @@ public class HomeActivity extends BaseActivity
         PrabhagFragment.OnListFragmentInteractionListener {
 
     private CallType isFrom;
-    private ComplaintFragment fragment;
+    Fragment fragment = null;
     CommonCallback.OnDialogClickListner listner;
     String[] items = {"Pick From Camera", "Pick From File"};
 
@@ -69,6 +73,9 @@ public class HomeActivity extends BaseActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        fragment = NoticeBoardFragment.newInstance("", "");
+        callFragment(fragment);
     }
 
 
@@ -99,7 +106,7 @@ public class HomeActivity extends BaseActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        Fragment fragment = null;
+
         switch (item.getItemId()) {
             case R.id.nav_notice_board:
                 fragment = NoticeBoardFragment.newInstance("", "");
@@ -124,12 +131,21 @@ public class HomeActivity extends BaseActivity
                 break;
 
             case R.id.nav_suggestion:
+                fragment = SuggestionFragment.newInstance("","");
                 break;
             case R.id.nav_feedback:
+                fragment = FeedbackFragment.newInstance("","");
                 break;
             case R.id.nav_emgs_no:
+                fragment = EmergencyFragment.newInstance("","");
                 break;
             case R.id.nav_contact:
+                fragment = ContactUsFragment.newInstance("", "");
+                break;
+                case R.id.nav_change_pswd:
+                fragment = SignUpFragment.newInstance("", "");
+                break;
+                case R.id.nav_registration:
                 fragment = SignUpFragment.newInstance("", "");
                 break;
         }

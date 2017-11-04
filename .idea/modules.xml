@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/WMCAppNew.iml" filepath="$PROJECT_DIR$/.idea/WMCAppNew.iml" />
-      <module fileurl="file://D:\Ayesha\Github\WMCAppNew\.idea\WMCAppNew.iml" filepath="D:\Ayesha\Github\WMCAppNew\.idea\WMCAppNew.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://D:\Ayesha\Github\WMCAppNew\app\app.iml" filepath="D:\Ayesha\Github\WMCAppNew\app\app.iml" />
     </modules>
   </component>
 </project>

@@ -4,6 +4,7 @@ package itg8.com.wmcapp.news;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v4.view.ViewCompat;
 import android.transition.Fade;
 import android.transition.TransitionInflater;
 import android.transition.TransitionSet;
@@ -101,33 +102,34 @@ public class NewsFragment extends Fragment implements NewsAdapter.NewsItemClicke
     public void onItemNewsClicked(int position, ImageView img) {
         fragment = NewsDetailsFragment.newInstance(String.valueOf(position), "");
 
-        // 1. Exit for Previous Fragment
-        Fade exitFade = new Fade();
-        exitFade.setDuration(FADE_DEFAULT_TIME);
-        Fragment previousFragment = getFragmentManager().findFragmentById(R.id.frame_container);
-
-        previousFragment.setExitTransition(exitFade);
-
-
-        // 2. Shared Elements Transition
-        TransitionSet enterTransitionSet = new TransitionSet();
-        enterTransitionSet.addTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.move));
-        enterTransitionSet.setDuration(MOVE_DEFAULT_TIME);
-        enterTransitionSet.setStartDelay(FADE_DEFAULT_TIME);
-        fragment.setSharedElementEnterTransition(enterTransitionSet);
-
-        // 3. Enter Transition for New Fragment
-        Fade enterFade = new Fade();
-        enterFade.setStartDelay(MOVE_DEFAULT_TIME + FADE_DEFAULT_TIME);
-        enterFade.setDuration(FADE_DEFAULT_TIME);
-        fragment.setEnterTransition(enterFade);
+//        // 1. Exit for Previous Fragment
+//        Fade exitFade = new Fade();
+//        exitFade.setDuration(FADE_DEFAULT_TIME);
+//        Fragment previousFragment = getFragmentManager().findFragmentById(R.id.frame_container);
+//
+//        previousFragment.setExitTransition(exitFade);
+//
+//
+//        // 2. Shared Elements Transition
+//        TransitionSet enterTransitionSet = new TransitionSet();
+//        enterTransitionSet.addTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.move));
+//        enterTransitionSet.setDuration(MOVE_DEFAULT_TIME);
+//        enterTransitionSet.setStartDelay(FADE_DEFAULT_TIME);
+//        fragment.setSharedElementEnterTransition(enterTransitionSet);
+//
+//        // 3. Enter Transition for New Fragment
+//        Fade enterFade = new Fade();
+//        enterFade.setStartDelay(MOVE_DEFAULT_TIME + FADE_DEFAULT_TIME);
+//        enterFade.setDuration(FADE_DEFAULT_TIME);
+//        fragment.setEnterTransition(enterFade);
 
     FragmentManager fm =getFragmentManager();
     img.setTransitionName(String.valueOf(position));
     FragmentTransaction fragmentTransaction= fm.beginTransaction();
-        fragmentTransaction.addSharedElement(img, img.getTransitionName());
+        fragmentTransaction.addSharedElement(img,  ViewCompat.getTransitionName(img));
         fragmentTransaction.replace(R.id.frame_container, fragment);
         fragmentTransaction.addToBackStack(fragment.getClass().getSimpleName());
-        fragmentTransaction.commitAllowingStateLoss();
+        fragmentTransaction.commit();
+    //    fragmentTransaction.commitAllowingStateLoss();
     }
 }

@@ -42,4 +42,6 @@
         <string name = "show_identity"> पहचान दिखाएँ </string>
         <string name = "hide_identity"> पहचान छुपाएं </string>
 
-    </resources>
+    <string name="contact_us">हमसे संपर्क करें</string>
+
+</resources>

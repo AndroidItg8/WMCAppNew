@@ -132,10 +132,11 @@
                 android:layout_margin="16dp"
                 android:visibility="visible"
                 app:fabSize="normal"
+                android:id="@+id/fab_login"
                 app:srcCompat="@drawable/ic_arrow_forward_black_24dp" />
 
 
-            <android.support.v4.widget.CircleImageView
+            <com.github.rahatarmanahmed.cpv.CircularProgressView
                 android:id="@+id/progressView"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
@@ -156,7 +157,7 @@
             android:weightSum="2">
 
             <Button
-                android:id="@+id/btn_save"
+                android:id="@+id/btn_facebook"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -166,7 +167,7 @@
                 android:textColor="@color/colorFacebook" />
 
             <Button
-                android:id="@+id/btn_signUp"
+                android:id="@+id/btn_google"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

@@ -8,18 +8,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.common.BaseFragment;
+import itg8.com.wmcapp.complaint.AddComplaintFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link NoticeBoardFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NoticeBoardFragment extends Fragment {
+public class NoticeBoardFragment extends BaseFragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -27,10 +30,13 @@ public class NoticeBoardFragment extends Fragment {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     Unbinder unbinder;
+    @BindView(R.id.rl_include)
+    RelativeLayout rlInclude;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Fragment fragment= null;
 
 
     public NoticeBoardFragment() {
@@ -70,7 +76,8 @@ public class NoticeBoardFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_notice_board, container, false);
         unbinder = ButterKnife.bind(this, view);
-         init();
+rlInclude.setOnClickListener(this);
+        init();
         return view;
     }
 
@@ -84,5 +91,18 @@ public class NoticeBoardFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId())
+        {
+            case R.id.rl_include:
+                fragment = AddComplaintFragment.newInstance("","");
+
+                break;
+
+        }
+        callFragment(fragment);
     }
 }

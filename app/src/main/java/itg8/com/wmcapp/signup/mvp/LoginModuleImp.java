@@ -46,8 +46,8 @@ public class LoginModuleImp implements LoginMvp.LoginModule {
     }
 
     @Override
-    public void onSendToServer(Retro controller, String string, String username, String password, LoginMvp.LoginListener loginPresenterImp) {
-
+    public void onSendToServer(Retro controller, String url, String username, String password, LoginMvp.LoginListener loginPresenterImp) {
+//Call<ResponseBody> call= controller.checkAuthentication(url,)
     }
 
     @Override

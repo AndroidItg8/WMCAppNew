@@ -26,8 +26,8 @@
 
     <style name="inputText" parent="TextAppearance.Design.Hint">
         <item name="colorControlNormal">@color/colorGray</item>
-    <item name="colorControlActivated">@color/colorPrimary</item>
-    <item name="colorControlHighlight">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="colorControlHighlight">@color/colorPrimary</item>
     </style>
 
 
@@ -40,6 +40,10 @@
     <style name="menu_labels_style">
         <item name="android:background">@drawable/fab_label_background</item>
         <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="ToolbarColoredBackArrow" parent="AppTheme">
+        <item name="android:textColorSecondary">@android:color/white</item>
     </style>
 
 </resources>

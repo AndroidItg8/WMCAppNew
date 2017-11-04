@@ -1,18 +1,22 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="itg8.com.wmcapp.change_password.ChangePswdFragment">
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
 
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="40dp"/>
+            android:layout_height="200dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/bpkuti" />
 
 
 
@@ -33,7 +37,6 @@
                 android:singleLine="true"
                 android:inputType="textPassword"
                 android:visibility="gone"
-
                 android:textColor="@color/colorBlack"
                 android:textSize="15sp"
                 android:hint="Enter Old Password" />
@@ -44,6 +47,7 @@
             android:layout_width="match_parent"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_height="wrap_content">
 
             <EditText
@@ -56,6 +60,7 @@
                 android:inputType="textPassword"
                 android:textColor="@color/colorBlack"
                 android:textSize="15sp"
+                android:textColorHint="@color/colorBlack"
                 android:hint="Enter New Password" />
 
         </android.support.design.widget.TextInputLayout>
@@ -76,6 +81,8 @@
                 android:inputType="textPassword"
                 android:textColor="@color/colorBlack"
                 android:textSize="15sp"
+                android:textColorHint="@color/colorBlack"
+
                 android:hint="Enter New  Confirm Password" />
 
         </android.support.design.widget.TextInputLayout>
@@ -95,15 +102,18 @@
             android:id="@+id/btn_submit"
             android:text="submit"/>
 
-        <android.support.v4.widget.CircleImageView
+        <com.github.rahatarmanahmed.cpv.CircularProgressView
             android:id="@+id/progressView"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:visibility="gone"
+            app:cpv_color="@color/colorPrimary"
+            app:cpv_thickness="2dp"
+            app:cpv_indeterminate="true"
             />
-
-    </LinearLayout>
+</LinearLayout>
+    </ScrollView>
 
 
 

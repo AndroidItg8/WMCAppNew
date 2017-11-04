@@ -5,12 +5,16 @@
     android:background="@color/colorGrayLight"
     tools:context="itg8.com.wmcapp.board.NoticeBoardFragment">
 
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rl_include">
         <include layout="@layout/layout_complaint"
-            android:id="@+id/includeComplaint"/>
+           />
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/includeComplaint"
+        android:layout_below="@+id/rl_include"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/recyclerView"/>

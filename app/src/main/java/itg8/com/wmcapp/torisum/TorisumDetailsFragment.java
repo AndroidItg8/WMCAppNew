@@ -6,27 +6,46 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.widget.AutoScrollViewPager;
+import itg8.com.wmcapp.widget.CustomFontTextView;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link TorisumDetailsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TorisumDetailsFragment extends Fragment  {
+public class TorisumDetailsFragment extends Fragment {
     //implements OnMapReadyCallback
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    @BindView(R.id.viewPager)
+    AutoScrollViewPager viewPager;
+    @BindView(R.id.lbl_place_name)
+    CustomFontTextView lblPlaceName;
+    @BindView(R.id.lbl_place_description)
+    CustomFontTextView lblPlaceDescription;
+    @BindView(R.id.lbl_time)
+    CustomFontTextView lblTime;
+    @BindView(R.id.ratingBar)
+    RatingBar ratingBar;
+    @BindView(R.id.lbl_reviews)
+    CustomFontTextView lblReviews;
+    @BindView(R.id.ll_navi)
+    LinearLayout llNavi;
+//    @BindView(R.id.map)
+//    android.widget.fragment map;
+    Unbinder unbinder;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -69,11 +88,23 @@ public class TorisumDetailsFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_torisum_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_torisum_details, container, false);
 //        SupportMapFragment mapFragment = (SupportMapFragment).getSupportFragmentManager()
 //                .findFragmentById(R.id.map);
 //        mapFragment.getMapAsync(this);
-        return view ;
+        unbinder = ButterKnife.bind(this, view);
+        int[] mDrawables= {R.drawable.bpkuti, R.drawable.garbage};
+        ItemPagerAdapter adapter = new ItemPagerAdapter(getActivity(), mDrawables);
+        viewPager.setAdapter(adapter);
+        viewPager.startAutoScroll(6000);
+
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
 //    @Override

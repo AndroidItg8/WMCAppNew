@@ -10,6 +10,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.cilty.model.CityModel;
 
 /**
  * Created by Android itg 8 on 11/1/2017.
@@ -17,12 +18,13 @@ import itg8.com.wmcapp.R;
 
 public class CityAdapter extends BaseAbstractAdapter {
 
+    private final List<CityModel> list;
     private Context context;
 
-    CityAdapter(Context context, List<String> data) {
+    CityAdapter(Context context, List<CityModel> data) {
         super(context, data);
         this.context = context;
-//        this.data = data;
+        this.list = data;
     }
 
 
@@ -38,9 +40,9 @@ public class CityAdapter extends BaseAbstractAdapter {
 
     @Override
     public void onBindData(RecyclerView.ViewHolder holder, Object val) {
-//        if (val instanceof NewsModel) {
-//
-//        }
+        if (val instanceof CityModel) {
+
+        }
 
 
     }

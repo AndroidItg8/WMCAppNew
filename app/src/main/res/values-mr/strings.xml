@@ -18,5 +18,9 @@
          <string name = "current_location"> वर्तमान स्थान  </string>  
          <string name = "other_location"> दुसरा पत्ता  </string>  
          <string name = "show_identity"> ओळख दर्शवा  </string>  
-         <string name = "hide_identity"> ओळख लपवा  </string>  
+         <string name = "hide_identity"> ओळख लपवा  </string>
+        <string name = "hospital"> रूग्णालय</string>
+        <string name="contact_us">आमच्याशी संपर्क साधा</string>
+
+
 </resources>

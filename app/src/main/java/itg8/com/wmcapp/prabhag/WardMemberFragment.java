@@ -127,18 +127,6 @@ public class WardMemberFragment extends Fragment implements ContactRvAdapter.OnC
     }
 
     @Override
-    public void onMessageClicked(ContactModel model) {
-        Intent smsIntent = new Intent(Intent.ACTION_VIEW);
-        //TODO implementation put contact number after provided for sms
-        Uri data = Uri.parse("sms:");
-        smsIntent.setData(data);
-//        smsIntent.putExtra("address", "1234567890");
-//        smsIntent.putExtra("sms_body", "From WMC");
-//        startActivity(Intent.createChooser(smsIntent, "SMS:"));
-        startActivity(smsIntent);
-    }
-
-    @Override
     public void onCallClicked(ContactModel model) {
         //TODO implement: change below code as per model data after tel;
         if(!hasCallPermission)
@@ -158,4 +146,18 @@ public class WardMemberFragment extends Fragment implements ContactRvAdapter.OnC
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         hasCallPermission=false;
     }
+
+
+    @Override
+    public void onMessageClicked(ContactModel model) {
+        Intent smsIntent = new Intent(Intent.ACTION_VIEW);
+        //TODO implementation put contact number after provided for sms
+        Uri data = Uri.parse("sms:");
+        smsIntent.setData(data);
+//        smsIntent.putExtra("address", "1234567890");
+//        smsIntent.putExtra("sms_body", "From WMC");
+//        startActivity(Intent.createChooser(smsIntent, "SMS:"));
+        startActivity(smsIntent);
+    }
+
 }

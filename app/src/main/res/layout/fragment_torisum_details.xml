@@ -8,11 +8,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/img"
+    <itg8.com.wmcapp.widget.AutoScrollViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:src="@drawable/back_torisum"
         android:scaleType="fitXY"/>
 
     <itg8.com.wmcapp.widget.CustomFontTextView
@@ -20,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:layout_below="@+id/img"
+        android:layout_below="@+id/viewPager"
         android:ellipsize="end"
         android:inputType="text"
         android:lines="2"
@@ -65,14 +64,16 @@
 
         <RatingBar
             android:id="@+id/ratingBar"
+            style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/lbl_place_description"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
             android:numStars="5"
             android:rating="3.5"
-            android:stepSize=".5" />
+            android:stepSize=".5"/>
 
 
         <itg8.com.wmcapp.widget.CustomFontTextView
@@ -101,9 +102,22 @@
                 android:layout_weight="1"
                 android:drawablePadding="10dp"
                 android:drawableStart="@drawable/ic_directions_black_24dp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorBlack"
                 android:textSize="14sp"
                 android:padding="10dp"
+                android:text="Direction"
+                app:font_value="ROBOTO_REGULAR"/>
+            <itg8.com.wmcapp.widget.CustomFontTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                android:drawablePadding="10dp"
+                android:drawableStart="@drawable/ic_share_black_24dp"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"
+                android:padding="10dp"
+                android:text="Share"
                 app:font_value="ROBOTO_REGULAR"/>
         </LinearLayout>
 

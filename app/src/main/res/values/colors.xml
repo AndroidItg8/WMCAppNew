@@ -15,4 +15,8 @@
     <color name="colorRed">#5563120a</color>
     <color name="bg_edittext_stroke_color">#c4c1c1</color>
     <color name="transparentBlackHalf">#5b000000</color>
+    <color name="colorAmbulance">#A61100</color>
+    <color name="colorHospital">#7CB342</color>
+    <color name="colorFire">#C1562E</color>
+    <color name="colorPolice">#BDB76A</color>
 </resources>

@@ -49,5 +49,11 @@
     <string name="invalid_email">Invalid Email</string>
     <string name="invalid_pass">Invalid Password</string>
     <string name="empty">Field is empty</string>
-    <string name="url_login">aaa</string>
+    <string name="url_login">/Token</string>
+    <string name="hospital">Hospital</string>
+    <string name="fire">Fire Bridget</string>
+    <string name="police">Police</string>
+    <string name="ambulance">Ambulance</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="title_activity_splash">SplashActivity</string>
 </resources>
