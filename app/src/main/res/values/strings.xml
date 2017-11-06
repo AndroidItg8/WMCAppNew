@@ -63,6 +63,7 @@
     <string name="url_city">/api/CustomerApp/CityList</string>
     <string name="url_complaint">/api/CustomerApp/ComplaintListPerUser</string>
     <string name="url_notice_board">/api/CustomerApp/NoticeboardList</string>
+    <!--<string name="url_file">/api/UploadFileApp/UploadFilesSyS?ty="1"</string>-->
     <!--?skip=0&pageSize=10-->
     <string name="url_complaint_category_list">/api/CustomerApp/ComplaintCategoryList</string>
     <string name="invalid_number">Please Enter 10 digit Number</string>
