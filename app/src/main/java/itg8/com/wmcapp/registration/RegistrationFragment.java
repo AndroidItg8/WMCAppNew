@@ -132,8 +132,6 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
     private void senDataToserver() {
         if (validate()) {
-
-
             postDataIntoServer(
                     inputName.getText().toString().trim(),
                     inputEmail.getText().toString().trim(),
@@ -159,6 +157,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                  if (response.isSuccessful()) {
                      if (response.body().isFlag()) {
                          showToast("Registration Successfully");
+                         getActivity().onBackPressed();
 
                      }else
                      {
@@ -214,13 +213,13 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
             inputEmail.setError(getString(R.string.invalid_email));
 
         }
-        if (MobileNumber.length() != 10) {
-            validate = false;
-            inputMobile.setError(getString(R.string.invalid_number));
-        } else if (TextUtils.isEmpty(MobileNumber)) {
-            inputMobile.setError(getString(R.string.empty));
-            validate = false;
-        }
+//        if (MobileNumber.length() != 10) {
+//            validate = false;
+//            inputMobile.setError(getString(R.string.invalid_number));
+//        } else if (TextUtils.isEmpty(MobileNumber)) {
+//            inputMobile.setError(getString(R.string.empty));
+//            validate = false;
+//        }
 
 
 

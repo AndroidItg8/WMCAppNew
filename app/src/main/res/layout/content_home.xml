@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,5 +12,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/frame_container" />
+    <com.github.rahatarmanahmed.cpv.CircularProgressView
+        android:id="@+id/progressView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="16dp"
+        android:layout_gravity="center"
+         app:cpv_indeterminate="true"
+        app:cpv_thickness="2dp"
+        app:cpv_color="@color/colorPrimary"
+        android:visibility="visible" />
 
-</android.support.constraint.ConstraintLayout>
+
+</FrameLayout>

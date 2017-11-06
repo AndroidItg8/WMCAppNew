@@ -29,7 +29,7 @@ import itg8.com.wmcapp.cilty.mvp.CityMVP;
  * Use the {@link CityFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CityFragment extends Fragment  {
+public class CityFragment extends Fragment  implements CityAdapter.CityItemClickedListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -93,7 +93,7 @@ public class CityFragment extends Fragment  {
 
     private void init(List<CityModel> list) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new CityAdapter(getActivity(), list));
+        recyclerView.setAdapter(new CityAdapter(getActivity(), list, this));
     }
 
     @Override
@@ -103,4 +103,8 @@ public class CityFragment extends Fragment  {
     }
 
 
+    @Override
+    public void onCityItemClicked(int position, CityModel cityModel) {
+
+    }
 }

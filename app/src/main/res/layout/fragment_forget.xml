@@ -1,0 +1,65 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorWhite"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/bpkuti"
+            android:padding="40dp"/>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_name"
+            android:layout_width="match_parent"
+            android:layout_margin="16dp"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/input_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+
+                android:singleLine="true"
+                android:textColor="@color/colorBlack"
+                android:textSize="15sp"
+                android:hint="Enter EmailId" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/colorWhite"
+            android:layout_margin="16dp"
+            android:id="@+id/btn_submit"
+
+            android:background="@color/colorPrimary"
+            android:text="submit"/>
+    </LinearLayout>
+
+
+        <com.github.rahatarmanahmed.cpv.CircularProgressView
+            android:id="@+id/progressView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:cpv_color="@color/colorPrimary"
+            app:cpv_thickness="2dp"
+            android:layout_gravity="center"
+            app:cpv_indeterminate="true"
+            app:cpv_animAutostart="true"/>
+
+
+</FrameLayout>

@@ -31,6 +31,7 @@ import java.util.List;
 
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.board.NoticeBoardFragment;
+import itg8.com.wmcapp.change_password.ChangePswdFragment;
 import itg8.com.wmcapp.cilty.CityAdapter;
 import itg8.com.wmcapp.cilty.CityFragment;
 import itg8.com.wmcapp.cilty.model.CityModel;
@@ -39,7 +40,9 @@ import itg8.com.wmcapp.cilty.mvp.CityPresenterImp;
 import itg8.com.wmcapp.common.BaseActivity;
 import itg8.com.wmcapp.common.CallType;
 import itg8.com.wmcapp.common.CommonCallback;
+import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.CustomDialogFragment;
+import itg8.com.wmcapp.common.Prefs;
 import itg8.com.wmcapp.complaint.ComplaintFragment;
 import itg8.com.wmcapp.contact.ContactUsFragment;
 import itg8.com.wmcapp.database.BaseDatabaseHelper;
@@ -63,7 +66,7 @@ import static itg8.com.wmcapp.common.CallType.WARD_MEMBER;
 public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,CommonCallback.OnImagePickListener,
         CustomDialogFragment.DialogItemClickListener,
-        PrabhagFragment.OnListFragmentInteractionListener  ,CityMVP.CityView {
+        PrabhagFragment.OnListFragmentInteractionListener  ,CityMVP.CityView, CityAdapter.CityItemClickedListener {
 
     private static final String TAG = HomeActivity.class.getSimpleName();
     private CallType isFrom;
@@ -75,6 +78,7 @@ public class HomeActivity extends BaseActivity
     private CityMVP.CityPresenter presenter;
     private Dao<CityModel, Integer> mDAOCity = null;
     private List<CityModel> cityList = null;
+    private String langauge=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,9 +134,8 @@ public class HomeActivity extends BaseActivity
                  openBottomSheetForLanguage();
                 break;
             case R.id.action_city:
-//                 if(cityList!= null && cityList.size()>0)
-//                    openBottomSheetForCity(cityList);
-                openBottomSheetForLanguage();
+                 if(cityList!= null && cityList.size()>0)
+                    openBottomSheetForCity(cityList);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -146,11 +149,18 @@ public class HomeActivity extends BaseActivity
         mBottomSheetDialog.setContentView(view);
         mBottomSheetDialog.setCancelable(true);
         mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams.MATCH_PARENT);
         mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
          RecyclerView recyclerView =view.findViewById(R.id.recyclerView);
+         Button btnDismiss =view.findViewById(R.id.btn_dismiss);
          recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-         recyclerView.setAdapter(new CityAdapter(getApplicationContext(), cityList));
+         recyclerView.setAdapter(new CityAdapter(getApplicationContext(), cityList, this));
+         btnDismiss.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 mBottomSheetDialog.dismiss();
+             }
+         });
         mBottomSheetDialog.show();
 
     }
@@ -165,24 +175,30 @@ public class HomeActivity extends BaseActivity
         mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
-       CustomFontTextView lblEng =  view.findViewById(R.id.lbl_lang_eng);
-       CustomFontTextView lblHin =  view.findViewById(R.id.lbl_lang_hin);
-       CustomFontTextView lblMar =  view.findViewById(R.id.lbl_lang_mar);
+       final CustomFontTextView lblEng =  view.findViewById(R.id.lbl_lang_eng);
+       final CustomFontTextView lblHin =  view.findViewById(R.id.lbl_lang_hin);
+       final CustomFontTextView lblMar =  view.findViewById(R.id.lbl_lang_mar);
        lblEng.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
+                langauge = lblEng.getText().toString();
+                 mBottomSheetDialog.dismiss();
 
            }
        });
        lblHin.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
+               langauge = lblHin.getText().toString();
+               mBottomSheetDialog.dismiss();
 
            }
        });
        lblMar.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
+               langauge = lblMar.getText().toString();
+               mBottomSheetDialog.dismiss();
 
            }
        });
@@ -190,6 +206,7 @@ public class HomeActivity extends BaseActivity
 
 
     }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -229,7 +246,7 @@ public class HomeActivity extends BaseActivity
                 fragment = ContactUsFragment.newInstance("", "");
                 break;
                 case R.id.nav_change_pswd:
-                fragment = SignUpFragment.newInstance("", "");
+                fragment = ChangePswdFragment.newInstance("", "");
                 break;
                 case R.id.nav_registration:
                 fragment = SignUpFragment.newInstance("", "");
@@ -307,11 +324,12 @@ public class HomeActivity extends BaseActivity
 
     @Override
     public void onGetCityList(List<CityModel> list) {
-        try {
-            saveBrandToDatabase(list);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            saveBrandToDatabase(list);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+         this.cityList = list;
 
 
     }
@@ -351,7 +369,7 @@ public class HomeActivity extends BaseActivity
     }
 
 
-    private void showSnackbar(boolean isConnected) {
+    public  void showSnackbar(boolean isConnected) {
 
         int color;
         String message;
@@ -454,6 +472,10 @@ public class HomeActivity extends BaseActivity
     }
 
 
+    @Override
+    public void onCityItemClicked(int position, CityModel cityModel) {
+        Prefs.putString(CommonMethod.CITY, cityModel.getName());
 
+    }
 }
 

@@ -17,6 +17,7 @@ public class CommonMethod {
     public static final String RESULT_DATA_KEY = "resultJet";
     public static final String HEADER = "HEADER";
     public static final String IS_LOGIN = "IS_LOGIN";
+    public static final String CITY = "CITY";
 
 
     private static Typeface typeface;
