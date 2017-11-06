@@ -4,6 +4,7 @@ import android.view.View;
 
 
 import itg8.com.wmcapp.common.Retro;
+import itg8.com.wmcapp.common.RetroController;
 
 /**
  * Created by Android itg 8 on 10/9/2017.
@@ -26,31 +27,24 @@ public interface LoginMvp {
 
          void hideProgress();
          void onNoInternetConnect(boolean b);
-         void onInternetConnect(boolean b);
 
 
-//         void onGetProfileModel(List<ProfileModel> body);
 
-         void onFirstTimeLogin(String success);
      }
       public interface LoginPresenter
       {
           void onDestroy();
           void onLoginClicked(View view);
           void onNoInternetConnect(boolean b);
-          void onInternetConnect(boolean b);
 
 
-          void onGetProfile(String url);
       }
 
       public interface LoginModule
       {
           void onDestroy();
-          void onFail(String message);
-          void onSendToServer(Retro controller, String string, String username, String password, LoginListener loginPresenterImp);
+          void onSendToServer(RetroController controller, String string, String username, String password, LoginListener loginPresenterImp);
 
-          void onGetProfileFromServer(Retro retroController, String url, LoginPresenterImp loginPresenterImp);
       }
 
     public interface LoginListener{
@@ -61,8 +55,6 @@ public interface LoginMvp {
         void onPasswordInvalid(String err);
         void showProgress();
         void hideProgress();
-        void onFirstTimeLogin(String success);
         void onNoInternetConnect(boolean b);
-        void onInternetConnect(boolean b);
     }
 }

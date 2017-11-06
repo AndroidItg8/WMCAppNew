@@ -20,28 +20,52 @@
     <!--<string name="show_identity">पहचान दिखाएँ</string>-->
     <!--<string name="hide_identity">पहचान छिपाएं</string>-->
 
-        <!---->
-        <string name = "app_name"> WMC </string>
-        <string name = "title_home"> होम </string>
-        <string name = "title_dashboard"> डैशबोर्ड </string>
-        <string name = "title_notifications"> सूचनाएं </string>
-        <string name = "no_location_data_provided"> कोई स्थान नहीं मिला </string>
-        <string name = "no_address_found"> ​​कोई स्थान नहीं मिला </string>
-        <string name = "address_found"> ​​पता मिला </string>
-        <string name = "service_not_available"> कोई सेवा उपलब्ध नहीं है </string>
-        <string name = "invalid_lat_long_used"> अमान्य कुंजी </string>
+    <!---->
+        
+    <string name="app_name"> WMC </string>
+        
+    <string name="title_home"> होम </string>
+        
+    <string name="title_dashboard"> डैशबोर्ड </string>
+        
+    <string name="title_notifications"> सूचनाएं </string>
+        
+    <string name="no_location_data_provided"> कोई स्थान नहीं मिला </string>
+        
+    <string name="no_address_found"> ​​कोई स्थान नहीं मिला </string>
+        
+    <string name="address_found"> ​​पता मिला </string>
+        
+    <string name="service_not_available"> कोई सेवा उपलब्ध नहीं है </string>
+        
+    <string name="invalid_lat_long_used"> अमान्य कुंजी </string>
 
-        <string name = "hello_blank_fragment"> खाली खाली टुकड़ा </string>
-        <string name = "imgadd"> imgAdd </string>
-        <string name = "enter_description"> विवरण दर्ज करें </string>
-        <string name = "other_address"> पता </string>
-        <string name = "rationale_no_permission"> कृपया आगे बढ़ने की अनुमति दें। </string>
-        <string name = "rationale_call_permission"> कृपया कॉल अनुमति प्रदान करें </string>
-        <string name = "current_location"> वर्तमान स्थान </string>
-        <string name = "other_location"> अन्य स्थान </string>
-        <string name = "show_identity"> पहचान दिखाएँ </string>
-        <string name = "hide_identity"> पहचान छुपाएं </string>
-
+        
+    <string name="hello_blank_fragment"> खाली खाली टुकड़ा </string>
+        
+    <string name="imgadd"> imgAdd </string>
+        
+    <string name="enter_description"> विवरण दर्ज करें </string>
+        
+    <string name="other_address"> पता </string>
+        
+    <string name="rationale_no_permission"> कृपया आगे बढ़ने की अनुमति दें। </string>
+        
+    <string name="rationale_call_permission"> कृपया कॉल अनुमति प्रदान करें </string>
+        
+    <string name="current_location"> वर्तमान स्थान </string>
+        
+    <string name="other_location"> अन्य स्थान </string>
+        
+    <string name="show_identity"> पहचान दिखाएँ </string>
+        
+    <string name="hide_identity"> पहचान छुपाएं </string>
     <string name="contact_us">हमसे संपर्क करें</string>
+
+    <!--add it now -->
+    <string name="english">अंग्रेज़ी</string>
+    <string name="hindi">हिंदी</string>
+    <string name="marathi">मराठी</string>
+
 
 </resources>

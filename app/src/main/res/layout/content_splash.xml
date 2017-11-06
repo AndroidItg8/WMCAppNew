@@ -6,8 +6,26 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="itg8.com.wmcapp.splash.SplashActivity"
-    android:id="@+id/splash"
+
+
     tools:showIn="@layout/activity_splash">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/splash"/>
+    <com.github.rahatarmanahmed.cpv.CircularProgressView
+        android:id="@+id/progressView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="16dp"
+        android:layout_gravity="center"
+         app:cpv_color="@color/colorPrimary"
+        app:cpv_thickness="2dp"
+        app:cpv_indeterminate="true"
+        android:visibility="visible" />
+
+
 
 
 </FrameLayout>

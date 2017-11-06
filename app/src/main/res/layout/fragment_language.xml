@@ -1,0 +1,59 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_margin="10dp"
+    tools:context="itg8.com.wmcapp.language.LanguageFragment">
+
+    <itg8.com.wmcapp.widget.CustomFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lbl_lang_eng"
+        android:textColor="@color/colorBlack"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:padding="8dp"
+        android:textSize="18sp"
+        android:text="@string/english"/>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/lbl_lang_eng"
+        android:background="@color/colorGrayLight"/>
+
+    <itg8.com.wmcapp.widget.CustomFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lbl_lang_hin"
+        android:textColor="@color/colorBlack"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_below="@+id/view"
+        android:padding="8dp"
+        android:textSize="18sp"
+        android:text="@string/hindi"/>
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/lbl_lang_hin"
+        android:background="@color/colorGrayLight"/>
+
+
+    <itg8.com.wmcapp.widget.CustomFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lbl_lang_mar"
+        android:textColor="@color/colorBlack"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_below="@+id/view1"
+        android:padding="8dp"
+        android:textSize="18sp"
+        android:text="@string/marathi"/>
+
+</RelativeLayout>

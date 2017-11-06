@@ -9,13 +9,15 @@ import android.graphics.Typeface;
 
 public class CommonMethod {
 
-    public static final String BASE_URL = "";
+    public static final String BASE_URL = "http://192.168.1.54:8080";
     public static final String RECEIVER = "myReceiver";
     public static final String LOCATION_DATA_EXTRA = "LocationDataExtras";
     public static final int FAILURE_RESULT = 111;
     public static final int SUCCESS_RESULT = 112;
     public static final String RESULT_DATA_KEY = "resultJet";
     public static final String HEADER = "HEADER";
+    public static final String IS_LOGIN = "IS_LOGIN";
+
 
     private static Typeface typeface;
 

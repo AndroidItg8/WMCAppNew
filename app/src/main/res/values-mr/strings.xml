@@ -21,6 +21,9 @@
          <string name = "hide_identity"> ओळख लपवा  </string>
         <string name = "hospital"> रूग्णालय</string>
         <string name="contact_us">आमच्याशी संपर्क साधा</string>
-
+<!--add it now -->
+    <string name="english">इंग्रजी</string>
+    <string name="hindi">हिंदी</string>
+    <string name="marathi">मराठी</string>
 
 </resources>

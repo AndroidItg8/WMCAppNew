@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.home.HomeActivity;
 
 /**
  * Created by Android itg 8 on 11/1/2017.
@@ -73,6 +74,7 @@ public class CustomFontTextView extends TextView {
 
         setTypeface(customFont);
     }
+
 
 
 }

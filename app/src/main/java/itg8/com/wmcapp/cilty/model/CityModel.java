@@ -6,17 +6,33 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 @Generated("org.jsonschema2pojo")
+@DatabaseTable(tableName=CityModel.TABLE_CITY)
 public class CityModel implements Parcelable
 {
 
+    public static final String TABLE_CITY ="TableCity";
+    public static final String FIELD_ID ="id";
+    public static final String FIELD_PID ="pid";
+    public static final String FIELD_NAME ="name";
+    public static final String FIELD_STATE_ID ="state id";
+    @DatabaseField(columnName = FIELD_PID , generatedId = true)
+    @Expose
+    private long tblId;
+
+    @DatabaseField(columnName = FIELD_ID)
     @SerializedName("ID")
     @Expose
     private int ID;
+    @DatabaseField(columnName = FIELD_NAME)
     @SerializedName("Name")
     @Expose
     private String Name;
+    @DatabaseField(columnName = FIELD_STATE_ID)
+
     @SerializedName("StateID")
     @Expose
     private int StateID;

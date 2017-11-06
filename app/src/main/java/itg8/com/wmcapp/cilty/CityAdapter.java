@@ -21,7 +21,7 @@ public class CityAdapter extends BaseAbstractAdapter {
     private final List<CityModel> list;
     private Context context;
 
-    CityAdapter(Context context, List<CityModel> data) {
+    public CityAdapter(Context context, List<CityModel> data) {
         super(context, data);
         this.context = context;
         this.list = data;

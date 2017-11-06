@@ -56,4 +56,12 @@
     <string name="ambulance">Ambulance</string>
     <string name="contact_us">Contact Us</string>
     <string name="title_activity_splash">SplashActivity</string>
+    <string name="action_filter">filter langauge</string>
+    <string name="english">English</string>
+    <string name="hindi">Hindi</string>
+    <string name="marathi">Marathi</string>
+    <string name="url_city">/api/CustomerApp/CityList</string>
+    <string name="invalid_number">Please Enter 10 digit Number</string>
+    <string name="pswd">Password does not match.</string>
+    <string name="url_registration">/api/CustomerApp/Register</string>
 </resources>

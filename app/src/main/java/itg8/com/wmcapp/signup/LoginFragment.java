@@ -1,6 +1,7 @@
 package itg8.com.wmcapp.signup;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +22,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.common.CommonMethod;
+import itg8.com.wmcapp.common.Prefs;
+import itg8.com.wmcapp.home.HomeActivity;
 import itg8.com.wmcapp.signup.mvp.LoginMvp;
 import itg8.com.wmcapp.signup.mvp.LoginPresenterImp;
 import itg8.com.wmcapp.widget.CustomFontTextView;
@@ -134,6 +138,10 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
 
     @Override
     public void onSuccess() {
+        Prefs.putBoolean(CommonMethod.IS_LOGIN, true);
+//        Intent intent = new Intent(getContext(), HomeActivity.class);
+//        startActivity(intent);
+        getActivity().onBackPressed();
 
     }
 
@@ -182,50 +190,39 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
 
     }
 
-    @Override
-    public void onInternetConnect(boolean b) {
-        showSnackbar(b);
 
-    }
-
-
-    @Override
-    public void onFirstTimeLogin(String success) {
-
-
-    }
 
     private void showSnackbar(boolean isConnected) {
 
-//        int color;
-//        String message;
-//        if (!isConnected) {
-//
-//            message = "Connected to Internet";
-//            color = Color.WHITE;
-//            hideSnackbar();
-//
-//        } else {
-//            message = " Not connected to internet...Please try again";
-//            color = Color.RED;
-//        }
-//        snackbar = Snackbar.make(findViewById(R.id.fab), message, Snackbar.LENGTH_INDEFINITE);
-//
-//        View sbView = snackbar.getView();
-//        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-//        textView.setTextColor(color);
-//        textView.setMaxLines(2);
-//        snackbar.show();
-//
-//
-//        snackbar.setAction("OK", new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                onSnackbarOkClicked(view);
-//
-//            }
-//        });
-//        snackbar.show();
+        int color;
+        String message;
+        if (!isConnected) {
+
+            message = "Connected to Internet";
+            color = Color.WHITE;
+            hideSnackbar();
+
+        } else {
+            message = " Not connected to internet...Please try again";
+            color = Color.RED;
+        }
+        snackbar = Snackbar.make(getActivity().findViewById(R.id.fab), message, Snackbar.LENGTH_INDEFINITE);
+
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(color);
+        textView.setMaxLines(2);
+        snackbar.show();
+
+
+        snackbar.setAction("OK", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onSnackbarOkClicked(view);
+
+            }
+        });
+        snackbar.show();
     }
 
     private void onSnackbarOkClicked(View view) {
@@ -239,24 +236,24 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
     }
 
     private void showTextSnackbar(String s) {
-//        snackbar = Snackbar
-//                .make(findViewById(R.id.fab), s, Snackbar.LENGTH_INDEFINITE);
-//
-//        View sbView = snackbar.getView();
-//        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-//        textView.setTextColor(Color.WHITE);
-//        textView.setText(s);
-//
-//        textView.setMaxLines(2);
-//
-//        snackbar.setAction("OK", new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                snackbar.dismiss();
-//
-//            }
-//        });
-//        snackbar.show();
+        snackbar = Snackbar
+                .make(getActivity().findViewById(R.id.fab), s, Snackbar.LENGTH_INDEFINITE);
+
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.WHITE);
+        textView.setText(s);
+
+        textView.setMaxLines(2);
+
+        snackbar.setAction("OK", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                snackbar.dismiss();
+
+            }
+        });
+        snackbar.show();
     }
 
     @Override

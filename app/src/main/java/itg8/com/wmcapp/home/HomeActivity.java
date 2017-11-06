@@ -1,9 +1,15 @@
 package itg8.com.wmcapp.home;
 
+import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,18 +18,31 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.j256.ormlite.dao.Dao;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.board.NoticeBoardFragment;
+import itg8.com.wmcapp.cilty.CityAdapter;
+import itg8.com.wmcapp.cilty.CityFragment;
+import itg8.com.wmcapp.cilty.model.CityModel;
+import itg8.com.wmcapp.cilty.mvp.CityMVP;
+import itg8.com.wmcapp.cilty.mvp.CityPresenterImp;
 import itg8.com.wmcapp.common.BaseActivity;
 import itg8.com.wmcapp.common.CallType;
 import itg8.com.wmcapp.common.CommonCallback;
 import itg8.com.wmcapp.common.CustomDialogFragment;
 import itg8.com.wmcapp.complaint.ComplaintFragment;
 import itg8.com.wmcapp.contact.ContactUsFragment;
+import itg8.com.wmcapp.database.BaseDatabaseHelper;
 import itg8.com.wmcapp.emergency.EmergencyFragment;
 import itg8.com.wmcapp.feedback.FeedbackFragment;
 import itg8.com.wmcapp.news.NewsFragment;
@@ -32,8 +51,10 @@ import itg8.com.wmcapp.prabhag.WardMemberFragment;
 import itg8.com.wmcapp.prabhag.dummy.DummyContent;
 import itg8.com.wmcapp.prabhag.model.ContactModel;
 import itg8.com.wmcapp.signup.SignUpFragment;
+import itg8.com.wmcapp.splash.SplashActivity;
 import itg8.com.wmcapp.suggestion.SuggestionFragment;
 import itg8.com.wmcapp.torisum.TorisumFragment;
+import itg8.com.wmcapp.widget.CustomFontTextView;
 
 import static itg8.com.wmcapp.common.CallType.PRABHAG;
 import static itg8.com.wmcapp.common.CallType.WARD;
@@ -42,12 +63,18 @@ import static itg8.com.wmcapp.common.CallType.WARD_MEMBER;
 public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,CommonCallback.OnImagePickListener,
         CustomDialogFragment.DialogItemClickListener,
-        PrabhagFragment.OnListFragmentInteractionListener {
+        PrabhagFragment.OnListFragmentInteractionListener  ,CityMVP.CityView {
 
+    private static final String TAG = HomeActivity.class.getSimpleName();
     private CallType isFrom;
     Fragment fragment = null;
     CommonCallback.OnDialogClickListner listner;
     String[] items = {"Pick From Camera", "Pick From File"};
+    private List<CityModel> list;
+    private Snackbar snackbar;
+    private CityMVP.CityPresenter presenter;
+    private Dao<CityModel, Integer> mDAOCity = null;
+    private List<CityModel> cityList = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +82,8 @@ public class HomeActivity extends BaseActivity
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        presenter = new CityPresenterImp(this);
+        presenter.onGetCity(getString(R.string.url_city));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -93,13 +122,73 @@ public class HomeActivity extends BaseActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id)
+        {
+            case R.id.action_settings:
+                break;
+            case R.id.action_language:
+                 openBottomSheetForLanguage();
+                break;
+            case R.id.action_city:
+//                 if(cityList!= null && cityList.size()>0)
+//                    openBottomSheetForCity(cityList);
+                openBottomSheetForLanguage();
+                break;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openBottomSheetForCity(List<CityModel> cityList) {
+        View view = getLayoutInflater().inflate(R.layout.fragment_city, null);
+
+        final Dialog mBottomSheetDialog = new Dialog(HomeActivity.this,
+                R.style.MaterialDialogSheet);
+        mBottomSheetDialog.setContentView(view);
+        mBottomSheetDialog.setCancelable(true);
+        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
+         RecyclerView recyclerView =view.findViewById(R.id.recyclerView);
+         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+         recyclerView.setAdapter(new CityAdapter(getApplicationContext(), cityList));
+        mBottomSheetDialog.show();
+
+    }
+
+    private void openBottomSheetForLanguage() {
+        View view = getLayoutInflater().inflate(R.layout.fragment_language, null);
+
+        final Dialog mBottomSheetDialog = new Dialog(HomeActivity.this,
+                R.style.MaterialDialogSheet);
+        mBottomSheetDialog.setContentView(view);
+        mBottomSheetDialog.setCancelable(true);
+        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
+       CustomFontTextView lblEng =  view.findViewById(R.id.lbl_lang_eng);
+       CustomFontTextView lblHin =  view.findViewById(R.id.lbl_lang_hin);
+       CustomFontTextView lblMar =  view.findViewById(R.id.lbl_lang_mar);
+       lblEng.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+
+           }
+       });
+       lblHin.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+
+           }
+       });
+       lblMar.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+
+           }
+       });
+        mBottomSheetDialog.show();
+
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -120,16 +209,13 @@ public class HomeActivity extends BaseActivity
             case R.id.nav_news:
                  fragment = NewsFragment.newInstance("", "");
                 break;
-
             case R.id.nav_praphag:
                 isFrom = PRABHAG;
                fragment= PrabhagFragment.newInstance(1);
                 break;
-
             case R.id.nav_profile:
                 fragment = ComplaintFragment.newInstance("", "");
                 break;
-
             case R.id.nav_suggestion:
                 fragment = SuggestionFragment.newInstance("","");
                 break;
@@ -218,5 +304,156 @@ public class HomeActivity extends BaseActivity
             showWardMemberDetail();
         }
     }
+
+    @Override
+    public void onGetCityList(List<CityModel> list) {
+        try {
+            saveBrandToDatabase(list);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    @Override
+    public void onFail(String message) {
+        showTextSnackbar(message);
+
+
+    }
+
+    @Override
+    public void onError(Object t) {
+        showTextSnackbar(t.toString());
+
+
+    }
+
+    @Override
+    public void showProgress() {
+       // progressView.setVisibility(View.VISIBLE);
+
+    }
+
+    @Override
+    public void hideProgress() {
+      //  progressView.setVisibility(View.GONE);
+
+
+    }
+
+    @Override
+    public void onNoInternetConnect(boolean b) {
+        showSnackbar(b);
+
+
+    }
+
+
+    private void showSnackbar(boolean isConnected) {
+
+        int color;
+        String message;
+        if (!isConnected) {
+
+            message = "Connected to Internet";
+            color = Color.WHITE;
+            hideSnackbar();
+
+        } else {
+            message = " Not connected to internet...Please try again";
+            color = Color.RED;
+        }
+        snackbar = Snackbar.make(findViewById(R.id.fab), message, Snackbar.LENGTH_INDEFINITE);
+
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(color);
+        textView.setMaxLines(2);
+        snackbar.show();
+
+
+        snackbar.setAction("OK", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onSnackbarOkClicked(view);
+
+            }
+        });
+        snackbar.show();
+    }
+
+    private void onSnackbarOkClicked(View view) {
+        presenter.onGetCity(getString(R.string.url_city));
+    }
+
+    public void hideSnackbar() {
+        if (snackbar != null && snackbar.isShown()) {
+            snackbar.dismiss();
+        }
+    }
+
+    private void showTextSnackbar(String s) {
+        snackbar = Snackbar
+                .make(findViewById(R.id.fab), s, Snackbar.LENGTH_INDEFINITE);
+
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.WHITE);
+        textView.setText(s);
+
+        textView.setMaxLines(2);
+
+        snackbar.setAction("OK", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                snackbar.dismiss();
+
+            }
+        });
+        snackbar.show();
+    }
+
+    private void saveBrandToDatabase(List<CityModel> list) throws SQLException {
+        try {
+
+            mDAOCity = BaseDatabaseHelper.getBaseInstance().getHelper(HomeActivity.this).getmDAOCity();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (mDAOCity != null) {
+            BaseDatabaseHelper.getBaseInstance().clearCityTable();
+
+
+            for (CityModel model : list) {
+                try {
+                    int id = mDAOCity.create(model);
+
+                    cityList = mDAOCity
+                            .queryBuilder()
+                            .where()
+                            .eq(CityModel.FIELD_ID, model.getID())
+                            .query();
+                    Log.d(TAG, "CityList:" + new Gson().toJson(cityList));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+
+
+
+        }
+
+
+    }
+
+
+
 }
 

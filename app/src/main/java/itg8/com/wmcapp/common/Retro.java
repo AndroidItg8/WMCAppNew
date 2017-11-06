@@ -1,5 +1,7 @@
 package itg8.com.wmcapp.common;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -7,6 +9,7 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import itg8.com.wmcapp.cilty.model.CityModel;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -51,7 +54,7 @@ private Interceptor getHeader(final String header){
 
 
 
-    public RetroController getController(String header) {
+    public RetroController getController(String header, Context context) {
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -61,14 +64,15 @@ private Interceptor getHeader(final String header){
         builder.readTimeout(5, TimeUnit.MINUTES);
         if(header!=null)
             builder.addInterceptor(getHeader(header));
+        builder.addInterceptor(new ConnectivityInterceptor(context));
+
+
 
         OkHttpClient client=builder.build();
         Gson gson = new GsonBuilder().setLenient().create();
 
         Retrofit retrofit;
-
         retrofit = new Retrofit.Builder()
-
                 .baseUrl(CommonMethod.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -80,7 +84,6 @@ private Interceptor getHeader(final String header){
 
     }
 
-    public Call<ResponseBody> checkAuthentication(String url, String password, String username, String password1) {
-        return null;
-    }
+
+
 }

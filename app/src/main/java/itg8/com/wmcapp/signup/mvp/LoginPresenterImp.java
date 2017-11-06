@@ -47,8 +47,7 @@ public class LoginPresenterImp extends BaseWeakPresenter<LoginMvp.LoginView> imp
                 isValid=false;
                 getView().onPasswordInvalid(view.getContext().getString(R.string.empty));
             }
-            if(!isValid)
-                return;
+
             if(!android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches()){
                 isValid=false;
                 getView().onUsernameInvalid(view.getContext().getString(R.string.invalid_email));
@@ -78,22 +77,10 @@ public class LoginPresenterImp extends BaseWeakPresenter<LoginMvp.LoginView> imp
         }
     }
 
-    @Override
-    public void onInternetConnect(boolean b) {
 
 
-    }
 
-    @Override
-    public void onGetProfile(String url) {
-        if(hasView()){
-            getView().showProgress();
 
-        module.onGetProfileFromServer((MyApplication.getInstance().getRetroController()),url, this);
-
-    }
-
-    }
 
     @Override
     public void onUsernameInvalid(String err) {
@@ -133,14 +120,7 @@ public class LoginPresenterImp extends BaseWeakPresenter<LoginMvp.LoginView> imp
 
     }
 
-    @Override
-    public void onSuccess() {
-        if(hasView()) {
-           getView().hideProgress();
-            getView().onSuccess();
-        }
 
-    }
 
     @Override
     public void onFail(String message) {
@@ -170,13 +150,15 @@ public class LoginPresenterImp extends BaseWeakPresenter<LoginMvp.LoginView> imp
     }
 
 
-@Override
-    public void onFirstTimeLogin(String success) {
-        if(hasView())
-        {
+
+
+    @Override
+    public void onSuccess() {
+        if(hasView()) {
             getView().hideProgress();
-            getView().onFirstTimeLogin(success);
+            getView().onSuccess();
         }
+
     }
 }
 
