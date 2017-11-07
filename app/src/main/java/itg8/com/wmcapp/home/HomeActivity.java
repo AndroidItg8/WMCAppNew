@@ -1,6 +1,7 @@
 package itg8.com.wmcapp.home;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -106,7 +107,9 @@ public class HomeActivity extends BaseActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        if(Prefs.getString(CommonMethod.HEADER)==null){
+            startActivity(new Intent());
+        }
         fragment = NoticeBoardFragment.newInstance("", "");
         callFragment(fragment);
     }

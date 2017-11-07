@@ -77,4 +77,3 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
 }
 
-apply plugin: 'com.jakewharton.butterknife'

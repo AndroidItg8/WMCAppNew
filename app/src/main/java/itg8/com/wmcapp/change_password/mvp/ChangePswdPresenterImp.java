@@ -31,15 +31,12 @@ public class ChangePswdPresenterImp extends BaseWeakPresenter<ChangePasswordMVP.
 
     }
 
+
     @Override
-    public void onSubmitButtonClicked(View view, String from, String url) {
+    public void onSubmitButtonClicked(View view,  String url) {
         if(hasView()) {
             boolean isValid = true;
-            if (from != null && !TextUtils.isEmpty(from)) {
-               isValid =PasswordValidity(view);
 
-
-            } else {
                 oldPassword = getView().getOldPassword();
                 if (oldPassword.length() < 6) {
                     isValid = false;
@@ -50,14 +47,14 @@ public class ChangePswdPresenterImp extends BaseWeakPresenter<ChangePasswordMVP.
 
 
 
-            }
 
             if (isValid) {
                 getView().showProgress();
-                module.onAuthenticationToChangePswd((MyApplication.getInstance().getRetroController()), url, from, oldPassword, newPassword, confirmPassword, this);
+                module.onAuthenticationToChangePswd((MyApplication.getInstance().getRetroController()), url,  oldPassword, newPassword, confirmPassword, this);
 
             }
-        }
+
+    }
 
     }
 

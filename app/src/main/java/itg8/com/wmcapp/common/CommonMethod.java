@@ -3,6 +3,12 @@ package itg8.com.wmcapp.common;
 import android.content.Context;
 import android.graphics.Typeface;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 /**
  * Created by Android itg 8 on 11/1/2017.
  */
@@ -34,6 +40,33 @@ public class CommonMethod {
     }public static Typeface setFontRobotoRegular(Context context) {
         typeface = Typeface.createFromAsset(context.getAssets(), "font/Roboto-Regular.ttf");
         return typeface;
+    }
+
+    public static Calendar convertStringToDate(String assignDate) {
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss", Locale.getDefault());
+        Calendar date = Calendar.getInstance();
+        try{
+            date.setTime(formatter.parse(assignDate));
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+//        String finalString = formatter.format(date);
+        return date;
+    }
+
+    public static String getFormattedDateTime(String assigndate){
+        Calendar calendar=convertStringToDate(assigndate);
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm a",Locale.getDefault());
+        String convertedDate = "";
+
+        try {
+            convertedDate=sdf.format(calendar.getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return convertedDate;
     }
 
 }

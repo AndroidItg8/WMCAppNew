@@ -12,6 +12,7 @@ import itg8.com.wmcapp.utility.Connectivity;
 public class BaseWeakPresenter<T> {
     private WeakReference<T> weakReference;
     Context context;
+    public String url;
 
     public BaseWeakPresenter(T t) {
         this.weakReference=new WeakReference<T>(t);

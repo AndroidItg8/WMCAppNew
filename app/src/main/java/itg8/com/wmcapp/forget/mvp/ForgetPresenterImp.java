@@ -23,8 +23,7 @@ public class ForgetPresenterImp extends BaseWeakPresenter<ForgetMVP.ForgetView> 
     public void onDestroy() {
         if(hasView())
         {
-          detactView();
-
+          detachView();
         }
         module.onDestroy();
 

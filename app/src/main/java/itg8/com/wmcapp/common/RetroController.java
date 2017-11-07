@@ -85,7 +85,7 @@ import retrofit2.http.Url;
     Observable<ResponseBody> loadComplaint(@Url String url, @Query("skip") int page, @Query("pageSize") int limit);
 
     @GET()
-    Observable<ResponseBody> loadNoticeBoard(@Url String url,int page, int limit);
+    Observable<ResponseBody> loadNoticeBoard(@Url String url,@Query("skip") int page, @Query("pageSize") int limit,@Query("cityid") int cityId);
 
 
 }

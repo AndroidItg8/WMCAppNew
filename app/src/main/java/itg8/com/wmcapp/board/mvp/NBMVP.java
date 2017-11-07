@@ -1,7 +1,12 @@
 package itg8.com.wmcapp.board.mvp;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
+import java.util.List;
+
+import itg8.com.wmcapp.board.model.NoticeBoardModel;
 import itg8.com.wmcapp.common.BaseDestroyModule;
 import itg8.com.wmcapp.common.BaseFragmentPresenter;
 import ru.alexbykov.nopaginate.callback.OnLoadMore;
@@ -12,38 +17,37 @@ import ru.alexbykov.nopaginate.callback.OnLoadMore;
 
 public interface NBMVP {
     public interface NBView{
-        void onNBListAvailable();
+        void onNBListAvailable(List<NoticeBoardModel> o);
         void onNoMoreList();
         void onShowPaginationLoading(boolean show);
         void onPaginationError(boolean show);
     }
 
-    public interface NBPresenter extends BaseFragmentPresenter, OnLoadMore {
+    public interface NBPresenter extends BaseFragmentPresenter {
 
-        @Override
         void onDetach();
 
-        @Override
         void onAttach(Context context);
 
-        @Override
         void onPause();
 
-        @Override
         void onResume();
 
-        @Override
         void onLoadMore();
+
+        void onLoadMoreItems(String string);
+
+        RecyclerView.OnScrollListener scrollListener(LinearLayoutManager layoutManager);
     }
 
     public interface NBListener{
-        void onNBListAvailable();
+        void onNBListAvailable(List<NoticeBoardModel> o);
         void onNoMoreList();
         void onPaginationError();
     }
 
     public interface NBModule extends BaseDestroyModule {
-        void onStartLoadingList(int page, int limit,NBListener listener);
+        void onStartLoadingList(String url, int page, int limit, NBListener listener);
     }
 
 }

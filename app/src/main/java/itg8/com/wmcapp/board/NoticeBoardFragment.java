@@ -17,6 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.board.model.NoticeBoardModel;
 import itg8.com.wmcapp.board.mvp.NBMVP;
 import itg8.com.wmcapp.board.mvp.NBPresenterImp;
 import itg8.com.wmcapp.complaint.AddComplaintFragment;
@@ -45,8 +46,8 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
     private NBMVP.NBPresenter presenter;
     private Fragment fragment= null;
     private Context mContext;
-    private Paginate paginate;
     private NoticeBoardAdater adapter;
+    private LinearLayoutManager layoutManager;
 
 
     public NoticeBoardFragment() {
@@ -88,31 +89,30 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
         View view = inflater.inflate(R.layout.fragment_notice_board, container, false);
         unbinder = ButterKnife.bind(this, view);
 rlInclude.setOnClickListener(this);
-        initPaginate();
+        presenter=new NBPresenterImp(this);
         init();
+        initPaginate();
+        presenter.onLoadMoreItems(getString(R.string.url_notice_board));
         return view;
     }
 
     private void initPaginate() {
-        paginate = new PaginateBuilder()
-                .with(recyclerView)
-                .setCallback(presenter)
-                .setLoadingTriggerThreshold(10)
-                .build();
+
     }
 
     private void init() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        layoutManager=new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
         adapter=new NoticeBoardAdater(getActivity());
         recyclerView.setAdapter(adapter);
-
+        recyclerView.addOnScrollListener(presenter.scrollListener(layoutManager));
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext=context;
-        presenter=new NBPresenterImp(this);
+
     }
 
     @Override
@@ -153,27 +153,36 @@ rlInclude.setOnClickListener(this);
         super.onDetach();
         if(mContext!= null)
             mContext= null;
-        paginate.unSubscribe();
         presenter.onDetach();
     }
 
     @Override
-    public void onNBListAvailable() {
-        adapter.addItems();
+    public void onNBListAvailable(List<NoticeBoardModel> o) {
+        adapter.addItems(o);
     }
 
     @Override
     public void onNoMoreList() {
-        paginate.setPaginateNoMoreItems(true);
+        adapter.removeFooter();
     }
 
     @Override
     public void onShowPaginationLoading(boolean show) {
-        paginate.showLoading(show);
+        if(show){
+            adapter.addFooter();
+//            recyclerView.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    adapter.notifyItemInserted();
+//                }
+//            });
+        }else {
+            adapter.removeFooter();
+        }
     }
 
     @Override
     public void onPaginationError(boolean show) {
-        paginate.showError(show);
+
     }
 }

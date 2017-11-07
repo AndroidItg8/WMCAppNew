@@ -32,9 +32,8 @@ public class ChagePasswordImp implements ChangePasswordMVP.ChangePswdModule {
 
 
 
-
     @Override
-    public void onAuthenticationToChangePswd(RetroController controller, String url, String from, String oldpswd, String newpswd, String confirmpswd, final ChangePswdPresenterImp listener) {
+    public void onAuthenticationToChangePswd(RetroController controller, String url,  String oldpswd, String newpswd, String confirmpswd, final ChangePswdPresenterImp listener) {
 
              call = controller.changePassword(url, oldpswd, newpswd);
           call.enqueue(new Callback<RegistrationModel>() {
