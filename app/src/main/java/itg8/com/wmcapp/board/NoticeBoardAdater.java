@@ -38,6 +38,10 @@ class NoticeBoardAdater extends RecyclerView.Adapter<NoticeBoardAdater.NoticeBoa
         return 10;
     }
 
+    public void addItems() {
+
+    }
+
     public class NoticeBoardViewHolder extends RecyclerView.ViewHolder {
         public NoticeBoardViewHolder(View itemView) {
             super(itemView);

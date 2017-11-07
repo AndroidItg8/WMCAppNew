@@ -2,9 +2,8 @@ package itg8.com.wmcapp.common;
 
 import java.util.List;
 
-import itg8.com.wmcapp.board.model.NoticeBoardModel;
+import io.reactivex.Observable;
 import itg8.com.wmcapp.cilty.model.CityModel;
-import itg8.com.wmcapp.complaint.model.ComplaintModel;
 import itg8.com.wmcapp.registration.RegistrationModel;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -13,7 +12,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.http.Url;
 
 /**
@@ -80,13 +79,13 @@ import retrofit2.http.Url;
                                          @Field("City_fkid") String cityId
                                          );
 
-    @GET
-    Call<List<ComplaintModel>> getComplaintList(@Url String url, @Path("pageSize") int pageNumber);
-    @GET
-    Call<List<NoticeBoardModel>> getNoticeBoardList(@Url String url, @Path("pageSize") int pageNumber);
 
 
+    @GET()
+    Observable<ResponseBody> loadComplaint(@Url String url, @Query("skip") int page, @Query("pageSize") int limit);
 
+    @GET()
+    Observable<ResponseBody> loadNoticeBoard(@Url String url,int page, int limit);
 
 
 }

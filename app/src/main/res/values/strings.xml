@@ -17,7 +17,7 @@
     <string name="suggestion">Suggestion</string>
     <string name="profile">Profile</string>
     <string name="registration">Registration</string>
-    <string name="prabhag">Prabhag</string>
+    <string name="prabhag">Ward Information</string>
     <string name="ward_member">Ward Member</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -69,6 +69,8 @@
     <string name="invalid_number">Please Enter 10 digit Number</string>
     <string name="pswd">Password does not match.</string>
     <string name="url_registration">/api/CustomerApp/Register</string>
+    <string name="fail_to_load">Fail to load information</string>
+    <string name="rationale_no_internet">No Internet Connection</string>
     <string name="invalid_pass_not">Password must be minimum 6 character</string>
     <string name="url_change_password">/api/CustomerApp/changePassword</string>
     <string name="url_forget_pswd">/api/CustomerApp/ForgotPassword</string>

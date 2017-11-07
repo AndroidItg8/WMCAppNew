@@ -14,13 +14,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.complaint.mvp.ComplaintMVP;
+import itg8.com.wmcapp.complaint.mvp.ComplaintPresenterImp;
+import ru.alexbykov.nopaginate.paginate.Paginate;
+import ru.alexbykov.nopaginate.paginate.PaginateBuilder;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ComplaintFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ComplaintFragment extends Fragment {
+public class ComplaintFragment extends Fragment implements ComplaintMVP.ComplaintView {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -35,6 +39,8 @@ public class ComplaintFragment extends Fragment {
     private Context mContext;
     private ComplaintAdapter adapter;
 
+    private ComplaintMVP.ComplaintPresenter presenter;
+    private Paginate paginate;
 
     public ComplaintFragment() {
         // Required empty public constructor
@@ -65,6 +71,7 @@ public class ComplaintFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -73,8 +80,17 @@ public class ComplaintFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_complaint, container, false);
         unbinder = ButterKnife.bind(this, view);
+        initPagination();
         init();
         return view;
+    }
+
+    private void initPagination() {
+        paginate = new PaginateBuilder()
+                .with(recyclerView)
+                .setCallback(presenter)
+                .setLoadingTriggerThreshold(10)
+                .build();
     }
 
     private void init() {
@@ -93,6 +109,8 @@ public class ComplaintFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
+        presenter=new ComplaintPresenterImp(this);
+        presenter.onLoadMoreItem(getString(R.string.url_complaint));
     }
 
     @Override
@@ -100,5 +118,27 @@ public class ComplaintFragment extends Fragment {
         super.onDetach();
         if(mContext!= null)
             mContext= null;
+        paginate.unSubscribe();
+        presenter.onDetach();
+    }
+
+    @Override
+    public void onComplaintListAvailable() {
+        adapter.addItems();
+    }
+
+    @Override
+    public void onNoMoreList() {
+        paginate.setPaginateNoMoreItems(true);
+    }
+
+    @Override
+    public void onShowPaginationLoading(boolean show) {
+        paginate.showLoading(show);
+    }
+
+    @Override
+    public void onPaginationError(boolean show) {
+        paginate.showError(show);
     }
 }

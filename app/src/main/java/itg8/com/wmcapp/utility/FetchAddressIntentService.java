@@ -1,22 +1,39 @@
 package itg8.com.wmcapp.utility;
 
+import android.Manifest;
 import android.app.IntentService;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.os.ResultReceiver;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.model.LatLng;
-import itg8.com.wmcapp.R;
-import itg8.com.wmcapp.common.CommonMethod;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.common.CommonMethod;
+
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 
 /**
@@ -24,13 +41,18 @@ import java.util.Locale;
  * location through an intent. Tries to fetch the address for the location using a Geocoder, and
  * sends the result to the ResultReceiver.
  */
-public class FetchAddressIntentService extends IntentService {
+public class FetchAddressIntentService extends IntentService implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
     private static final String TAG = "FetchAddressIS";
+    private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
+    private long FASTEST_INTERVAL = 2000; /* 2 sec */
 
     /**
      * The receiver where results are forwarded from this service.
      */
     private ResultReceiver mReceiver;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    private String errorMessage;
 
     /**
      * This constructor is required, and calls the super IntentService(String)
@@ -39,6 +61,21 @@ public class FetchAddressIntentService extends IntentService {
     public FetchAddressIntentService() {
         // Use the TAG to name the worker thread.
         super(TAG);
+    }
+
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addOnConnectionFailedListener(this)
+                .addConnectionCallbacks(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        startLocationUpdate();
     }
 
     /**
@@ -65,6 +102,10 @@ public class FetchAddressIntentService extends IntentService {
         // Get the location passed to this service through an extra.
         LatLng location = intent.getParcelableExtra(CommonMethod.LOCATION_DATA_EXTRA);
 
+        startLocationBroadcast(location);
+    }
+
+    private void startLocationBroadcast(LatLng location) {
         // Make sure that the location data was really sent over through an extra. If it wasn't,
         // send an error error message and return.
         if (location == null) {
@@ -111,7 +152,7 @@ public class FetchAddressIntentService extends IntentService {
         }
 
         // Handle case where no address was found.
-        if (addresses == null || addresses.size()  == 0) {
+        if (addresses == null || addresses.size() == 0) {
             if (errorMessage.isEmpty()) {
                 errorMessage = getString(R.string.no_address_found);
                 Log.e(TAG, errorMessage);
@@ -130,7 +171,7 @@ public class FetchAddressIntentService extends IntentService {
             // getPostalCode() ("94043", for example)
             // getCountryCode() ("US", for example)
             // getCountryName() ("United States", for example)
-            for(int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
+            for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
                 addressFragments.add(address.getAddressLine(i));
             }
             Log.i(TAG, getString(R.string.address_found));
@@ -146,5 +187,90 @@ public class FetchAddressIntentService extends IntentService {
         Bundle bundle = new Bundle();
         bundle.putString(CommonMethod.RESULT_DATA_KEY, message);
         mReceiver.send(resultCode, bundle);
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Log.i(TAG, "onConnected" + bundle);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+//        Location l = LocationServices.FusedLocationPro.getLastLocation(mGoogleApiClient);
+//        if (l != null) {
+//            Log.i(TAG, "lat " + l.getLatitude());
+//            Log.i(TAG, "lng " + l.getLongitude());
+//
+//        }
+
+        startLocationUpdate();
+    }
+
+    private void startLocationUpdate() {
+        // Create the location request to start receiving updates
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+
+        // Create LocationSettingsRequest object using location request
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        LocationSettingsRequest locationSettingsRequest = builder.build();
+
+        // Check whether location settings are satisfied
+        // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
+        SettingsClient settingsClient = LocationServices.getSettingsClient(this);
+        settingsClient.checkLocationSettings(locationSettingsRequest);
+
+        // new Google API SDK v11 uses getFusedLocationProviderClient(this)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        // do work here
+                        onLocationChanged(locationResult.getLastLocation());
+                    }
+                },
+                Looper.myLooper());
+    }
+
+    private void onLocationChanged(Location location) {
+        String msg = "Updated Location: " +
+                Double.toString(location.getLatitude()) + "," +
+                Double.toString(location.getLongitude());
+        // You can now create a LatLng Object for use with maps
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        startLocationBroadcast(latLng);
+    }
+
+    private void initLocationRequest() {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
     }
 }

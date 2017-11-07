@@ -49,6 +49,11 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
         return 10;
     }
 
+    public void addItems() {
+
+
+    }
+
     public class ComplaintViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.img)
         CircularImageView img;

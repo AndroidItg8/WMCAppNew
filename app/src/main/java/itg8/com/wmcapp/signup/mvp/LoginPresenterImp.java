@@ -28,7 +28,7 @@ public class LoginPresenterImp extends BaseWeakPresenter<LoginMvp.LoginView> imp
         module.onDestroy();
          if(hasView())
          {
-             detactView();
+             detachView();
          }
 
     }

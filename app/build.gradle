@@ -72,7 +72,7 @@ dependencies {
     implementation 'ch.acra:acra:4.9.0'
     // Json
     implementation 'org.glassfish:javax.annotation:10.0-b28'
-
+    compile 'ru.alexbykov:nopaginate:0.4.3'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
 }
