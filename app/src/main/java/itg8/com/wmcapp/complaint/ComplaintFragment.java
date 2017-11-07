@@ -10,14 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.complaint.model.ComplaintModel;
 import itg8.com.wmcapp.complaint.mvp.ComplaintMVP;
 import itg8.com.wmcapp.complaint.mvp.ComplaintPresenterImp;
-import ru.alexbykov.nopaginate.paginate.Paginate;
-import ru.alexbykov.nopaginate.paginate.PaginateBuilder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,7 +41,7 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
     private ComplaintAdapter adapter;
 
     private ComplaintMVP.ComplaintPresenter presenter;
-    private Paginate paginate;
+    private LinearLayoutManager layoutManager;
 
     public ComplaintFragment() {
         // Required empty public constructor
@@ -80,23 +81,24 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_complaint, container, false);
         unbinder = ButterKnife.bind(this, view);
+        presenter=new ComplaintPresenterImp(this);
         initPagination();
         init();
+        presenter.onLoadMoreItem(getString(R.string.url_complaint));
         return view;
     }
 
     private void initPagination() {
-        paginate = new PaginateBuilder()
-                .with(recyclerView)
-                .setCallback(presenter)
-                .setLoadingTriggerThreshold(10)
-                .build();
+
     }
 
     private void init() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        layoutManager=new LinearLayoutManager(mContext);
+        recyclerView.setLayoutManager(layoutManager);
         adapter = new ComplaintAdapter(mContext);
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(presenter.scrollListener(layoutManager));
+
     }
 
     @Override
@@ -109,8 +111,7 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-        presenter=new ComplaintPresenterImp(this);
-        presenter.onLoadMoreItem(getString(R.string.url_complaint));
+
     }
 
     @Override
@@ -118,27 +119,36 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
         super.onDetach();
         if(mContext!= null)
             mContext= null;
-        paginate.unSubscribe();
         presenter.onDetach();
     }
 
     @Override
-    public void onComplaintListAvailable() {
-        adapter.addItems();
+    public void onComplaintListAvailable(List<ComplaintModel> o) {
+        adapter.addItems(o);
     }
 
     @Override
     public void onNoMoreList() {
-        paginate.setPaginateNoMoreItems(true);
+
     }
 
     @Override
     public void onShowPaginationLoading(boolean show) {
-        paginate.showLoading(show);
+        if(show){
+            adapter.addFooter();
+//            recyclerView.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    adapter.notifyItemInserted();
+//                }
+//            });
+        }else {
+            adapter.removeFooter();
+        }
     }
 
     @Override
     public void onPaginationError(boolean show) {
-        paginate.showError(show);
+
     }
 }

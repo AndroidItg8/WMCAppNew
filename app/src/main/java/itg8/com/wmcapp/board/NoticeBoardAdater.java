@@ -25,6 +25,7 @@ import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.board.model.NoticeBoardModel;
 import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.Logs;
+import itg8.com.wmcapp.common.ProgressHolder;
 import itg8.com.wmcapp.widget.CustomFontTextView;
 
 /**
@@ -52,7 +53,7 @@ class NoticeBoardAdater extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder = new NoticeBoardViewHolder(view);
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_rv_progress, parent, false);
-            holder = new NoticeBoardProgress(view);
+            holder = new ProgressHolder(view);
 
         }
         return holder;
@@ -154,10 +155,5 @@ class NoticeBoardAdater extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    public class NoticeBoardProgress extends RecyclerView.ViewHolder {
 
-        public NoticeBoardProgress(View itemView) {
-            super(itemView);
-        }
-    }
 }

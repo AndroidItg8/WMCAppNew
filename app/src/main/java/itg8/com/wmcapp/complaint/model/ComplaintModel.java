@@ -4,7 +4,7 @@ package itg8.com.wmcapp.complaint.model;
 import javax.annotation.Generated;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -53,7 +53,7 @@ public class ComplaintModel implements Parcelable
     private Object mdate;
     @SerializedName("ImagePath")
     @Expose
-    private Object ImagePath;
+    private String ImagePath;
     public final static Parcelable.Creator<ComplaintModel> CREATOR = new Creator<ComplaintModel>() {
 
 
@@ -75,7 +75,7 @@ public class ComplaintModel implements Parcelable
             instance.CityFkid = ((int) in.readValue((int.class.getClassLoader())));
             instance.mid = ((Object) in.readValue((Object.class.getClassLoader())));
             instance.mdate = ((Object) in.readValue((Object.class.getClassLoader())));
-            instance.ImagePath = ((Object) in.readValue((Object.class.getClassLoader())));
+            instance.ImagePath = ((String) in.readValue((String.class.getClassLoader())));
             return instance;
         }
 
@@ -325,7 +325,7 @@ public class ComplaintModel implements Parcelable
      * @return
      *     The ImagePath
      */
-    public Object getImagePath() {
+    public String getImagePath() {
         return ImagePath;
     }
 
@@ -334,7 +334,7 @@ public class ComplaintModel implements Parcelable
      * @param ImagePath
      *     The ImagePath
      */
-    public void setImagePath(Object ImagePath) {
+    public void setImagePath(String ImagePath) {
         this.ImagePath = ImagePath;
     }
 

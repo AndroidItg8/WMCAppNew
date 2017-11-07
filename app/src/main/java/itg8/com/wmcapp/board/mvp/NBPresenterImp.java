@@ -15,6 +15,7 @@ public class NBPresenterImp extends BaseWeakPresenter<NBMVP.NBView> implements N
     private static final int LIMIT = 10;
     private int page=0;
     private boolean isLoading;
+    private boolean isFinished=false;
 
     public NBPresenterImp(NBMVP.NBView nbView) {
         super(nbView);
@@ -65,7 +66,7 @@ public class NBPresenterImp extends BaseWeakPresenter<NBMVP.NBView> implements N
                 int totalItemCount = linearLayoutManager.getItemCount();
                 int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
 
-                if (!isLoading)
+                if (!isLoading && !isFinished)
                 {
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0)
                     {
@@ -92,8 +93,12 @@ public class NBPresenterImp extends BaseWeakPresenter<NBMVP.NBView> implements N
     public void onNBListAvailable(List<NoticeBoardModel> o) {
         if(hasView()){
             getView().onShowPaginationLoading(false);
-            getView().onNBListAvailable(o);
-            isLoading=false;
+            if(o.size()>0)
+                getView().onNBListAvailable(o);
+            else {
+                getView().onNoMoreList();
+                isFinished=true;
+            }isLoading=false;
         }
     }
 

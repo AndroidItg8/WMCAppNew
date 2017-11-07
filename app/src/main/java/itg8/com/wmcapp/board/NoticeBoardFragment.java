@@ -163,7 +163,7 @@ rlInclude.setOnClickListener(this);
 
     @Override
     public void onNoMoreList() {
-        adapter.removeFooter();
+//        adapter.removeFooter();
     }
 
     @Override
