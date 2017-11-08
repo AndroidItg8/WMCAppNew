@@ -74,6 +74,7 @@
     <string name="url_forget_pswd">/api/CustomerApp/ForgotPassword</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="dismiss">Dismiss</string>
+    <string name="url_toriusm">/api/CustomerApp/TourismList</string>
     <!--<string name="default_web_client_id">911695149245-hoihh8tl5vaormgrom6j79bdf5e6rp1j.apps.googleusercontent.com-->
     <!--</string>-->
 </resources>

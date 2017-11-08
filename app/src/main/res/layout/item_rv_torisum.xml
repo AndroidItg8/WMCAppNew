@@ -20,6 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:scaleType="fitXY"
+                android:id="@+id/img"
                 android:src="@drawable/back_torisum" />
 
             <RelativeLayout
@@ -43,25 +44,7 @@
                     android:textStyle="bold"
                     app:font_value="ROBOTO_MEDIUM" />
 
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_margin="10dp">
 
-                    <ImageView
-                        android:id="@+id/img_un_fav"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
-
-                    <ImageView
-                        android:id="@+id/img_fav"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:visibility="gone"
-                        app:srcCompat="@drawable/ic_favorite_black_24dp" />
-                </FrameLayout>
             </RelativeLayout>
         </FrameLayout>
 
@@ -111,7 +94,7 @@
 
 
             <itg8.com.wmcapp.widget.CustomFontTextView
-                android:id="@+id/customFontTextView2"
+                android:id="@+id/lbl_reviews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/lbl_place_description"

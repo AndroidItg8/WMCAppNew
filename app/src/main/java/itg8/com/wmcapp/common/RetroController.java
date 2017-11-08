@@ -5,6 +5,7 @@ import java.util.List;
 import io.reactivex.Observable;
 import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.registration.RegistrationModel;
+import itg8.com.wmcapp.torisum.model.TorisumModel;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -94,5 +95,6 @@ public interface RetroController {
     @GET()
     Observable<ResponseBody> loadNoticeBoard(@Url String url, @Query("skip") int page, @Query("pageSize") int limit, @Query("cityid") int cityId);
 
-
+    @GET()
+    Call<List<TorisumModel>> getTorisumList(@Url String loadUrl);
 }

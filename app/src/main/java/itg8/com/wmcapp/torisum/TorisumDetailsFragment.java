@@ -15,6 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.torisum.model.TorisumModel;
 import itg8.com.wmcapp.widget.AutoScrollViewPager;
 import itg8.com.wmcapp.widget.CustomFontTextView;
 
@@ -52,6 +53,7 @@ public class TorisumDetailsFragment extends Fragment {
     private String mParam2;
 
     private GoogleMap mMap;
+    private TorisumModel torisumModel;
 
     public TorisumDetailsFragment() {
         // Required empty public constructor
@@ -66,10 +68,10 @@ public class TorisumDetailsFragment extends Fragment {
      * @return A new instance of fragment TorisumDetailsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TorisumDetailsFragment newInstance(String param1, String param2) {
+    public static TorisumDetailsFragment newInstance(TorisumModel param1, String param2) {
         TorisumDetailsFragment fragment = new TorisumDetailsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putParcelable(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -79,7 +81,7 @@ public class TorisumDetailsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            torisumModel = getArguments().getParcelable(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }

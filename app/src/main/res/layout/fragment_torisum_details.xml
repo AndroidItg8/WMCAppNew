@@ -14,22 +14,22 @@
         android:layout_height="200dp"
         android:scaleType="fitXY"/>
 
-    <itg8.com.wmcapp.widget.CustomFontTextView
-        android:id="@+id/lbl_place_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_below="@+id/viewPager"
-        android:ellipsize="end"
-        android:inputType="text"
-        android:lines="2"
-        android:maxLines="2"
-        android:text="Place Name"
-        android:textAllCaps="true"
-        android:textColor="@color/colorBlack"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:font_value="ROBOTO_MEDIUM" />
+        <itg8.com.wmcapp.widget.CustomFontTextView
+            android:id="@+id/lbl_place_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/lbl_place_description"
+            android:layout_below="@+id/viewPager"
+            android:ellipsize="end"
+            android:inputType="text"
+            android:lines="2"
+            android:maxLines="2"
+            android:text="Place Name"
+            android:textAllCaps="true"
+            android:textColor="@color/colorBlack"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:font_value="ROBOTO_MEDIUM" />
 
 
         <itg8.com.wmcapp.widget.CustomFontTextView
@@ -119,6 +119,19 @@
                 android:padding="10dp"
                 android:text="Share"
                 app:font_value="ROBOTO_REGULAR"/>
+
+            <itg8.com.wmcapp.widget.CustomFontTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginTop="10dp"
+                    android:drawablePadding="10dp"
+                    android:drawableStart="@drawable/ic_favorite_black_24dp"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp"
+                    android:padding="10dp"
+                    android:text="Share"
+                    app:font_value="ROBOTO_REGULAR"/>
         </LinearLayout>
 
         <fragment
