@@ -4,42 +4,83 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="itg8.com.wmcapp.cilty.CityFragment">
+   >
+
+    <itg8.com.wmcapp.widget.CustomFontTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="8dp"
+        android:text="Your Selected City :Ahmadnagar Cantonment"
+        android:textColor="@color/colorBlack"
+        android:textSize="18sp"
+        app:font_value="ROBOTO_MEDIUM"
+        android:gravity="center"
+        android:id="@+id/lbl_select_city"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edt_search"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_below="@+id/lbl_select_city"
+        android:hint="Search here"
+        android:paddingLeft="05dp"
+        android:drawableLeft="@drawable/ic_search"
+        android:drawablePadding="10dp"
+        android:textCursorDrawable="@color/colorPrimary"
+        android:cursorVisible="true"
+        android:textColorHint="@color/colorGray"
+
+        android:backgroundTint="@color/colorPrimary"
+        android:paddingRight="05dp"/>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-  android:layout_above="@+id/btn_dismiss">
+        android:layout_below="@+id/edt_search"
+        android:layout_above="@+id/btn_dismiss">
+        <RadioGroup
+            android:id="@+id/rg_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        </RadioGroup>
 
-    <com.github.rahatarmanahmed.cpv.CircularProgressView
-        android:id="@+id/progressView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_margin="16dp"
-        android:visibility="gone"
-        app:cpv_color="@color/colorPrimary"
-        app:cpv_indeterminate="true"
-        app:cpv_thickness="2dp" />
+        <com.github.rahatarmanahmed.cpv.CircularProgressView
+            android:id="@+id/progressView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:visibility="gone"
+            app:cpv_color="@color/colorPrimary"
+            app:cpv_indeterminate="true"
+            app:cpv_thickness="2dp" />
     </FrameLayout>
+
     <Button
         android:id="@+id/btn_dismiss"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="20dp"
         android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:background="@color/colorPrimary"
-        android:textSize="15sp"
-        android:textColor="@color/colorWhite"
         android:text="dismiss"
-        android:layout_marginEnd="20dp"/>
+        android:textColor="@color/colorWhite"
+        android:textSize="15sp" />
 
 
 </RelativeLayout>

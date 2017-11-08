@@ -43,7 +43,7 @@ public interface ChangePasswordMVP {
     public interface ChangePswdModule
     {
         void onDestroy();
-        void onAuthenticationToChangePswd(RetroController controller, String url,  String oldpswd, String newpswd, String confirmpswd, ChangePswdPresenterImp listner);
+        void onAuthenticationToChangePswd(RetroController controller, String url, String oldpswd, String newpswd, String confirmpswd, ChangePswdPresenterImp listner);
     }
 
     public interface ChangePswdListener{

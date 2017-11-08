@@ -36,6 +36,17 @@ public class CityModel implements Parcelable
     @SerializedName("StateID")
     @Expose
     private int StateID;
+
+     private boolean isSelected;
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
     public final static Parcelable.Creator<CityModel> CREATOR = new Creator<CityModel>() {
 
 

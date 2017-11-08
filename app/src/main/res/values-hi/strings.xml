@@ -61,11 +61,10 @@
         
     <string name="hide_identity"> पहचान छुपाएं </string>
     <string name="contact_us">हमसे संपर्क करें</string>
+    <string name="dismiss">खारिज</string>
 
-    <!--add it now -->
-    <string name="english">अंग्रेज़ी</string>
-    <string name="hindi">हिंदी</string>
-    <string name="marathi">मराठी</string>
+
+
 
 
 </resources>

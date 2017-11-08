@@ -86,6 +86,7 @@ public class LoginModuleImp implements LoginMvp.LoginModule {
 
            @Override
            public void onFailure(Call<ResponseBody> call, Throwable t) {
+               t.printStackTrace();
                if (t instanceof NoConnectivityException) {
                    listener.onNoInternetConnect(true);
 

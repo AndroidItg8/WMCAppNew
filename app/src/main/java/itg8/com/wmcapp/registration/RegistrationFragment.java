@@ -147,7 +147,8 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         String url = getString(R.string.url_registration);
         showProgress();
         RetroController api = MyApplication.getInstance().getRetroController();
-        call = api.sendRegistrationInfoToserver(url, email, password, cpassword,"AppUser");
+
+        call = api.sendRegistrationInfoToserver(url,password, cpassword,name,mobile,"AppUser",email);
          call.enqueue(new Callback<RegistrationModel>() {
              @Override
              public void onResponse(Call<RegistrationModel> call, Response<RegistrationModel> response) {
@@ -157,11 +158,11 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                  if (response.isSuccessful()) {
                      if (response.body().isFlag()) {
                          showToast("Registration Successfully");
-                         getActivity().onBackPressed();
+
 
                      }else
                      {
-                         showToast("Registration Failed");
+                         showToast(response.body().getStatus());
 
                      }
                  } else {
@@ -213,13 +214,13 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
             inputEmail.setError(getString(R.string.invalid_email));
 
         }
-//        if (MobileNumber.length() != 10) {
-//            validate = false;
-//            inputMobile.setError(getString(R.string.invalid_number));
-//        } else if (TextUtils.isEmpty(MobileNumber)) {
-//            inputMobile.setError(getString(R.string.empty));
-//            validate = false;
-//        }
+        if (MobileNumber.length() != 10) {
+            validate = false;
+            inputMobile.setError(getString(R.string.invalid_number));
+        } else if (TextUtils.isEmpty(MobileNumber)) {
+            inputMobile.setError(getString(R.string.empty));
+            validate = false;
+        }
 
 
 

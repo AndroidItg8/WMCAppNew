@@ -19,7 +19,7 @@ import retrofit2.http.Url;
  * Created by swapnilmeshram on 31/10/17.
  */
 
- public  interface RetroController {
+public interface RetroController {
     @GET
     Call<List<CityModel>> getCityFromServer(@Url String url);
 
@@ -36,28 +36,36 @@ import retrofit2.http.Url;
 //   ConfirmPassword:123456
 //   UserRoles:AppUser
 
-   @FormUrlEncoded
-   @POST()
-   @Headers("Content-Type:application/x-www-form-urlencoded")
-  Call<RegistrationModel>  sendRegistrationInfoToserver(@Url String url,
-                                                        @Field("Email") String emailId,
-                                                        @Field("password") String password,
-                                                        @Field("ConfirmPassword")String cPassword,
-                                                        @Field("UserRoles") String appUser);
+//    Password:123456
+//    ConfirmPassword:123456
+//    FullName:Aman Ambarte
+//    MobileNumber:786786786786
+//    UserRoles:AppUser
+//    Email:Aman@gmail.com
 
-//    OldPassword:WMC123
+    @FormUrlEncoded
+    @POST()
+    @Headers("Content-Type:application/x-www-form-urlencoded")
+    Call<RegistrationModel> sendRegistrationInfoToserver(@Url String url,
+                                                         @Field("Password") String password,
+                                                         @Field("ConfirmPassword") String cPassword,
+                                                         @Field("FullName") String name,
+                                                         @Field("MobileNumber") String mobile,
+                                                         @Field("UserRoles") String appUser,
+                                                         @Field("Email") String emailId);
+
+    //    OldPassword:WMC123
 //    NewPassword:123456
-@FormUrlEncoded
-@POST()
-@Headers("Content-Type:application/x-www-form-urlencoded")
+    @FormUrlEncoded
+    @POST()
+    @Headers("Content-Type:application/x-www-form-urlencoded")
     Call<RegistrationModel> changePassword(@Url String url, @Field("OldPassword") String oldpswd, @Field("NewPassword") String newpswd);
-
 
 
     @FormUrlEncoded
     @POST()
     @Headers("Content-Type:application/x-www-form-urlencoded")
-    Call<RegistrationModel> forgetPaswd(@Url String url,@Field("Email") String email);
+    Call<RegistrationModel> forgetPaswd(@Url String url, @Field("Email") String email);
 
 //    Category_fkid:1
 //    ComplaintName:Dash
@@ -72,20 +80,19 @@ import retrofit2.http.Url;
     @Headers("Content-Type:application/x-www-form-urlencoded")
     Call<RegistrationModel> AddComplaint(@Url String url,
                                          @Field("Category_fkid") String coategoryId,
-                                         @Field("ComplaintName") String  complaintName,
+                                         @Field("ComplaintName") String complaintName,
                                          @Field("ComplaintDescription") String description,
                                          @Field("Longitutde") String longititude,
                                          @Field("Latitude") String latitiude,
                                          @Field("City_fkid") String cityId
-                                         );
-
+    );
 
 
     @GET()
-    Observable<ResponseBody> loadComplaint(@Url String url, @Query("skip") int page, @Query("pageSize") int limit,@Query("cityid") int cityId);
+    Observable<ResponseBody> loadComplaint(@Url String url, @Query("skip") int page, @Query("pageSize") int limit, @Query("cityid") int cityId);
 
     @GET()
-    Observable<ResponseBody> loadNoticeBoard(@Url String url,@Query("skip") int page, @Query("pageSize") int limit,@Query("cityid") int cityId);
+    Observable<ResponseBody> loadNoticeBoard(@Url String url, @Query("skip") int page, @Query("pageSize") int limit, @Query("cityid") int cityId);
 
 
 }

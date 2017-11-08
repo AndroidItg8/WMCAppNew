@@ -3,7 +3,6 @@ package itg8.com.wmcapp.splash;
 import android.graphics.Color;
 import android.os.Bundle;
 
-import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -20,7 +19,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import itg8.com.wmcapp.R;
-import itg8.com.wmcapp.cilty.CityFragment;
 import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.cilty.mvp.CityMVP;
 import itg8.com.wmcapp.cilty.mvp.CityPresenterImp;
@@ -29,6 +27,7 @@ import itg8.com.wmcapp.database.BaseDatabaseHelper;
 
 public class SplashActivity extends BaseActivity implements CityMVP.CityView {
 
+    private static final String TAG = SplashActivity.class.getSimpleName();
     private Fragment fragment;
     // Splash screen timer
     private static int SPLASH_TIME_OUT = 3000;
@@ -37,7 +36,6 @@ public class SplashActivity extends BaseActivity implements CityMVP.CityView {
     private Snackbar snackbar;
     private Dao<CityModel, Integer> mDAOCity = null;
     private List<CityModel> cityList= null;
-    private String  TAG = CityFragment.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +58,7 @@ public class SplashActivity extends BaseActivity implements CityMVP.CityView {
 
     private void splash(List<CityModel> cityList) {
 
-        fragment = CityFragment.newInstance(cityList,"");
-                ft = getSupportFragmentManager().beginTransaction();
-                ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-                ft.replace(R.id.splash,fragment);
-                ft.addToBackStack(null);
-                ft.commit();
+
 
     }
 

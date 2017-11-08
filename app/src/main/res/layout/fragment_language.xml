@@ -1,59 +1,76 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="300dp"
     android:layout_margin="10dp"
     tools:context="itg8.com.wmcapp.language.LanguageFragment">
 
-    <itg8.com.wmcapp.widget.CustomFontTextView
+    <RadioGroup
+        android:id="@+id/rg_language"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/lbl_lang_eng"
-        android:textColor="@color/colorBlack"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:padding="8dp"
-        android:textSize="18sp"
-        android:text="@string/english"/>
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp">
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_margin="10dp"
-        android:layout_below="@+id/lbl_lang_eng"
-        android:background="@color/colorGrayLight"/>
+        <RadioButton
+            android:id="@+id/rgb_english"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@drawable/rgb_selector"
+            android:checked="true"
+            android:gravity="center"
+            android:text="English" />
 
-    <itg8.com.wmcapp.widget.CustomFontTextView
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:layout_margin="10dp"
+            android:background="@color/colorGrayLight" />
+
+        <RadioButton
+            android:id="@+id/rgb_hindi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@drawable/rgb_selector"
+            android:gravity="center"
+            android:text="हिंदी" />
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:layout_margin="10dp"
+            android:background="@color/colorGrayLight" />
+
+        <RadioButton
+            android:id="@+id/rgb_marathi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@drawable/rgb_selector"
+            android:gravity="center"
+            android:text="मराठी" />
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:layout_margin="10dp"
+            android:visibility="gone"
+            android:background="@color/colorGrayLight" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btn_dismiss"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/lbl_lang_hin"
-        android:textColor="@color/colorBlack"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_below="@+id/view"
-        android:padding="8dp"
-        android:textSize="18sp"
-        android:text="@string/hindi"/>
-    <View
-        android:id="@+id/view1"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_margin="10dp"
-        android:layout_below="@+id/lbl_lang_hin"
-        android:background="@color/colorGrayLight"/>
-
-
-    <itg8.com.wmcapp.widget.CustomFontTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/lbl_lang_mar"
-        android:textColor="@color/colorBlack"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_below="@+id/view1"
-        android:padding="8dp"
-        android:textSize="18sp"
-        android:text="@string/marathi"/>
-
+        android:layout_below="@+id/rg_language"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/dismiss"
+        android:textColor="@color/colorWhite" />
 </RelativeLayout>

@@ -24,6 +24,8 @@ public class CommonMethod {
     public static final String HEADER = "HEADER";
     public static final String IS_LOGIN = "IS_LOGIN";
     public static final String CITY = "CITY";
+    public static final String LANGUAGE = "LANGUAGE";
+    public static final String SELECTED_CITY = "SELECTED_CITY";
 
 
     private static Typeface typeface;
