@@ -118,11 +118,10 @@ class NoticeBoardAdater extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         models.add(null);
     }
 
-    public void removeFooter() {
-        final int itemRemoved = models.size() - 1;
-        models.remove(itemRemoved);
-        notifyItemRemoved(itemRemoved);
-        notifyItemRangeChanged(itemRemoved, models.size());
+    public synchronized int removeFooter() {
+     int t=models.size()-1;
+        models.remove(t);
+        return t ;
     }
 
     public void notifyItemInserted() {

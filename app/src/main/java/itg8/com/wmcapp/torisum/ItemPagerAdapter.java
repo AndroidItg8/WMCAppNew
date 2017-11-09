@@ -24,7 +24,7 @@ public class ItemPagerAdapter extends android.support.v4.view.PagerAdapter {
     Context mContext;
 
 
-    public ItemPagerAdapter(Context context, List<Fileupload> items) {
+    public  ItemPagerAdapter(Context context, List<Fileupload> items) {
         this.mContext = context;
         this.mItems = items;
     }

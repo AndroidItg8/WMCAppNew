@@ -120,8 +120,6 @@ public class TorisumFragment extends Fragment implements TorisumAdapter.TorisumI
 
     @Override
     public void onTourismListAvailable(List<TorisumModel> list) {
-
-
         init(list);
     }
 

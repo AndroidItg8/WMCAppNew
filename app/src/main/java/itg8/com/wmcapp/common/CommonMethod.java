@@ -1,6 +1,7 @@
 package itg8.com.wmcapp.common;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.text.TextUtils;
 
@@ -85,4 +86,14 @@ public class CommonMethod {
         }else
             return "NOT AVAILABLE";
     }
+
+     public  static void  shareItem(Context context)
+     {
+         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+         sharingIntent.setType("text/plain");
+         String shareBody = "Here is the share content body";
+         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+         context.startActivity(Intent.createChooser(sharingIntent, "Share via"));
+     }
 }

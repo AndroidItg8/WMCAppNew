@@ -1,6 +1,9 @@
 package itg8.com.wmcapp.torisum;
 
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,11 +12,26 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.torisum.model.TorisumModel;
@@ -25,8 +43,8 @@ import itg8.com.wmcapp.widget.CustomFontTextView;
  * Use the {@link TorisumDetailsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TorisumDetailsFragment extends Fragment {
-    //implements OnMapReadyCallback
+public class TorisumDetailsFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -45,11 +63,16 @@ public class TorisumDetailsFragment extends Fragment {
     CustomFontTextView lblReviews;
     @BindView(R.id.ll_navi)
     LinearLayout llNavi;
-    //    @BindView(R.id.map)
-//    android.widget.fragment map;
+
     Unbinder unbinder;
     @BindView(R.id.lbl_address)
     CustomFontTextView lblAddress;
+    @BindView(R.id.lbl_direction)
+    CustomFontTextView lblDirection;
+    @BindView(R.id.lbl_share)
+    CustomFontTextView lblShare;
+    @BindView(R.id.lbl_like)
+    CustomFontTextView lblLike;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -57,6 +80,7 @@ public class TorisumDetailsFragment extends Fragment {
 
     private GoogleMap mMap;
     private TorisumModel torisumModel;
+    private Context mContext;
 
     public TorisumDetailsFragment() {
         // Required empty public constructor
@@ -94,9 +118,9 @@ public class TorisumDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_torisum_details, container, false);
-//        SupportMapFragment mapFragment = (SupportMapFragment).getSupportFragmentManager()
-//                .findFragmentById(R.id.map);
-//        mapFragment.getMapAsync(this);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
         unbinder = ButterKnife.bind(this, view);
         initView();
 
@@ -107,11 +131,47 @@ public class TorisumDetailsFragment extends Fragment {
     private void initView() {
         ItemPagerAdapter adapter = new ItemPagerAdapter(getActivity(), torisumModel.getFileupload());
         viewPager.setAdapter(adapter);
-        viewPager.startAutoScroll(6000);
+        viewPager.startAutoScroll(20000);
         lblPlaceName.setText(CommonMethod.checkEmpty(torisumModel.getName()));
         lblPlaceDescription.setText(CommonMethod.checkEmpty(torisumModel.getDescription()));
-        lblTime.setText(CommonMethod.getFormattedDateTime(torisumModel.getAddedDate()));
+//        lblTime.setText(CommonMethod.getFormattedDateTime(torisumModel.getAddedDate()));
+        lblShare.setOnClickListener(this);
+        lblLike.setOnClickListener(this);
+        lblDirection.setOnClickListener(this);
         lblAddress.setText(CommonMethod.checkEmpty(torisumModel.getAddress()));
+        Observable.create(new ObservableOnSubscribe<LatLng>() {
+            @Override
+            public void subscribe(ObservableEmitter<LatLng> e) throws Exception {
+                e.onNext(getLocationFromAddress(torisumModel.getName() + ", " + torisumModel.getAddress()));
+                e.onComplete();
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<LatLng>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(LatLng latLng) {
+                        if (latLng != null && mMap != null) {
+                            mMap.addMarker(new MarkerOptions().position(latLng).title(torisumModel.getName()));
+                            mMap.setMinZoomPreference(17);
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @Override
@@ -120,13 +180,59 @@ public class TorisumDetailsFragment extends Fragment {
         unbinder.unbind();
     }
 
-//    @Override
-//    public void onMapReady(GoogleMap googleMap) {
-//        mMap = googleMap;
-//
-//        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-//    }
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(torisumModel.getLotitude(), torisumModel.getLongitude());
+        mMap.addMarker(new MarkerOptions().position(sydney).title(torisumModel.getName()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        mContext = context;
+        super.onAttach(context);
+    }
+
+    public LatLng getLocationFromAddress(String strAddress) {
+        if (strAddress == null) {
+            return null;
+        }
+        Geocoder coder = new Geocoder(getActivity());
+        List<Address> address;
+        LatLng p1 = null;
+
+        try {
+            address = coder.getFromLocationName(strAddress, 5);
+            if (address == null) {
+                return null;
+            }
+            Address location = address.get(0);
+//            p1.=location.getLatitude();
+//            location.getLongitude();
+            if (location != null)
+                p1 = new LatLng((double) (location.getLatitude()),
+                        (double) (location.getLongitude()));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return p1;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId())
+        {
+            case R.id.lbl_direction:
+                break;
+            case R.id.lbl_share:
+                CommonMethod.shareItem(getActivity() );
+                break;
+            case R.id.lbl_like:
+                break;
+        }
+    }
 }

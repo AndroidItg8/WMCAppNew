@@ -36,10 +36,10 @@ public class TorisumModel implements Parcelable
     private String InchargeName;
     @SerializedName("Longitude")
     @Expose
-    private Object Longitude;
+    private double Longitude;
     @SerializedName("Lotitude")
     @Expose
-    private Object Lotitude;
+    private double Lotitude;
     @SerializedName("AddedDate")
     @Expose
     private String AddedDate;
@@ -73,8 +73,8 @@ public class TorisumModel implements Parcelable
             instance.Address = ((String) in.readValue((String.class.getClassLoader())));
             instance.ContactNumber = ((String) in.readValue((String.class.getClassLoader())));
             instance.InchargeName = ((String) in.readValue((String.class.getClassLoader())));
-            instance.Longitude = ((Object) in.readValue((Object.class.getClassLoader())));
-            instance.Lotitude = ((Object) in.readValue((Object.class.getClassLoader())));
+            instance.Longitude = ((double) in.readValue((double.class.getClassLoader())));
+            instance.Lotitude = ((double) in.readValue((double.class.getClassLoader())));
             instance.AddedDate = ((String) in.readValue((String.class.getClassLoader())));
             instance.LastModifiedDate = ((Object) in.readValue((Object.class.getClassLoader())));
             instance.mid = ((Object) in.readValue((Object.class.getClassLoader())));
@@ -222,7 +222,7 @@ public class TorisumModel implements Parcelable
      * @return
      *     The Longitude
      */
-    public Object getLongitude() {
+    public double getLongitude() {
         return Longitude;
     }
 
@@ -231,7 +231,7 @@ public class TorisumModel implements Parcelable
      * @param Longitude
      *     The Longitude
      */
-    public void setLongitude(Object Longitude) {
+    public void setLongitude(double Longitude) {
         this.Longitude = Longitude;
     }
 
@@ -240,7 +240,7 @@ public class TorisumModel implements Parcelable
      * @return
      *     The Lotitude
      */
-    public Object getLotitude() {
+    public double getLotitude() {
         return Lotitude;
     }
 
@@ -249,7 +249,7 @@ public class TorisumModel implements Parcelable
      * @param Lotitude
      *     The Lotitude
      */
-    public void setLotitude(Object Lotitude) {
+    public void setLotitude(double Lotitude) {
         this.Lotitude = Lotitude;
     }
 

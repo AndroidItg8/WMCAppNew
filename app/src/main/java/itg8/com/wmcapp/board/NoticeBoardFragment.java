@@ -128,6 +128,8 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
         super.onDestroyView();
         Logs.d("CYCLE : onDestroyView()");
         unbinder.unbind();
+        presenter.onDetach();
+
     }
 
     @Override
@@ -184,7 +186,6 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
         Logs.d("CYCLE : Detach()");
         if (mContext != null)
             mContext = null;
-        presenter.onDetach();
     }
 
     @Override
@@ -211,8 +212,16 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
                 }
             });
         } else {
+            recyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    int t = adapter.removeFooter();
+                    adapter.notifyItemRemoved(t);
+                    adapter.notifyItemRangeChanged(t, adapter.getItemCount());
 
-            adapter.removeFooter();
+                }
+            });
+
         }
     }
 

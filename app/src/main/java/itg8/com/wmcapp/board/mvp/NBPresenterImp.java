@@ -43,6 +43,11 @@ public class NBPresenterImp extends BaseWeakPresenter<NBMVP.NBView> implements N
     }
 
     @Override
+    public void onError(String message) {
+
+    }
+
+    @Override
     public void onLoadMore() {
         getItems(page,LIMIT);
     }

@@ -48,6 +48,11 @@ public class ComplaintPresenterImp extends BaseWeakPresenter<ComplaintMVP.Compla
     }
 
     @Override
+    public void onError(String message) {
+
+    }
+
+    @Override
     public void onLoadMore() {
         getItems(page,LIMIT);
     }
