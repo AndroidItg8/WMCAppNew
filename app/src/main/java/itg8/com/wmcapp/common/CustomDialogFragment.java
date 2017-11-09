@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.home.HomeActivity;
 
 
 public class CustomDialogFragment extends DialogFragment {
@@ -80,6 +81,7 @@ public class CustomDialogFragment extends DialogFragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 listener.onItemClick(position);
+                dismiss();
             }
         });
     }

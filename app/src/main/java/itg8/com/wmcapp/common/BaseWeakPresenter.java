@@ -26,7 +26,7 @@ public class BaseWeakPresenter<T> {
     }
 
     public boolean hasView(){
-        return weakReference.get() != null;
+        return weakReference!=null && weakReference.get() != null;
     }
 
     public T getView(){
@@ -34,8 +34,9 @@ public class BaseWeakPresenter<T> {
     }
 
 
-    protected void detachView(){
-        weakReference=null;
+    protected void detachView()
+    {
+        weakReference.clear();
     }
 
     // Check if there is any connectivity for a Wifi network

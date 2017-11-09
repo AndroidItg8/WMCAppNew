@@ -100,7 +100,7 @@ public class NewsFragment extends Fragment implements NewsAdapter.NewsItemClicke
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onItemNewsClicked(int position, ImageView img) {
-        fragment = NewsDetailsFragment.newInstance(String.valueOf(position), "");
+        fragment = NewsDetailsFragment.newInstance(ViewCompat.getTransitionName(img), "");
 
 //        // 1. Exit for Previous Fragment
 //        Fade exitFade = new Fade();
@@ -124,7 +124,7 @@ public class NewsFragment extends Fragment implements NewsAdapter.NewsItemClicke
 //        fragment.setEnterTransition(enterFade);
 
     FragmentManager fm =getFragmentManager();
-    img.setTransitionName(String.valueOf(position));
+
     FragmentTransaction fragmentTransaction= fm.beginTransaction();
         fragmentTransaction.addSharedElement(img,  ViewCompat.getTransitionName(img));
         fragmentTransaction.replace(R.id.frame_container, fragment);

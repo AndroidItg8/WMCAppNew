@@ -1,6 +1,7 @@
 package itg8.com.wmcapp.news;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,9 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
 
     @Override
     public void onBindViewHolder(NewsViewHolder holder, int position) {
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            holder.img.setTransitionName("MyItem" + position);
+        }
 
     }
 
@@ -61,13 +64,14 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
         CustomFontTextView lblDate;
         @BindView(R.id.img_close)
         TextView imgClose;
+
         public NewsViewHolder(final View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listner.onItemNewsClicked(getAdapterPosition(),img );
+                    listner.onItemNewsClicked(getAdapterPosition(), img);
 
                 }
             });

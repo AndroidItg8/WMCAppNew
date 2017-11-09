@@ -72,10 +72,7 @@ public class NewsDetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_news_details, container, false);
         unbinder = ButterKnife.bind(this, view);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-           // img.setTransitionName(mParam1);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                setSharedElementEnterTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move));
-            }
+            img.setTransitionName(mParam1);
         }
         return view;
     }

@@ -4,8 +4,10 @@ package itg8.com.wmcapp.board;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.board.model.NoticeBoardModel;
 import itg8.com.wmcapp.board.mvp.NBMVP;
 import itg8.com.wmcapp.board.mvp.NBPresenterImp;
+import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.complaint.AddComplaintFragment;
 import ru.alexbykov.nopaginate.paginate.Paginate;
 import ru.alexbykov.nopaginate.paginate.PaginateBuilder;
@@ -44,10 +47,11 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
     private String mParam1;
     private String mParam2;
     private NBMVP.NBPresenter presenter;
-    private Fragment fragment= null;
+    private Fragment fragment = null;
     private Context mContext;
     private NoticeBoardAdater adapter;
     private LinearLayoutManager layoutManager;
+    private FragmentTransaction ft;
 
 
     public NoticeBoardFragment() {
@@ -75,7 +79,10 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Logs.d("CYCLE : onCreate()");
+        setRetainInstance(true);
         if (getArguments() != null) {
+
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
@@ -86,10 +93,11 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Logs.d("CYCLE : onCreateView()");
         View view = inflater.inflate(R.layout.fragment_notice_board, container, false);
         unbinder = ButterKnife.bind(this, view);
-rlInclude.setOnClickListener(this);
-        presenter=new NBPresenterImp(this);
+        rlInclude.setOnClickListener(this);
+        presenter = new NBPresenterImp(this);
         init();
         initPaginate();
         presenter.onLoadMoreItems(getString(R.string.url_notice_board));
@@ -101,9 +109,9 @@ rlInclude.setOnClickListener(this);
     }
 
     private void init() {
-        layoutManager=new LinearLayoutManager(getActivity());
+        layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        adapter=new NoticeBoardAdater(getActivity());
+        adapter = new NoticeBoardAdater(getActivity());
         recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(presenter.scrollListener(layoutManager));
     }
@@ -111,23 +119,41 @@ rlInclude.setOnClickListener(this);
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mContext=context;
-
+        mContext = context;
+        Logs.d("CYCLE : Attach()");
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        Logs.d("CYCLE : onDestroyView()");
         unbinder.unbind();
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId())
-        {
-            case R.id.rl_include:
-                fragment = AddComplaintFragment.newInstance("","");
+    public void onStart() {
+        super.onStart();
+        Logs.d("CYCLE : onStart()");
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Logs.d("CYCLE : onResume()");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Logs.d("CYCLE : onPause()");
+    }
+
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.rl_include:
+                fragment = AddComplaintFragment.newInstance("", "");
                 break;
 
         }
@@ -135,7 +161,11 @@ rlInclude.setOnClickListener(this);
     }
 
     private void callFragment(Fragment fragment) {
-
+        ft = getFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+        ft.replace(R.id.frame_container, fragment);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 
 
@@ -151,8 +181,9 @@ rlInclude.setOnClickListener(this);
     @Override
     public void onDetach() {
         super.onDetach();
-        if(mContext!= null)
-            mContext= null;
+        Logs.d("CYCLE : Detach()");
+        if (mContext != null)
+            mContext = null;
         presenter.onDetach();
     }
 
@@ -168,15 +199,19 @@ rlInclude.setOnClickListener(this);
 
     @Override
     public void onShowPaginationLoading(boolean show) {
-        if(show){
-            adapter.addFooter();
-//            recyclerView.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    adapter.notifyItemInserted();
-//                }
-//            });
-        }else {
+        if (adapter == null)
+            return;
+        if (show) {
+
+            recyclerView.post(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.addFooter();
+                    adapter.notifyItemInserted(adapter.getItemCount() - 1);
+                }
+            });
+        } else {
+
             adapter.removeFooter();
         }
     }

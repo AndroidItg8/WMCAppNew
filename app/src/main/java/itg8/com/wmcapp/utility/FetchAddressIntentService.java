@@ -111,7 +111,7 @@ public class FetchAddressIntentService extends IntentService implements GoogleAp
         if (location == null) {
             errorMessage = getString(R.string.no_location_data_provided);
             Log.wtf(TAG, errorMessage);
-            deliverResultToReceiver(CommonMethod.FAILURE_RESULT, errorMessage);
+            deliverResultToReceiver(CommonMethod.FAILURE_RESULT, errorMessage, null, null);
             return;
         }
 
@@ -157,7 +157,7 @@ public class FetchAddressIntentService extends IntentService implements GoogleAp
                 errorMessage = getString(R.string.no_address_found);
                 Log.e(TAG, errorMessage);
             }
-            deliverResultToReceiver(CommonMethod.FAILURE_RESULT, errorMessage);
+            deliverResultToReceiver(CommonMethod.FAILURE_RESULT, errorMessage, location, null);
         } else {
             Address address = addresses.get(0);
             ArrayList<String> addressFragments = new ArrayList<>();
@@ -176,16 +176,18 @@ public class FetchAddressIntentService extends IntentService implements GoogleAp
             }
             Log.i(TAG, getString(R.string.address_found));
             deliverResultToReceiver(CommonMethod.SUCCESS_RESULT,
-                    TextUtils.join(System.getProperty("line.separator"), addressFragments));
+                    TextUtils.join(System.getProperty("line.separator"), addressFragments),location,address.getLocality());
         }
     }
 
     /**
      * Sends a resultCode and message to the receiver.
      */
-    private void deliverResultToReceiver(int resultCode, String message) {
+    private void deliverResultToReceiver(int resultCode, String message, LatLng location, String locality) {
         Bundle bundle = new Bundle();
         bundle.putString(CommonMethod.RESULT_DATA_KEY, message);
+        bundle.putParcelable(CommonMethod.LOCATION_DATA_EXTRA,location);
+        bundle.putString(CommonMethod.CITY,locality);
         mReceiver.send(resultCode, bundle);
     }
 

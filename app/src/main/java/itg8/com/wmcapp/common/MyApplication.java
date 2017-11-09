@@ -68,6 +68,7 @@ public class MyApplication extends Application{
 
     }
 
+
     public void resetRetroAfterLogin() {
         retroController = null;
     }

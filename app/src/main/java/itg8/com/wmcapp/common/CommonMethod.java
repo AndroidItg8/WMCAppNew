@@ -3,6 +3,8 @@ package itg8.com.wmcapp.common;
 import android.content.Context;
 import android.graphics.Typeface;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -69,6 +71,10 @@ public class CommonMethod {
             e.printStackTrace();
         }
         return convertedDate;
+    }
+
+    public static interface ResultListener{
+        void onResultAddress(String result, LatLng mLocation, String city);
     }
 
 }
