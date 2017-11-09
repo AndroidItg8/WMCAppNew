@@ -37,9 +37,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:maxLines="5"
             android:lines="5"
             android:layout_below="@+id/lbl_place_name"
-            android:maxLines="5"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:text="Short Description of this place Short Description of this placeShort Description of this place Short Description of this placeShort Description of this place..."
@@ -47,13 +47,28 @@
             android:textSize="14sp"
             app:font_value="ROBOTO_REGULAR" />
 
+        <itg8.com.wmcapp.widget.CustomFontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lbl_place_description"
+            android:id="@+id/lbl_address_value"
+            android:maxLines="5"
+            android:lines="5"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:text="Short Description of this place Short Description of this placeShort Description of this place Short Description of this placeShort Description of this place..."
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            app:font_value="ROBOTO_REGULAR"
+            />
+
 
         <itg8.com.wmcapp.widget.CustomFontTextView
             android:id="@+id/lbl_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/lbl_place_description"
+            android:layout_below="@+id/lbl_address_value"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:text="Open Until: 7 pm"
@@ -67,7 +82,7 @@
             style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/lbl_place_description"
+            android:layout_below="@+id/lbl_address_value"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
@@ -80,7 +95,7 @@
             android:id="@+id/lbl_reviews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/lbl_place_description"
+            android:layout_below="@+id/lbl_address_value"
             android:layout_marginTop="10dp"
             android:layout_toEndOf="@+id/ratingBar"
             android:text=" 568 reviews"
@@ -142,6 +157,8 @@
             android:layout_marginTop="10dp"
             android:layout_below="@+id/ll_navi"
             tools:context="itg8.com.wmcapp.MapsActivity" />
+
+
 
 
     </RelativeLayout>

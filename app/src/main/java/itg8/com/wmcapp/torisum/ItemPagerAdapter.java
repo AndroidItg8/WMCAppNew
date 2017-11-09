@@ -7,25 +7,31 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.common.CommonMethod;
+import itg8.com.wmcapp.torisum.model.Fileupload;
 
 
 public class ItemPagerAdapter extends android.support.v4.view.PagerAdapter {
 
+    private final List<Fileupload> mItems;
     Context mContext;
-    int[] mItems;
 
 
-    public ItemPagerAdapter(Context context, int[] items) {
+    public ItemPagerAdapter(Context context, List<Fileupload> items) {
         this.mContext = context;
         this.mItems = items;
     }
 
     @Override
     public int getCount() {
-        return mItems.length;
+        return mItems.size();
     }
 
     @Override
@@ -34,14 +40,26 @@ public class ItemPagerAdapter extends android.support.v4.view.PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(ViewGroup container, final int position) {
         View itemView = LayoutInflater.from(mContext).inflate(R.layout.pager_item_torisum, container, false);
-        ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView);
+        final ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView);
         Picasso.with(mContext)
-                .load(mItems[position])
-                .placeholder(R.drawable.bpkuti)
-                .error(R.drawable.bpkuti)
-                .into(imageView);
+                .load(CommonMethod.BASE_URL + mItems.get(position).getFilepath())
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .into(imageView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError() {
+                        // Try again online if cache failed
+                        Picasso.with(mContext)
+                                .load(CommonMethod.BASE_URL + mItems.get(position).getFilepath())
+                                .into((imageView));
+                    }
+                });
 
         container.addView(itemView);
         return itemView;

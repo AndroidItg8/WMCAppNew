@@ -15,6 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.torisum.model.TorisumModel;
 import itg8.com.wmcapp.widget.AutoScrollViewPager;
 import itg8.com.wmcapp.widget.CustomFontTextView;
@@ -95,12 +96,22 @@ public class TorisumDetailsFragment extends Fragment {
 //                .findFragmentById(R.id.map);
 //        mapFragment.getMapAsync(this);
         unbinder = ButterKnife.bind(this, view);
-        int[] mDrawables= {R.drawable.bpkuti, R.drawable.garbage};
-        ItemPagerAdapter adapter = new ItemPagerAdapter(getActivity(), mDrawables);
-        viewPager.setAdapter(adapter);
-        viewPager.startAutoScroll(6000);
+         initView();
+
+
 
         return view;
+    }
+
+    private void initView() {
+        ItemPagerAdapter adapter = new ItemPagerAdapter(getActivity(), torisumModel.getFileupload());
+        viewPager.setAdapter(adapter);
+        viewPager.startAutoScroll(6000);
+        lblPlaceName.setText(CommonMethod.CheckEmpty(torisumModel.getName()));
+        lblPlaceDescription.setText(CommonMethod.CheckEmpty(torisumModel.getDescription()));
+        lblTime.setText( CommonMethod.getFormattedDateTime(torisumModel.getAddedDate()));
+
+
     }
 
     @Override

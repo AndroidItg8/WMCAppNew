@@ -2,6 +2,7 @@ package itg8.com.wmcapp.common;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.text.TextUtils;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -77,4 +78,11 @@ public class CommonMethod {
         void onResultAddress(String result, LatLng mLocation, String city);
     }
 
+    public static String CheckEmpty(String name) {
+        if(!TextUtils.isEmpty(name))
+        {
+            return name;
+        }else
+            return "NOT AVAILABLE";
+    }
 }
