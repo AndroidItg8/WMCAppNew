@@ -57,7 +57,9 @@
     <string name="contact_us">Contact Us</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="action_filter">filter langauge</string>
-
+    <string name="english">English</string>
+    <string name="hindi">Hindi</string>
+    <string name="marathi">Marathi</string>
     <string name="url_city">/api/CustomerApp/CityList</string>
     <string name="url_complaint">/api/CustomerApp/ComplaintListPerUser</string>
     <string name="url_notice_board">/api/CustomerApp/NoticeboardList</string>
@@ -76,4 +78,5 @@
     <string name="dismiss">Dismiss</string>
     <!--<string name="default_web_client_id">911695149245-hoihh8tl5vaormgrom6j79bdf5e6rp1j.apps.googleusercontent.com-->
     <!--</string>-->
+    <string name="url_add_complaint">/api/UploadFileApp/MediaUpload</string>
 </resources>

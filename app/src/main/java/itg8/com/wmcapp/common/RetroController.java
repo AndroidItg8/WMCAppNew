@@ -5,13 +5,17 @@ import java.util.List;
 import io.reactivex.Observable;
 import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.registration.RegistrationModel;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
@@ -94,5 +98,16 @@ public interface RetroController {
     @GET()
     Observable<ResponseBody> loadNoticeBoard(@Url String url, @Query("skip") int page, @Query("pageSize") int limit, @Query("cityid") int cityId);
 
+
+    @Multipart
+    @POST()
+    Observable<ResponseBody> addComplaint(@Url String url,
+                                          @Part MultipartBody.Part file,
+                                          @Part("Latitude") RequestBody lat,
+                                          @Part("Longitutde") RequestBody lang,
+                                          @Part("ComplaintName") RequestBody addr,
+                                          @Part("ComplaintDescription") RequestBody desc,
+                                          @Part("City_fkid") RequestBody cityId,
+                                          @Part("ShowIdentity") RequestBody identity);
 
 }

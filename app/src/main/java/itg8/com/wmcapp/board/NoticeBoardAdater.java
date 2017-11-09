@@ -2,6 +2,7 @@ package itg8.com.wmcapp.board;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -91,7 +92,7 @@ class NoticeBoardAdater extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                         .into(((NoticeBoardViewHolder) holder).imgGarbage);
                             }
                         });
-            }else {
+            } else {
                 ((NoticeBoardViewHolder) holder).imgGarbage.setVisibility(View.GONE);
             }
         }
@@ -107,18 +108,18 @@ class NoticeBoardAdater extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void addItems(List<NoticeBoardModel> o) {
+        models.clear();
+        notifyDataSetChanged();
         models.addAll(o);
         notifyDataSetChanged();
     }
 
     public void addFooter() {
         models.add(null);
-        notifyItemInserted(models.size()-1);
-
     }
 
     public void removeFooter() {
-        final int itemRemoved=models.size() - 1;
+        final int itemRemoved = models.size() - 1;
         models.remove(itemRemoved);
         notifyItemRemoved(itemRemoved);
         notifyItemRangeChanged(itemRemoved, models.size());
@@ -136,13 +137,13 @@ class NoticeBoardAdater extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public class NoticeBoardViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.img_garbage)
         ImageView imgGarbage;
-//        @BindView(R.id.customFontTextView)
+        //        @BindView(R.id.customFontTextView)
 //        TextView customFontTextView;
         @BindView(R.id.frm_img_view)
         FrameLayout frmImgView;
         @BindView(R.id.lbl_title_only)
         TextView lblTitleOnly;
-//        @BindView(R.id.rl_top)
+        //        @BindView(R.id.rl_top)
 //        RelativeLayout rlTop;
         @BindView(R.id.lbl_description)
         CustomFontTextView lblDescription;

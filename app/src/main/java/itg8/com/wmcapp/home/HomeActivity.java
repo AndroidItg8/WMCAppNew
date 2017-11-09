@@ -1,6 +1,7 @@
 package itg8.com.wmcapp.home;
 
 import android.app.Dialog;
+import android.content.ComponentCallbacks;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -33,6 +34,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.board.NoticeBoardFragment;
 import itg8.com.wmcapp.change_password.ChangePswdFragment;
@@ -45,11 +53,14 @@ import itg8.com.wmcapp.common.CallType;
 import itg8.com.wmcapp.common.CommonCallback;
 import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.CustomDialogFragment;
+import itg8.com.wmcapp.common.Language;
+import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.Prefs;
 import itg8.com.wmcapp.complaint.ComplaintFragment;
 import itg8.com.wmcapp.contact.ContactUsFragment;
 import itg8.com.wmcapp.database.BaseDatabaseHelper;
+import itg8.com.wmcapp.database.CityTableManipulate;
 import itg8.com.wmcapp.emergency.EmergencyFragment;
 import itg8.com.wmcapp.feedback.FeedbackFragment;
 import itg8.com.wmcapp.news.NewsFragment;
@@ -81,8 +92,9 @@ public class HomeActivity extends BaseActivity
     private List<CityModel> list;
     private Snackbar snackbar;
     private CityMVP.CityPresenter presenter;
-    private Dao<CityModel, Integer> mDAOCity = null;
+    private CityTableManipulate mDAOCity = null;
     private List<CityModel> cityList = null;
+    private Language langauge=null;
     private CityAdapter cityAdapter;
 
 
@@ -104,6 +116,8 @@ public class HomeActivity extends BaseActivity
             }
         });
 
+        mDAOCity = new CityTableManipulate(this);
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -119,6 +133,7 @@ public class HomeActivity extends BaseActivity
         fragment = NoticeBoardFragment.newInstance("", "");
         callFragment(fragment);
     }
+
 
 
     @Override
@@ -240,28 +255,28 @@ public class HomeActivity extends BaseActivity
                 fragment = TorisumFragment.newInstance("", "");
                 break;
             case R.id.nav_news:
-                fragment = NewsFragment.newInstance("", "");
+                 fragment = NewsFragment.newInstance("", "");
                 break;
             case R.id.nav_praphag:
                 isFrom = PRABHAG;
-                fragment = PrabhagFragment.newInstance(1);
+               fragment= PrabhagFragment.newInstance(1);
                 break;
             case R.id.nav_profile:
                 fragment = ComplaintFragment.newInstance("", "");
                 break;
             case R.id.nav_suggestion:
-                fragment = SuggestionFragment.newInstance("", "");
+                fragment = SuggestionFragment.newInstance("","");
                 break;
             case R.id.nav_feedback:
-                fragment = FeedbackFragment.newInstance("", "");
+                fragment = FeedbackFragment.newInstance("","");
                 break;
             case R.id.nav_emgs_no:
-                fragment = EmergencyFragment.newInstance("", "");
+                fragment = EmergencyFragment.newInstance("","");
                 break;
             case R.id.nav_contact:
                 fragment = ContactUsFragment.newInstance("", "");
                 break;
-            case R.id.nav_change_pswd:
+                case R.id.nav_change_pswd:
                 fragment = ChangePswdFragment.newInstance("", "");
                 break;
             case R.id.nav_registration:
@@ -305,12 +320,14 @@ public class HomeActivity extends BaseActivity
     }
 
 
+
     public List<ContactModel> getDummyContacts() {
-        List<ContactModel> models = new ArrayList<>();
+        List<ContactModel> models=new ArrayList<>();
         models.add(new ContactModel());
         models.add(new ContactModel());
         return models;
     }
+
 
 
     @Override
@@ -330,7 +347,6 @@ public class HomeActivity extends BaseActivity
             super.onBackPressed();
         }
     }
-
     @Override
     public void onImagePickClick() {
         CustomDialogFragment.newInstance(items).show(getSupportFragmentManager(), CustomDialogFragment.TAG);
@@ -349,13 +365,45 @@ public class HomeActivity extends BaseActivity
     public void onListFragmentInteraction(DummyContent.DummyItem item) {
         if (isFrom == PRABHAG) {
             showWard();
-        } else if (isFrom == WARD) {
+        }else if(isFrom == WARD){
             showWardMemberDetail();
         }
     }
 
     @Override
-    public void onGetCityList(List<CityModel> list) {
+    public void onGetCityList(final List<CityModel> list) {
+        Observable.create(new ObservableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
+                storeCity(list);
+            }
+        })
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<Boolean>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Boolean aBoolean) {
+                if(aBoolean){
+                    Logs.d("Stored in db");
+                }else {
+                    Logs.d("Fail to store in db");
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
 //        try {
 //            saveBrandToDatabase(list);
 //        } catch (SQLException e) {
@@ -364,6 +412,16 @@ public class HomeActivity extends BaseActivity
         this.cityList = list;
 
 
+    }
+
+    private boolean storeCity(List<CityModel> list) {
+        try {
+            saveBrandToDatabase(list);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -382,13 +440,13 @@ public class HomeActivity extends BaseActivity
 
     @Override
     public void showProgress() {
-        // progressView.setVisibility(View.VISIBLE);
+       // progressView.setVisibility(View.VISIBLE);
 
     }
 
     @Override
     public void hideProgress() {
-        //  progressView.setVisibility(View.GONE);
+      //  progressView.setVisibility(View.GONE);
 
 
     }
@@ -466,38 +524,15 @@ public class HomeActivity extends BaseActivity
     }
 
     private void saveBrandToDatabase(List<CityModel> list) throws SQLException {
-        try {
-
-            mDAOCity = BaseDatabaseHelper.getBaseInstance().getHelper(HomeActivity.this).getmDAOCity();
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        mDAOCity.deleteAll();
 
         if (mDAOCity != null) {
-            BaseDatabaseHelper.getBaseInstance().clearCityTable();
-
-
             for (CityModel model : list) {
-                try {
                     int id = mDAOCity.create(model);
-
-                    cityList = mDAOCity
-                            .queryBuilder()
-                            .where()
-                            .eq(CityModel.FIELD_ID, model.getID())
-                            .query();
-                    Log.d(TAG, "CityList:" + new Gson().toJson(cityList));
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                    Log.d(TAG, "CityId:" + id);
             }
 
-
         }
-
-
     }
 
 
@@ -506,6 +541,11 @@ public class HomeActivity extends BaseActivity
         cityModel.setSelected(true);
         Prefs.putInt(CommonMethod.SELECTED_CITY, cityModel.getID());
         cityAdapter.notifyDataSetChanged();
+
+    }
+
+    public void setDialogCallbackListener(CommonCallback.OnDialogClickListner callbacks) {
+        listner = callbacks;
 
     }
 }
