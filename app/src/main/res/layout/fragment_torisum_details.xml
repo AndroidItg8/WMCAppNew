@@ -1,18 +1,19 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="itg8.com.wmcapp.torisum.TorisumDetailsFragment">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <itg8.com.wmcapp.widget.AutoScrollViewPager
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="fitXY"/>
+        <itg8.com.wmcapp.widget.AutoScrollViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="fitXY" />
 
         <itg8.com.wmcapp.widget.CustomFontTextView
             android:id="@+id/lbl_place_name"
@@ -36,31 +37,30 @@
             android:id="@+id/lbl_place_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="5"
-            android:lines="5"
             android:layout_below="@+id/lbl_place_name"
-            android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:ellipsize="end"
+            android:lines="5"
+            android:maxLines="5"
             android:text="Short Description of this place Short Description of this placeShort Description of this place Short Description of this placeShort Description of this place..."
             android:textColor="@color/colorBlack"
             android:textSize="14sp"
             app:font_value="ROBOTO_REGULAR" />
 
         <itg8.com.wmcapp.widget.CustomFontTextView
-            android:layout_width="wrap_content"
+            android:id="@+id/lbl_address"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/lbl_place_description"
-            android:id="@+id/lbl_address_value"
-            android:maxLines="5"
-            android:lines="5"
-            android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:text="Short Description of this place Short Description of this placeShort Description of this place Short Description of this placeShort Description of this place..."
+            android:layout_marginStart="10dp"
+            android:lines="4"
+            android:maxLines="4"
+            android:text="Sevagram, Maharashtra 442102 Mahatma Gandhi Ashram, Address"
             android:textColor="@color/colorBlack"
             android:textSize="14sp"
-            app:font_value="ROBOTO_REGULAR"
-            />
+            app:font_value="ROBOTO_REGULAR" />
 
 
         <itg8.com.wmcapp.widget.CustomFontTextView
@@ -68,9 +68,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/lbl_address_value"
-            android:layout_marginTop="10dp"
+            android:layout_below="@+id/lbl_address"
             android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
             android:text="Open Until: 7 pm"
             android:textColor="@color/colorGreen"
             android:textSize="14sp"
@@ -82,20 +82,20 @@
             style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/lbl_address_value"
-            android:layout_marginTop="10dp"
+            android:layout_below="@+id/lbl_address"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:numStars="5"
             android:rating="3.5"
-            android:stepSize=".5"/>
+            android:stepSize=".5" />
 
 
         <itg8.com.wmcapp.widget.CustomFontTextView
             android:id="@+id/lbl_reviews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/lbl_address_value"
+            android:layout_below="@+id/lbl_address"
             android:layout_marginTop="10dp"
             android:layout_toEndOf="@+id/ratingBar"
             android:text=" 568 reviews"
@@ -117,36 +117,37 @@
                 android:layout_weight="1"
                 android:drawablePadding="10dp"
                 android:drawableStart="@drawable/ic_directions_black_24dp"
-                android:textColor="@color/colorBlack"
-                android:textSize="14sp"
                 android:padding="10dp"
                 android:text="Direction"
-                app:font_value="ROBOTO_REGULAR"/>
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"
+                app:font_value="ROBOTO_REGULAR" />
+
             <itg8.com.wmcapp.widget.CustomFontTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginTop="10dp"
+                android:layout_weight="1"
                 android:drawablePadding="10dp"
                 android:drawableStart="@drawable/ic_share_black_24dp"
-                android:textColor="@color/colorBlack"
-                android:textSize="14sp"
                 android:padding="10dp"
                 android:text="Share"
-                app:font_value="ROBOTO_REGULAR"/>
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"
+                app:font_value="ROBOTO_REGULAR" />
 
             <itg8.com.wmcapp.widget.CustomFontTextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginTop="10dp"
-                    android:drawablePadding="10dp"
-                    android:drawableStart="@drawable/ic_favorite_black_24dp"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="14sp"
-                    android:padding="10dp"
-                    android:text="Share"
-                    app:font_value="ROBOTO_REGULAR"/>
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:drawablePadding="10dp"
+                android:drawableStart="@drawable/ic_favorite_black_24dp"
+                android:padding="10dp"
+                android:text="Share"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"
+                app:font_value="ROBOTO_REGULAR" />
         </LinearLayout>
 
         <fragment
@@ -154,11 +155,9 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:layout_marginTop="10dp"
             android:layout_below="@+id/ll_navi"
+            android:layout_marginTop="10dp"
             tools:context="itg8.com.wmcapp.MapsActivity" />
-
-
 
 
     </RelativeLayout>

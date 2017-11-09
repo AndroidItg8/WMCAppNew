@@ -45,9 +45,11 @@ public class TorisumDetailsFragment extends Fragment {
     CustomFontTextView lblReviews;
     @BindView(R.id.ll_navi)
     LinearLayout llNavi;
-//    @BindView(R.id.map)
+    //    @BindView(R.id.map)
 //    android.widget.fragment map;
     Unbinder unbinder;
+    @BindView(R.id.lbl_address)
+    CustomFontTextView lblAddress;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -96,8 +98,7 @@ public class TorisumDetailsFragment extends Fragment {
 //                .findFragmentById(R.id.map);
 //        mapFragment.getMapAsync(this);
         unbinder = ButterKnife.bind(this, view);
-         initView();
-
+        initView();
 
 
         return view;
@@ -107,11 +108,10 @@ public class TorisumDetailsFragment extends Fragment {
         ItemPagerAdapter adapter = new ItemPagerAdapter(getActivity(), torisumModel.getFileupload());
         viewPager.setAdapter(adapter);
         viewPager.startAutoScroll(6000);
-        lblPlaceName.setText(CommonMethod.CheckEmpty(torisumModel.getName()));
-        lblPlaceDescription.setText(CommonMethod.CheckEmpty(torisumModel.getDescription()));
-        lblTime.setText( CommonMethod.getFormattedDateTime(torisumModel.getAddedDate()));
-
-
+        lblPlaceName.setText(CommonMethod.checkEmpty(torisumModel.getName()));
+        lblPlaceDescription.setText(CommonMethod.checkEmpty(torisumModel.getDescription()));
+        lblTime.setText(CommonMethod.getFormattedDateTime(torisumModel.getAddedDate()));
+        lblAddress.setText(CommonMethod.checkEmpty(torisumModel.getAddress()));
     }
 
     @Override

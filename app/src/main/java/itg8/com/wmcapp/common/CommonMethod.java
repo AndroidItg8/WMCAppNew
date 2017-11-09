@@ -78,7 +78,7 @@ public class CommonMethod {
         void onResultAddress(String result, LatLng mLocation, String city);
     }
 
-    public static String CheckEmpty(String name) {
+    public static String checkEmpty(String name) {
         if(!TextUtils.isEmpty(name))
         {
             return name;
