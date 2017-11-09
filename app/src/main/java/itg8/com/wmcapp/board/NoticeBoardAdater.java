@@ -40,6 +40,7 @@ class NoticeBoardAdater extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     List<NoticeBoardModel> models;
     private int itemRemoved;
+    private boolean footerAdded=false;
 
     public NoticeBoardAdater(Context context) {
         this.context = context;
@@ -108,28 +109,20 @@ class NoticeBoardAdater extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void addItems(List<NoticeBoardModel> o) {
-        models.clear();
-        notifyDataSetChanged();
         models.addAll(o);
         notifyDataSetChanged();
     }
 
     public void addFooter() {
-        models.add(null);
+            models.add(null);
     }
 
-    public synchronized int removeFooter() {
-     int t=models.size()-1;
-        models.remove(t);
-        return t ;
+    public void removeFooter() {
+            models.remove(models.size()-1);
     }
 
-    public void notifyItemInserted() {
-        notifyItemInserted(models.size() - 1);
-    }
-
-    public void notifyItemRemoved() {
-
+    public int getModelSize() {
+        return models.size();
     }
 
 

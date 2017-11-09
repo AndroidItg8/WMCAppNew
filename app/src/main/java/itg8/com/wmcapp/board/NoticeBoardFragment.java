@@ -129,7 +129,6 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
         Logs.d("CYCLE : onDestroyView()");
         unbinder.unbind();
         presenter.onDetach();
-
     }
 
     @Override
@@ -203,24 +202,28 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
         if (adapter == null)
             return;
         if (show) {
-
-            recyclerView.post(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.addFooter();
-                    adapter.notifyItemInserted(adapter.getItemCount() - 1);
-                }
-            });
+            adapter.addFooter();
+            adapter.notifyItemInserted(adapter.getItemCount() - 1);
+//            recyclerView.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    adapter.addFooter();
+//                    adapter.notifyItemInserted(adapter.getItemCount() - 1);
+//                }
+//            });
         } else {
-            recyclerView.post(new Runnable() {
-                @Override
-                public void run() {
-                    int t = adapter.removeFooter();
-                    adapter.notifyItemRemoved(t);
-                    adapter.notifyItemRangeChanged(t, adapter.getItemCount());
-
-                }
-            });
+            adapter.removeFooter();
+            adapter.notifyItemRemoved(adapter.getModelSize());
+//            recyclerView.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    adapter.removeFooter();
+//                    adapter.notifyItemRemoved(adapter.getModelSize());
+////                    adapter.notifyItemRemoved(t);
+////                    adapter.notifyItemRangeChanged(t, adapter.getItemCount());
+//
+//                }
+//            });
 
         }
     }

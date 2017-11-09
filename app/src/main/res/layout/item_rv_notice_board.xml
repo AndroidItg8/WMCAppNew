@@ -24,7 +24,7 @@
                 android:layout_height="200dp"
                 android:visibility="gone"
                 android:src="@drawable/bpkuti"
-                android:scaleType="fitXY" />
+                android:scaleType="center" />
 
             <TextView
                 android:id="@+id/lbl_title_only"

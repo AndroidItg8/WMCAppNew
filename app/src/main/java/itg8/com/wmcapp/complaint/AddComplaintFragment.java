@@ -40,18 +40,23 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.common.CommonCallback;
 import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.MyApplication;
 import itg8.com.wmcapp.common.ProgressRequestBody;
+import itg8.com.wmcapp.database.CityTableManipulate;
 import itg8.com.wmcapp.home.HomeActivity;
 import itg8.com.wmcapp.registration.RegistrationModel;
 import itg8.com.wmcapp.utility.FetchAddressIntentService;
@@ -117,6 +122,8 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     private String lastAddressResult;
     private LatLng latlang;
     private File selectedFile;
+    private CityTableManipulate mDAOCity;
+    private int cityId=0;
 
 
     public AddComplaintFragment() {
@@ -144,6 +151,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -169,6 +177,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
         imgMoreMenu.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
         mResultReceiver = new AddressResultReceiver(new Handler());
+        mDAOCity = new CityTableManipulate(getActivity());
 
         Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
         intent.putExtra(CommonMethod.RECEIVER, mResultReceiver);
@@ -275,7 +284,6 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     private void uploadToServer() {
         String description = null;
         String address = null;
-        int cityId = 0;
         String identity;
         double latitude;
         double longitude;
@@ -308,7 +316,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
             longitude = latlang.longitude;
         }
 
-        provideToServer(description, address, cityId, identity, latitude, longitude);
+            provideToServer(description, address, cityId, identity, latitude, longitude);
 
 
     }
@@ -321,9 +329,9 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
         RequestBody addr = createPartFromString(String.valueOf(address));
         RequestBody desc = createPartFromString(String.valueOf(description));
         //TODO changes: temporary city id;
-        RequestBody city=createPartFromInt(18266);
-        RequestBody ident=createPartFromString(identity);
-        Observable<ResponseBody> call = MyApplication.getInstance().getRetroController().addComplaint(getString(R.string.url_add_complaint),part, lat, lang, addr, desc, city, ident);
+        RequestBody city = createPartFromInt(cityId);
+        RequestBody ident = createPartFromString(identity);
+        Observable<ResponseBody> call = MyApplication.getInstance().getRetroController().addComplaint(getString(R.string.url_add_complaint), part, lat, lang, addr, desc, city, ident);
         call.subscribeOn(Schedulers.io())
                 .flatMap(new Function<ResponseBody, ObservableSource<RegistrationModel>>() {
                     @Override
@@ -339,7 +347,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
 
                     @Override
                     public void onNext(RegistrationModel o) {
-
+                        hideProgress();
                     }
 
                     @Override
@@ -354,11 +362,15 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
                 });
     }
 
+    private void hideProgress() {
+        progressBar.setVisibility(View.GONE);
+    }
+
     private ObservableSource<RegistrationModel> createRegModelFromResponse(ResponseBody body) {
         try {
-            String s=body.string();
-            JSONObject object=new JSONObject(s);
-            if(object.getBoolean("flag")){
+            String s = body.string();
+            JSONObject object = new JSONObject(s);
+            if (object.getBoolean("flag")) {
                 return Observable.just(new RegistrationModel());
             }
         } catch (IOException e) {
@@ -372,6 +384,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     private RequestBody createPartFromString(String val) {
         return RequestBody.create(MediaType.parse("text/plain"), val);
     }
+
     private RequestBody createPartFromInt(int val) {
         return RequestBody.create(MediaType.parse("text/plain"), String.valueOf(val));
     }
@@ -464,12 +477,46 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     }
 
     @Override
-    public void onResultAddress(String result, LatLng mLocation, String city) {
+    public void onResultAddress(String result, LatLng mLocation, final String city) {
         this.lastAddressResult = result;
         edtAddress.setText(result);
         this.latlang = mLocation;
+        if(city!=null)
+        {
+            if (mDAOCity != null) {
+                Observable.create(new ObservableOnSubscribe<Integer>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<Integer> e) throws Exception {
+                        CityModel cityModel = mDAOCity.getCity(city);
+                        if(cityModel!=null)
+                            e.onNext(cityModel.getID());
+                    }
+                }).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<Integer>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
 
-        mResultReceiver.setResultListener(null);
+                            }
+
+                            @Override
+                            public void onNext(Integer integer) {
+                                AddComplaintFragment.this.cityId=integer;
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
+            }
+        }
+//        mResultReceiver.setResultListener(null);
     }
 
     @Override
@@ -524,11 +571,11 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
             // Display the address string or an error message sent from the intent service.
             mAddressOutput = resultData.getString(CommonMethod.RESULT_DATA_KEY);
             LatLng mLocation = resultData.getParcelable(CommonMethod.LOCATION_DATA_EXTRA);
-            String city=resultData.getString(CommonMethod.CITY);
-if(city!=null)
-            Logs.d("CITY: ",city);
+            String city = resultData.getString(CommonMethod.CITY);
+            if (city != null)
+                Logs.d("CITY: ", city);
             if (listener != null)
-                listener.onResultAddress(mAddressOutput, mLocation,city);
+                listener.onResultAddress(mAddressOutput, mLocation, city);
 
             // Show a toast message if an address was found.
             if (resultCode == CommonMethod.SUCCESS_RESULT) {

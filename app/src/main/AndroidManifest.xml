@@ -72,9 +72,8 @@
         <activity
             android:name=".signup.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
-
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".test.TestActivity"></activity>
     </application>
 
 </manifest>

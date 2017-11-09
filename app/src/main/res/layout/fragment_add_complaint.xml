@@ -40,9 +40,10 @@
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:max="100"
+            android:indeterminate="false"
             android:layout_gravity="center"
             android:progress="0"
             android:progressDrawable="@drawable/circular" />

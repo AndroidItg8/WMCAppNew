@@ -103,7 +103,8 @@ public class NBPresenterImp extends BaseWeakPresenter<NBMVP.NBView> implements N
             else {
                 getView().onNoMoreList();
                 isFinished=true;
-            }isLoading=false;
+            }
+            isLoading=false;
         }
     }
 

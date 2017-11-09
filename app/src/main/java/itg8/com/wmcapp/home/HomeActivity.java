@@ -70,6 +70,7 @@ import itg8.com.wmcapp.prabhag.dummy.DummyContent;
 import itg8.com.wmcapp.prabhag.model.ContactModel;
 import itg8.com.wmcapp.signup.LoginActivity;
 import itg8.com.wmcapp.suggestion.SuggestionFragment;
+import itg8.com.wmcapp.test.TestActivity;
 import itg8.com.wmcapp.torisum.TorisumFragment;
 
 import static itg8.com.wmcapp.common.CallType.PRABHAG;
@@ -106,6 +107,10 @@ public class HomeActivity extends BaseActivity
         setSupportActionBar(toolbar);
         presenter = new CityPresenterImp(this);
         presenter.onGetCity(getString(R.string.url_city));
+
+
+//        startActivity(new Intent(this, TestActivity.class));
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
