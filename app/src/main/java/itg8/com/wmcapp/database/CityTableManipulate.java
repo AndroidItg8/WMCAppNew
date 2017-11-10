@@ -52,10 +52,10 @@ public class CityTableManipulate implements Crud {
     }
 
     @Override
-    public CityModel getCity(String city) {
+    public CityModel getCity(String value, String key) {
         CityModel model=null;
         try{
-            model=helper.getmDAOCity().queryBuilder().where().eq(CityModel.FIELD_NAME,city).queryForFirst();
+            model=helper.getmDAOCity().queryBuilder().where().eq(key,value).queryForFirst();
         }catch (SQLException e){
             e.printStackTrace();
         }

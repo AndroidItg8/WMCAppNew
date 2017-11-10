@@ -3,6 +3,8 @@ package itg8.com.wmcapp.common;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -12,6 +14,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
+import itg8.com.wmcapp.torisum.model.TorisumModel;
 
 /**
  * Created by Android itg 8 on 11/1/2017.
@@ -30,6 +34,19 @@ public class CommonMethod {
     public static final String CITY = "CITY";
     public static final String LANGUAGE = "LANGUAGE";
     public static final String SELECTED_CITY = "SELECTED_CITY";
+    public static final int COMPLAINT = 1;
+    public static final int NOTICE = 2;
+    public static final int TOURISM = 3;
+
+
+//    1) Complaint
+//2)Notice
+//3)tourism
+//
+//1)0 or null :- open complaint;
+//2)1 :- process
+//3)2:- closed
+
 
 
     private static Typeface typeface;
@@ -75,6 +92,13 @@ public class CommonMethod {
         return convertedDate;
     }
 
+    public static void directionShow(Context context, String generateDirection) {
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                Uri.parse(generateDirection));
+
+        context.startActivity(intent);
+    }
+
     public static interface ResultListener{
         void onResultAddress(String result, LatLng mLocation, String city);
     }
@@ -87,13 +111,13 @@ public class CommonMethod {
             return "NOT AVAILABLE";
     }
 
-     public  static void  shareItem(Context context)
+     public  static void  shareItem(Context context, String  body, String title)
      {
          Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-         sharingIntent.setType("text/plain");
-         String shareBody = "Here is the share content body";
-         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
-         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-         context.startActivity(Intent.createChooser(sharingIntent, "Share via"));
+//         sharingIntent.setType("text/plain");
+         sharingIntent.setType("image/*");
+         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, title);
+         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "http://winnipeg.ca/waterandwaste/images/garbage/garbage_cc.jpg");
+         context.startActivity(Intent.createChooser(sharingIntent, "Share"));
      }
 }

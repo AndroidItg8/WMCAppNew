@@ -1,0 +1,175 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
+    tools:context="itg8.com.wmcapp.profile.ProfileFragment">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/lbl_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textSize="25sp"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/colorBlack"
+                android:text="Person Name" />
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorPrimary"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/lbl_profile"/>
+
+            <TextView
+                android:id="@+id/lbl_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/colorBlack"
+                android:layout_below="@+id/view1"
+                android:text="Email" />
+
+            <TextView
+                android:id="@+id/text_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentEnd="true"
+                android:gravity="end"
+                android:textColor="@color/colorBlack"
+                android:layout_below="@+id/view1"
+                android:layout_toEndOf="@+id/lbl_email"
+                android:text="Email@gmail.com" />
+
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorPrimary"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/lbl_email"/>
+
+
+            <TextView
+                android:id="@+id/lbl_mobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="20dp"
+                android:textColor="@color/colorBlack"
+                android:layout_below="@+id/view2"
+                android:layout_alignBaseline="@+id/text_mobile"
+                android:text="Mobile Number" />
+
+
+            <TextView
+                android:id="@+id/text_mobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentEnd="true"
+                android:gravity="end"
+                android:textColor="@color/colorBlack"
+                android:layout_below="@+id/view2"
+                android:layout_toEndOf="@+id/lbl_mobile"
+                android:text="9876543210" />
+
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorPrimary"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/text_mobile"/>
+
+            <TextView
+                android:id="@+id/lbl_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="30dp"
+                android:textColor="@color/colorBlack"
+                android:layout_below="@+id/view3"
+                android:layout_alignBaseline="@+id/text_address"
+                android:text="Address" />
+
+            <TextView
+                android:id="@+id/text_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_alignParentEnd="true"
+                android:gravity="end|center"
+                android:lines="4"
+                android:maxLines="4"
+                android:ellipsize="end"
+                android:textColor="@color/colorBlack"
+                android:layout_below="@+id/view3"
+                android:layout_toEndOf="@+id/lbl_address"
+                android:text="Flat No 102 sattaya Apartment Gayatri Nagar Nagpur" />
+            <View
+                android:id="@+id/view4"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorPrimary"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@+id/text_address"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorPrimary"
+                android:text="Logout"
+                android:id="@+id/btn_ok"
+                android:textColor="@color/colorWhite"/>
+        </RelativeLayout>
+
+
+            <com.github.rahatarmanahmed.cpv.CircularProgressView
+                android:id="@+id/progressView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:cpv_color="@color/colorPrimary"
+                app:cpv_thickness="2dp"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                app:cpv_indeterminate="true"
+                app:cpv_animAutostart="true"/>
+    </FrameLayout>
+
+
+
+</ScrollView>

@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -31,16 +33,42 @@ import itg8.com.wmcapp.widget.CustomFontTextView;
 public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int LOADING_VIEW = 1;
     private static final int NORMAL_VIEW = 2;
+    private static final int SHOW_PROGRESS = 0;
+    private static final int HIDE_PROGRESS = 1;
+    private static final int VOTED = 1;
+    private static final int VOTE_UP = 0;
+
 
     private Context mContext;
+    private ComplaintListner listner;
     private List<ComplaintModel> models;
+    private int progress = HIDE_PROGRESS;
+    private int likedSize;
 
-    public ComplaintAdapter(Context mContext) {
-        this.mContext = mContext;
-        models=new ArrayList<>();
+    public void showProgress() {
+        progress = SHOW_PROGRESS;
+        notifyDataSetChanged();
+    }
+
+    public void hideProgress() {
+        progress = HIDE_PROGRESS;
+        notifyDataSetChanged();
     }
 
 
+    public interface ComplaintListner {
+        void onComplaintItemClicked(int position, ComplaintModel model);
+
+        void onVoteUpClicked(int position, ComplaintModel model);
+
+        void onShareClicked(int position, ComplaintModel model);
+    }
+
+    public ComplaintAdapter(Context mContext, ComplaintListner listner) {
+        this.mContext = mContext;
+        this.listner = listner;
+        models = new ArrayList<>();
+    }
 
 
     @Override
@@ -49,7 +77,7 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (viewType == NORMAL_VIEW) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.item_rv_complaint, parent, false);
             holder = new ComplaintViewHolder(view);
-        }else {
+        } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_rv_progress, parent, false);
             holder = new ProgressHolder(view);
         }
@@ -63,8 +91,8 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        if(holder instanceof ComplaintViewHolder) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+        if (holder instanceof ComplaintViewHolder) {
 
             if (!TextUtils.isEmpty(models.get(position).getImagePath())) {
                 ((ComplaintViewHolder) holder).imgGarbage.setVisibility(View.VISIBLE);
@@ -83,12 +111,74 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 // Try again online if cache failed
                                 Picasso.with(mContext)
                                         .load(CommonMethod.BASE_URL + models.get(holder.getAdapterPosition()).getImagePath())
-                                        .into(((ComplaintViewHolder) holder).imgGarbage);
+                                        .into(((ComplaintViewHolder) holder).imgGarbage, new Callback() {
+                                            @Override
+                                            public void onSuccess() {
+                                                ((ComplaintViewHolder) holder).imgGarbage.setVisibility(View.VISIBLE);
+
+                                            }
+
+                                            @Override
+                                            public void onError() {
+                                                ((ComplaintViewHolder) holder).imgGarbage.setVisibility(View.GONE);
+                                            }
+                                        });
                             }
                         });
-            }else {
+            } else {
                 ((ComplaintViewHolder) holder).imgGarbage.setVisibility(View.GONE);
             }
+
+
+            ((ComplaintViewHolder) holder).lblCityName.setText(CommonMethod.checkEmpty(models.get(position).getCityName()));
+            ((ComplaintViewHolder) holder).lblAddressValue.setText(CommonMethod.checkEmpty(models.get(position).getComplaintName()));
+            ((ComplaintViewHolder) holder).lblProblemValue.setText(CommonMethod.checkEmpty(models.get(position).getComplaintDescription()));
+             ((ComplaintViewHolder) holder).lblVoteValue.setText(CommonMethod.checkEmpty(String.valueOf(models.get(position).getLikeList().size())));
+             if(models.get(position).getLikeList().size()>0)
+             {
+                 likedSize = models.get(position).getLikeList().size();
+
+             }
+
+
+            if (progress == HIDE_PROGRESS) {
+                ((ComplaintViewHolder) holder).progressViewLike.setVisibility(View.GONE);
+            }else
+            {
+                ((ComplaintViewHolder) holder).progressViewLike.setVisibility(View.VISIBLE);
+
+            }
+             if(models.get(position).getLikestatus()== VOTE_UP)
+             {
+                 likedSize = models.get(position).getLikeList().size();
+             }else
+             {
+                 ((ComplaintViewHolder) holder).lblVoteValue.setText(++likedSize);
+             }
+              if(models.get(position).isVoted())
+              {
+                  ((ComplaintViewHolder) holder).lblVoteUp.setText("VOTED");
+                   ((ComplaintViewHolder) holder).lblVoteUp.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
+                   ((ComplaintViewHolder) holder).lblVoteValue.setText(++likedSize);
+              }
+
+
+
+
+
+
+            ((ComplaintViewHolder) holder).lblVoteUp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listner.onVoteUpClicked(position, models.get(position));
+                }
+            });
+            ((ComplaintViewHolder) holder).lblShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listner.onShareClicked(position, models.get(position));
+                }
+            });
         }
     }
 
@@ -105,11 +195,11 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public void addFooter() {
         models.add(null);
-        notifyItemInserted(models.size()-1);
+        notifyItemInserted(models.size() - 1);
     }
 
     public void removeFooter() {
-        final int itemRemoved=models.size() - 1;
+        final int itemRemoved = models.size() - 1;
         models.remove(itemRemoved);
         notifyItemRemoved(itemRemoved);
         notifyItemRangeChanged(itemRemoved, models.size());
@@ -123,12 +213,42 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         CustomFontTextView lblNameValue;
         @BindView(R.id.lbl_days_value)
         CustomFontTextView lblDaysValue;
+        @BindView(R.id.rl_top)
+        RelativeLayout rlTop;
         @BindView(R.id.img_garbage)
         ImageView imgGarbage;
+        @BindView(R.id.lbl_cityName)
+        CustomFontTextView lblCityName;
+        @BindView(R.id.rl_center)
+        RelativeLayout rlCenter;
+        @BindView(R.id.lbl_problem_value)
+        CustomFontTextView lblProblemValue;
+        @BindView(R.id.lbl_address_value)
+        CustomFontTextView lblAddressValue;
+        @BindView(R.id.lbl_vote)
+        CustomFontTextView lblVote;
+        @BindView(R.id.lbl_vote_value)
+        CustomFontTextView lblVoteValue;
+        @BindView(R.id.rl_bottom)
+        RelativeLayout rlBottom;
+        @BindView(R.id.view)
+        View view;
+        @BindView(R.id.lbl_voteUp)
+        CustomFontTextView lblVoteUp;
+        @BindView(R.id.lbl_share)
+        CustomFontTextView lblShare;
+        @BindView(R.id.progressViewLike)
+        CircularProgressView progressViewLike;
 
         public ComplaintViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listner.onComplaintItemClicked(getAdapterPosition(), models.get(getAdapterPosition()));
+                }
+            });
         }
     }
 }

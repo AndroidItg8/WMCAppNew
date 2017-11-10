@@ -4,10 +4,12 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import itg8.com.wmcapp.cilty.model.CityModel;
+import itg8.com.wmcapp.complaint.model.LikeModel;
+import itg8.com.wmcapp.profile.ProfileModel;
 import itg8.com.wmcapp.registration.RegistrationModel;
+import itg8.com.wmcapp.torisum.model.TorisumModel;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import itg8.com.wmcapp.torisum.model.TorisumModel;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -113,4 +115,15 @@ public interface RetroController {
 
     @GET()
     Call<List<TorisumModel>> getTorisumList(@Url String loadUrl);
+
+    @GET()
+    Call<List<ProfileModel>> getProfile(@Url String url);
+
+    //    Master_fkid:1
+//    SubMaster_fkid:5
+//    Likes:1
+    @FormUrlEncoded
+    @POST()
+    @Headers("Content-Type:application/x-www-form-urlencoded")
+    Call<LikeModel> sendLike(@Url String url, @Field("Master_fkid") int complaint, @Field("SubMaster_fkid") int subMaster_fkid, @Field("Likes") int i);
 }

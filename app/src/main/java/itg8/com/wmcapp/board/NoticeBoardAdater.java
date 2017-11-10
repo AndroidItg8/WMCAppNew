@@ -37,14 +37,20 @@ class NoticeBoardAdater extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int LOADING_VIEW = 1;
     private static final int NORMAL_VIEW = 2;
 
+
     private Context context;
+    private NoticeBoardListner listner;
     List<NoticeBoardModel> models;
     private int itemRemoved;
     private boolean footerAdded=false;
 
-    public NoticeBoardAdater(Context context) {
+    public NoticeBoardAdater(Context context,NoticeBoardListner listner) {
         this.context = context;
+        this.listner = listner;
         models = new ArrayList<>();
+    }
+    public interface NoticeBoardListner{
+        void onNBItemClicked(int position, NoticeBoardModel model);
     }
 
     @Override
@@ -145,6 +151,12 @@ class NoticeBoardAdater extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public NoticeBoardViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+             itemView.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View view) {
+                     listner.onNBItemClicked(getAdapterPosition(), models.get(getAdapterPosition()));
+                 }
+             });
         }
     }
 

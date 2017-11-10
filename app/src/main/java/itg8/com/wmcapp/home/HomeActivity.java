@@ -56,6 +56,7 @@ import itg8.com.wmcapp.common.CustomDialogFragment;
 import itg8.com.wmcapp.common.Language;
 import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.Logs;
+import itg8.com.wmcapp.common.MyApplication;
 import itg8.com.wmcapp.common.Prefs;
 import itg8.com.wmcapp.complaint.ComplaintFragment;
 import itg8.com.wmcapp.contact.ContactUsFragment;
@@ -68,9 +69,9 @@ import itg8.com.wmcapp.prabhag.PrabhagFragment;
 import itg8.com.wmcapp.prabhag.WardMemberFragment;
 import itg8.com.wmcapp.prabhag.dummy.DummyContent;
 import itg8.com.wmcapp.prabhag.model.ContactModel;
+import itg8.com.wmcapp.profile.ProfileFragment;
 import itg8.com.wmcapp.signup.LoginActivity;
 import itg8.com.wmcapp.suggestion.SuggestionFragment;
-import itg8.com.wmcapp.test.TestActivity;
 import itg8.com.wmcapp.torisum.TorisumFragment;
 
 import static itg8.com.wmcapp.common.CallType.PRABHAG;
@@ -267,7 +268,7 @@ public class HomeActivity extends BaseActivity
                fragment= PrabhagFragment.newInstance(1);
                 break;
             case R.id.nav_profile:
-                fragment = ComplaintFragment.newInstance("", "");
+                fragment = ProfileFragment.newInstance("", "");
                 break;
             case R.id.nav_suggestion:
                 fragment = SuggestionFragment.newInstance("","");

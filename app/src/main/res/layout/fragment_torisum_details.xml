@@ -21,10 +21,10 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/lbl_place_description"
             android:layout_below="@+id/viewPager"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
             android:ellipsize="end"
             android:inputType="text"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
             android:lines="2"
             android:maxLines="2"
             android:text="Place Name"
@@ -40,9 +40,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/lbl_address"
+            android:layout_marginBottom="05dp"
             android:layout_marginEnd="15dp"
             android:layout_marginStart="15dp"
-            android:layout_marginBottom="05dp"
             android:text="Short Description of this place Short Description of this placeShort Description of this place Short Description of this placeShort Description of this place..."
             android:textColor="@color/colorBlack"
             android:textSize="14sp"
@@ -53,12 +53,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/lbl_place_name"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
             android:text="Sevagram, Maharashtra 442102 Mahatma Gandhi Ashram, Address"
             android:textColor="@color/colorBlack"
             android:textSize="12sp"
-            android:layout_marginBottom="5dp"
             app:font_value="ROBOTO_MEDIUM" />
 
 
@@ -70,12 +70,12 @@
             android:layout_below="@+id/lbl_place_description"
             android:layout_marginEnd="10dp"
             android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/lbl_likes"
+            android:gravity="center"
             android:text="Time:10:00 am to 07:00 pm"
             android:textColor="@color/colorGreen"
             android:textSize="14sp"
             android:textStyle="normal"
-            android:gravity="center"
-             android:layout_toEndOf="@+id/lbl_reviews"
             app:font_value="ROBOTO_MEDIUM" />
 
         <RatingBar
@@ -93,13 +93,13 @@
 
 
         <itg8.com.wmcapp.widget.CustomFontTextView
-            android:id="@+id/lbl_reviews"
+            android:id="@+id/lbl_likes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/lbl_place_description"
             android:layout_marginTop="10dp"
             android:layout_toEndOf="@+id/ratingBar"
-            android:text=" 568 reviews"
+            android:text=" 2 likes"
             android:textColor="@color/colorGray"
             android:textSize="14sp"
             app:font_value="ROBOTO_REGULAR" />
@@ -113,6 +113,7 @@
             android:orientation="horizontal">
 
             <itg8.com.wmcapp.widget.CustomFontTextView
+                android:id="@+id/lbl_direction"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -123,10 +124,10 @@
                 android:text="Direction"
                 android:textColor="@color/colorBlack"
                 android:textSize="14sp"
-                android:id="@+id/lbl_direction"
                 app:font_value="ROBOTO_REGULAR" />
 
             <itg8.com.wmcapp.widget.CustomFontTextView
+                android:id="@+id/lbl_share"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -137,10 +138,10 @@
                 android:text="Share"
                 android:textColor="@color/colorBlack"
                 android:textSize="14sp"
-                android:id="@+id/lbl_share"
                 app:font_value="ROBOTO_REGULAR" />
 
             <itg8.com.wmcapp.widget.CustomFontTextView
+                android:id="@+id/lbl_like"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -149,7 +150,6 @@
                 android:drawableStart="@drawable/ic_favorite_border_black_24dp"
                 android:padding="10dp"
                 android:text="Like"
-                android:id="@+id/lbl_like"
                 android:textColor="@color/colorBlack"
                 android:textSize="14sp"
                 app:font_value="ROBOTO_REGULAR" />

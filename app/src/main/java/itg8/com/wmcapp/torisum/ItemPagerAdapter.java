@@ -21,12 +21,17 @@ import itg8.com.wmcapp.torisum.model.Fileupload;
 public class ItemPagerAdapter extends android.support.v4.view.PagerAdapter {
 
     private final List<Fileupload> mItems;
+    private ImageClickedListener listener;
     Context mContext;
+     public interface ImageClickedListener{
+         void onItemClicked(int position,Fileupload fileupload );
+     }
 
 
-    public  ItemPagerAdapter(Context context, List<Fileupload> items) {
+    public  ItemPagerAdapter(Context context, List<Fileupload> items, ImageClickedListener listener) {
         this.mContext = context;
         this.mItems = items;
+        this.listener = listener;
     }
 
     @Override
@@ -62,6 +67,13 @@ public class ItemPagerAdapter extends android.support.v4.view.PagerAdapter {
                 });
 
         container.addView(itemView);
+         itemView.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                  listener.onItemClicked(position, mItems.get(position));
+
+             }
+         });
         return itemView;
 
     }

@@ -487,7 +487,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
                 Observable.create(new ObservableOnSubscribe<Integer>() {
                     @Override
                     public void subscribe(ObservableEmitter<Integer> e) throws Exception {
-                        CityModel cityModel = mDAOCity.getCity(city);
+                        CityModel cityModel = mDAOCity.getCity(city,CityModel.FIELD_NAME);
                         if(cityModel!=null)
                             e.onNext(cityModel.getID());
                     }

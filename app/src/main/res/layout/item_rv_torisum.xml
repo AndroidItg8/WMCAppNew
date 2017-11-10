@@ -100,7 +100,7 @@
                 android:layout_below="@+id/lbl_place_description"
                 android:layout_marginTop="10dp"
                 android:layout_toEndOf="@+id/ratingBar"
-                android:text=" 568 reviews"
+                android:text=" 2 likes"
                 android:textColor="@color/colorGray"
                 android:textSize="14sp"
                 app:font_value="ROBOTO_REGULAR" />

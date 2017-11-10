@@ -6,6 +6,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.CommonMethod;
+import itg8.com.wmcapp.torisum.model.Fileupload;
 import itg8.com.wmcapp.torisum.model.TorisumModel;
 import itg8.com.wmcapp.widget.AutoScrollViewPager;
 import itg8.com.wmcapp.widget.CustomFontTextView;
@@ -43,7 +45,7 @@ import itg8.com.wmcapp.widget.CustomFontTextView;
  * Use the {@link TorisumDetailsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TorisumDetailsFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener {
+public class TorisumDetailsFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener, ItemPagerAdapter.ImageClickedListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,8 +61,8 @@ public class TorisumDetailsFragment extends Fragment implements OnMapReadyCallba
     CustomFontTextView lblTime;
     @BindView(R.id.ratingBar)
     RatingBar ratingBar;
-    @BindView(R.id.lbl_reviews)
-    CustomFontTextView lblReviews;
+    @BindView(R.id.lbl_likes)
+    CustomFontTextView lblLikes;
     @BindView(R.id.ll_navi)
     LinearLayout llNavi;
 
@@ -81,6 +83,7 @@ public class TorisumDetailsFragment extends Fragment implements OnMapReadyCallba
     private GoogleMap mMap;
     private TorisumModel torisumModel;
     private Context mContext;
+    private LatLng lastLatLng;
 
     public TorisumDetailsFragment() {
         // Required empty public constructor
@@ -129,7 +132,7 @@ public class TorisumDetailsFragment extends Fragment implements OnMapReadyCallba
     }
 
     private void initView() {
-        ItemPagerAdapter adapter = new ItemPagerAdapter(getActivity(), torisumModel.getFileupload());
+        ItemPagerAdapter adapter = new ItemPagerAdapter(getActivity(), torisumModel.getFileupload(), this);
         viewPager.setAdapter(adapter);
         viewPager.startAutoScroll(20000);
         lblPlaceName.setText(CommonMethod.checkEmpty(torisumModel.getName()));
@@ -156,6 +159,7 @@ public class TorisumDetailsFragment extends Fragment implements OnMapReadyCallba
                     @Override
                     public void onNext(LatLng latLng) {
                         if (latLng != null && mMap != null) {
+                            lastLatLng=latLng;
                             mMap.addMarker(new MarkerOptions().position(latLng).title(torisumModel.getName()));
                             mMap.setMinZoomPreference(17);
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -185,9 +189,9 @@ public class TorisumDetailsFragment extends Fragment implements OnMapReadyCallba
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(torisumModel.getLotitude(), torisumModel.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(sydney).title(torisumModel.getName()));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        LatLng sydney = new LatLng(torisumModel.getLotitude(), torisumModel.getLongitude());
+//        mMap.addMarker(new MarkerOptions().position(sydney).title(torisumModel.getName()));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     @Override
@@ -213,6 +217,7 @@ public class TorisumDetailsFragment extends Fragment implements OnMapReadyCallba
 //            p1.=location.getLatitude();
 //            location.getLongitude();
             if (location != null)
+
                 p1 = new LatLng((double) (location.getLatitude()),
                         (double) (location.getLongitude()));
 
@@ -220,6 +225,8 @@ public class TorisumDetailsFragment extends Fragment implements OnMapReadyCallba
             e.printStackTrace();
         }
         return p1;
+
+
     }
 
     @Override
@@ -227,12 +234,35 @@ public class TorisumDetailsFragment extends Fragment implements OnMapReadyCallba
         switch (view.getId())
         {
             case R.id.lbl_direction:
+                CommonMethod.directionShow(getActivity(),generateDirection());
+
                 break;
             case R.id.lbl_share:
-                CommonMethod.shareItem(getActivity() );
+                if(lastLatLng!= null)
+                    CommonMethod.shareItem(getActivity(), generateTextToshare(),torisumModel.getName() );
                 break;
             case R.id.lbl_like:
                 break;
         }
+    }
+
+    private String generateDirection() {
+
+//        return  "https://www.google.com/maps/dir/?api=1&&query_place_id=lastLatLng.latitude,lastLatLng.longitude&travelmode=walking";
+//        return "http://maps.google.com/maps?daddr="+lastLatLng.latitude+","+lastLatLng.longitude+ " ("+torisumModel.getName()+")";
+        return "http://maps.google.com/maps?q="+lastLatLng.latitude+","+lastLatLng.longitude+ " ("+torisumModel.getName()+")&daddr="+lastLatLng.latitude+","+lastLatLng.longitude;
+    }
+
+    private String generateTextToshare() {
+        return  "Place visit to Wardha\n"+torisumModel.getName()+"\nAddress: "+torisumModel.getAddress() +"\nhttp://maps.google.com/maps?saddr="+lastLatLng.latitude+","+lastLatLng.longitude;
+    }
+
+    @Override
+    public void onItemClicked(int position, Fileupload fileupload) {
+        Fragment fragment = ImageZoomFragment.newInstance(fileupload, "");
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.frame_container, fragment).addToBackStack(TorisumDetailsFragment.class.getSimpleName()).commit();
+
+
     }
 }

@@ -13,12 +13,17 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import itg8.com.wmcapp.board.model.NoticeBoardModel;
+import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.MyApplication;
+import itg8.com.wmcapp.common.NoConnectivityException;
 import itg8.com.wmcapp.complaint.model.ComplaintModel;
+import itg8.com.wmcapp.complaint.model.LikeModel;
 import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.HttpException;
+import retrofit2.Response;
 
 /**
  * Created by swapnilmeshram on 06/11/17.
@@ -78,5 +83,43 @@ class ComplaintModuleImp implements ComplaintMVP.ComplaintModule {
 
                     }
                 });
+    }
+
+    @Override
+    public void onSendLikesToServer(String url, int SubMaster_fkid, final ComplaintModel model, final ComplaintMVP.ComplaintListener listener) {
+        Call<LikeModel> callLike = MyApplication.getInstance().getRetroController().sendLike(url, CommonMethod.COMPLAINT,SubMaster_fkid,1);
+        callLike.enqueue(new Callback<LikeModel>() {
+            @Override
+            public void onResponse(Call<LikeModel> call, Response<LikeModel> response) {
+                if(response.isSuccessful())
+                {
+                    if(response.body().isFlag())
+                    {
+                        listener.onSuccess(model);
+
+                    }else
+                    {
+                        listener.onFailed("Can not Save");
+                    }
+                }else{
+                    listener.onFailed("Can not Save");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LikeModel> call, Throwable t) {
+                if (t instanceof NoConnectivityException) {
+                    // We had non-2XX http error
+                    Logs.d("IN HTTPEXCEPTION: "+t.getMessage());
+                }
+                if (t instanceof IOException) {
+                    // A network or conversion error happened
+                    Logs.d("IN IOException: "+t.getMessage());
+                }
+                listener.onPaginationError();
+            }
+
+        });
+
     }
 }

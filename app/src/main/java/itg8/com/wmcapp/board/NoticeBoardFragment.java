@@ -4,6 +4,7 @@ package itg8.com.wmcapp.board;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,7 @@ import itg8.com.wmcapp.board.mvp.NBMVP;
 import itg8.com.wmcapp.board.mvp.NBPresenterImp;
 import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.complaint.AddComplaintFragment;
+import itg8.com.wmcapp.torisum.TorisumDetailsFragment;
 import ru.alexbykov.nopaginate.paginate.Paginate;
 import ru.alexbykov.nopaginate.paginate.PaginateBuilder;
 
@@ -32,7 +34,7 @@ import ru.alexbykov.nopaginate.paginate.PaginateBuilder;
  * Use the {@link NoticeBoardFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NoticeBoardFragment extends Fragment implements View.OnClickListener, itg8.com.wmcapp.board.mvp.NBMVP.NBView {
+public class NoticeBoardFragment extends Fragment implements View.OnClickListener, NBMVP.NBView, NoticeBoardAdater.NoticeBoardListner {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -111,7 +113,7 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
     private void init() {
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new NoticeBoardAdater(getActivity());
+        adapter = new NoticeBoardAdater(getActivity(), this);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(presenter.scrollListener(layoutManager));
     }
@@ -230,6 +232,15 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onPaginationError(boolean show) {
+
+    }
+
+    @Override
+    public void onNBItemClicked(int position, NoticeBoardModel model) {
+        Fragment fragment = NoticeBoardDeatilsFragment.newInstance(model, "");
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.frame_container, fragment).addToBackStack(NoticeBoardDeatilsFragment.class.getSimpleName()).commit();
+
 
     }
 }

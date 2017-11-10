@@ -1,6 +1,12 @@
 package itg8.com.wmcapp.common;
 
 import android.app.Application;
+import android.util.Log;
+
+import java.util.List;
+
+import itg8.com.wmcapp.cilty.model.CityModel;
+import itg8.com.wmcapp.database.CityTableManipulate;
 
 /**
  * Created by swapnilmeshram on 31/10/17.
@@ -9,8 +15,11 @@ import android.app.Application;
 public class MyApplication extends Application{
 
     private static final String SHARED = "MyWardhPref";
+    private static final String TAG = MyApplication.class.getSimpleName();
     private static MyApplication mInstance;
     private RetroController retroController;
+    private CityTableManipulate mDAOCity = null;
+
 
 
     public static synchronized MyApplication getInstance(){
@@ -72,4 +81,6 @@ public class MyApplication extends Application{
     public void resetRetroAfterLogin() {
         retroController = null;
     }
+
+
 }

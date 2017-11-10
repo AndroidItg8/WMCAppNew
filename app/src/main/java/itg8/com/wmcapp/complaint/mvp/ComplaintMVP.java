@@ -20,6 +20,12 @@ public interface ComplaintMVP {
         void onNoMoreList();
         void onShowPaginationLoading(boolean show);
         void onPaginationError(boolean show);
+
+        void hideProgress();
+        void onSuccessLike(ComplaintModel model);
+        void onFailedLike(String s);
+
+        void showProgress();
     }
 
     public interface ComplaintPresenter extends BaseFragmentPresenter{
@@ -37,16 +43,22 @@ public interface ComplaintMVP {
         void onLoadMoreItem(String string);
 
         RecyclerView.OnScrollListener scrollListener(LinearLayoutManager layoutManager);
+
+        void onVoteUp(String string, int pkid, ComplaintModel model);
     }
 
     public interface ComplaintListener{
         void onComplaintListAvailable(List<ComplaintModel> o);
         void onNoMoreList();
         void onPaginationError();
+        void onSuccess(ComplaintModel model);
+        void onFailed(String s);
     }
 
     public interface ComplaintModule extends BaseDestroyModule{
         void onStartLoadingList(String loadUrl, int page, int limit, ComplaintListener listener);
+
+        void onSendLikesToServer(String url, int SubMaster_fkid, ComplaintModel model, ComplaintListener listener);
     }
 
 }

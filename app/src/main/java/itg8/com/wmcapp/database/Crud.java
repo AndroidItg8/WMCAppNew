@@ -11,5 +11,5 @@ public interface Crud {
     public int delete(Object item);
     public  int deleteAll();
 
-    CityModel getCity(String city);
+    CityModel getCity(String value,String key);
 }

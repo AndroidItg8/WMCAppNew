@@ -88,6 +88,17 @@ public class ComplaintPresenterImp extends BaseWeakPresenter<ComplaintMVP.Compla
         };
     }
 
+    @Override
+    public void onVoteUp(String url, int pkid, ComplaintModel model) {
+        if(hasView())
+        {
+             getView().showProgress();
+            module.onSendLikesToServer(url, pkid, model, this);
+        }
+
+
+    }
+
     private void getItems(int page, int limit) {
         if(hasView()){
             getView().onPaginationError(false);
@@ -125,5 +136,26 @@ public class ComplaintPresenterImp extends BaseWeakPresenter<ComplaintMVP.Compla
                 getView().onShowPaginationLoading(false);
                 getView().onPaginationError(true);
             }
+    }
+
+    @Override
+    public void onSuccess(ComplaintModel model) {
+         if(hasView())
+         {
+             getView().hideProgress();
+             getView().onSuccessLike(model);
+         }
+
+    }
+
+    @Override
+    public void onFailed(String s) {
+        if(hasView())
+        {
+            getView().hideProgress();
+            getView().onFailedLike(s);
+        }
+
+
     }
 }

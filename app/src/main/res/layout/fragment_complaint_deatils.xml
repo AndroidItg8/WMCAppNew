@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    android:layout_marginTop="10dp"
-    app:cardPreventCornerOverlap="true"
-    app:cardUseCompatPadding="true">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
+    tools:context="itg8.com.wmcapp.complaint.ComplaintDeatilsFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -88,8 +86,9 @@
                     android:layout_height="200dp"
                     android:scaleType="fitXY" />
 
+
                 <itg8.com.wmcapp.widget.CustomFontTextView
-                    android:id="@+id/lbl_cityName"
+                    android:id="@+id/customFontTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
@@ -104,8 +103,8 @@
                     android:text="Garbage"
                     android:textColor="@color/colorWhite"
                     android:textSize="12sp"
-
                     app:font_value="ROBOTO_REGULAR" />
+
             </FrameLayout>
 
 
@@ -117,8 +116,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/rl_center"
             android:layout_marginBottom="10dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginStart="25dp"
             android:layout_marginTop="10dp"
             android:background="@color/colorWhite">
 
@@ -126,12 +125,9 @@
                 android:id="@+id/lbl_problem_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
                 android:gravity="left"
                 android:inputType="text"
-                android:lines="2"
-                android:maxLines="2"
-                android:text="Problem "
+                android:text="Problem Problem Problem Problem Problem Problem Problem Problem Problem Problem Problem"
                 android:textColor="@color/colorBlack"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -143,33 +139,21 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/lbl_problem_value"
                 android:layout_marginTop="5dp"
+                android:gravity="center"
                 android:text="NAGPUR"
                 android:textColor="@color/colorBlack"
                 android:textSize="14sp"
-                app:font_value="ROBOTO_LIGHT" />
+                app:font_value="ROBOTO_MEDIUM" />
 
-            <itg8.com.wmcapp.widget.CustomFontTextView
-                android:id="@+id/lbl_vote"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/lbl_address_value"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="15dp"
-                android:gravity="center"
-                android:text="Votes "
-                android:textColor="@color/colorGray"
-                android:textSize="14sp"
-                app:font_value="ROBOTO_LIGHT" />
             <itg8.com.wmcapp.widget.CustomFontTextView
                 android:id="@+id/lbl_vote_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/lbl_address_value"
                 android:layout_marginEnd="10dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center"
-                android:layout_toEndOf="@+id/lbl_vote"
-                android:text="4"
+                android:text="Votes"
                 android:textColor="@color/colorGray"
                 android:textSize="14sp"
                 app:font_value="ROBOTO_LIGHT" />
@@ -197,35 +181,18 @@
             android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content">
-
             <itg8.com.wmcapp.widget.CustomFontTextView
-                android:id="@+id/lbl_voteUp"
-                android:layout_width="wrap_content"
+                android:id="@+id/lbl_vote"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:drawableStart="@drawable/ic_vote"
                 android:drawablePadding="10dp"
                 android:gravity="center_vertical"
-                android:text="Vote Up"
+                android:text="Votes"
                 android:textColor="@color/colorGray"
                 android:textSize="14sp"
                 app:font_value="ROBOTO_LIGHT" />
-
-                <com.github.rahatarmanahmed.cpv.CircularProgressView
-                    android:id="@+id/progressViewLike"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    app:cpv_color="@color/colorPrimary"
-                    app:cpv_thickness="2dp"
-                    android:visibility="gone"
-                    android:layout_gravity="center"
-                    app:cpv_indeterminate="true"
-                    app:cpv_animAutostart="true"/>
-
-            </FrameLayout>
 
             <itg8.com.wmcapp.widget.CustomFontTextView
                 android:id="@+id/lbl_share"
@@ -239,9 +206,7 @@
                 android:textColor="@color/colorGray"
                 android:textSize="14sp"
                 app:font_value="ROBOTO_LIGHT" />
-
-
         </LinearLayout>
     </RelativeLayout>
 
-</android.support.v7.widget.CardView>
+</ScrollView>

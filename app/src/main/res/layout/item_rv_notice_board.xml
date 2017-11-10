@@ -26,7 +26,7 @@
                 android:src="@drawable/bpkuti"
                 android:scaleType="center" />
 
-            <TextView
+            <itg8.com.wmcapp.widget.CustomFontTextView
                 android:id="@+id/lbl_title_only"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -42,9 +42,9 @@
                 android:ellipsize="end"
                 android:text="Notice Title"
                 android:textColor="@color/colorWhite"
-                android:textSize="12sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
-                android:fontFamily="@font/roboto_mono_thin" />
+                app:font_value="ROBOTO_MEDIUM" />
         </FrameLayout>
             <!--<itg8.com.wmcapp.widget.CustomFontTextView-->
                 <!--android:id="@+id/lbl_title_only"-->
