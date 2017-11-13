@@ -200,6 +200,7 @@
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:id="@+id/frame"
                 android:layout_height="wrap_content">
 
             <itg8.com.wmcapp.widget.CustomFontTextView
@@ -216,8 +217,8 @@
 
                 <com.github.rahatarmanahmed.cpv.CircularProgressView
                     android:id="@+id/progressViewLike"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     app:cpv_color="@color/colorPrimary"
                     app:cpv_thickness="2dp"
                     android:visibility="gone"

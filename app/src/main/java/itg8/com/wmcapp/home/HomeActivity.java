@@ -108,6 +108,8 @@ public class HomeActivity extends BaseActivity
         setSupportActionBar(toolbar);
         presenter = new CityPresenterImp(this);
         presenter.onGetCity(getString(R.string.url_city));
+      int result=   CommonMethod.calculateTerm();
+      Logs.d("Result"+result);
 
 
 //        startActivity(new Intent(this, TestActivity.class));
@@ -535,7 +537,7 @@ public class HomeActivity extends BaseActivity
         if (mDAOCity != null) {
             for (CityModel model : list) {
                     int id = mDAOCity.create(model);
-                    Log.d(TAG, "CityId:" + id);
+                 //   Log.d(TAG, "CityId:" + id);
             }
 
         }

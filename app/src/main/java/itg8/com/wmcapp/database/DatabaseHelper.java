@@ -10,7 +10,9 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
+import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.cilty.model.CityModel;
+import itg8.com.wmcapp.complaint.model.TempComplaintModel;
 
 /**
  * Created by Android itg 8 on 10/25/2017.
@@ -20,10 +22,11 @@ import itg8.com.wmcapp.cilty.model.CityModel;
 
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
-    private static final String DATABASE_NAME    = "ormlite.db";
-    private static final int    DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME    ="ormlite.db";
+    private static final int    DATABASE_VERSION = 2;
 
     private Dao<CityModel, Integer> mDAOCity = null;
+    private Dao<TempComplaintModel, Integer> mDAOComplaint;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -57,6 +60,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
 
         return mDAOCity;
+    }
+    public Dao<TempComplaintModel, Integer> getmDAOComplaint() throws SQLException {
+        if (mDAOComplaint == null) {
+            mDAOComplaint = getDao(TempComplaintModel.class);
+        }
+        return mDAOComplaint;
     }
 
     @Override

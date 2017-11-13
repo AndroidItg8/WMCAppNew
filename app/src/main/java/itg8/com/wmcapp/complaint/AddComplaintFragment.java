@@ -3,12 +3,14 @@ package itg8.com.wmcapp.complaint;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,6 +58,7 @@ import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.MyApplication;
 import itg8.com.wmcapp.common.ProgressRequestBody;
+import itg8.com.wmcapp.complaint.model.TempComplaintModel;
 import itg8.com.wmcapp.database.CityTableManipulate;
 import itg8.com.wmcapp.home.HomeActivity;
 import itg8.com.wmcapp.registration.RegistrationModel;
@@ -321,17 +324,17 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
 
     }
 
-    private void provideToServer(String description, String address, int cityId, String identity, double latitude, double longitude) {
+    private void provideToServer(final String description, final String address, final int cityId, final String identity,  final double latitude,  final double longitude) {
         ProgressRequestBody prb = new ProgressRequestBody(selectedFile, this);
         MultipartBody.Part part = MultipartBody.Part.createFormData("file", selectedFile.getName(), prb);
-        RequestBody lat = createPartFromString(String.valueOf(latitude));
-        RequestBody lang = createPartFromString(String.valueOf(longitude));
-        RequestBody addr = createPartFromString(String.valueOf(address));
-        RequestBody desc = createPartFromString(String.valueOf(description));
+       RequestBody lat = createPartFromString(String.valueOf(latitude));
+      RequestBody lang = createPartFromString(String.valueOf(longitude));
+         RequestBody addr = createPartFromString(String.valueOf(address));
+       RequestBody desc = createPartFromString(String.valueOf(description));
         //TODO changes: temporary city id;
-        RequestBody city = createPartFromInt(cityId);
-        RequestBody ident = createPartFromString(identity);
-        Observable<ResponseBody> call = MyApplication.getInstance().getRetroController().addComplaint(getString(R.string.url_add_complaint), part, lat, lang, addr, desc, city, ident);
+       RequestBody city = createPartFromInt(cityId);
+      RequestBody ident = createPartFromString(identity);
+         Observable<ResponseBody> call = MyApplication.getInstance().getRetroController().addComplaint(getString(R.string.url_add_complaint), part, lat, lang, addr, desc, city, ident);
         call.subscribeOn(Schedulers.io())
                 .flatMap(new Function<ResponseBody, ObservableSource<RegistrationModel>>() {
                     @Override
@@ -353,6 +356,9 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
+
+                        setDataToModel(latitude,longitude, address,description,cityId,identity, selectedFile.getName());
+
                     }
 
                     @Override
@@ -361,6 +367,64 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
                     }
                 });
     }
+
+    private void setDataToModel(double latitude, double longitude, String address, String description, int cityId, String identity, String file) {
+        TempComplaintModel model = new TempComplaintModel();
+        model.setAdd(address);
+        model.setDescription(description);
+        model.setCityId(cityId);
+        model.setLatitude(latitude);
+        model.setLongitude(longitude);
+        model.setShowIdentity(identity);
+        model.setFilePath(file);
+
+
+        openDialogue(model);
+
+
+
+    }
+    private  void openDialogue(final TempComplaintModel model)
+    {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getContext());
+
+        // set title
+        alertDialogBuilder.setTitle("Vote");
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage("Do you want to send information ")
+                .setCancelable(false)
+                .setPositiveButton("Immediately", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // if this button is clicked, close
+                        // current activity
+
+
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .setNegativeButton("Later", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // if this button is clicked, just close
+                        // the dialog box and do nothing
+                        ((MyApplication)getContext()).saveComplaintModel(model);
+                        dialog.dismiss();
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+
+    }
+
+
 
     private void hideProgress() {
         progressBar.setVisibility(View.GONE);

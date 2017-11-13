@@ -10,26 +10,36 @@ import java.sql.SQLException;
 import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.complaint.model.TempComplaintModel;
-import itg8.com.wmcapp.database.BaseDatabaseHelper;
-import itg8.com.wmcapp.database.Crud;
-import itg8.com.wmcapp.database.DatabaseHelper;
 
 /**
- * Created by swapnilmeshram on 08/11/17.
+ * Created by Android itg 8 on 11/13/2017.
  */
 
-public class CityTableManipulate implements Crud.CityCrud, Crud {
+public class ComplaintTableManipute implements Crud.ComplaintCrud, Crud {
 
     private final DatabaseHelper helper;
 
-    public CityTableManipulate(Context context) {
+    public ComplaintTableManipute(Context context) {
         helper = BaseDatabaseHelper.getBaseInstance().getHelper(context);
     }
+    @Override
+    public TempComplaintModel getComplaint(String value, String key) {
+        TempComplaintModel model=null;
+        try{
+            model=helper.getmDAOComplaint().queryBuilder().where().eq(key,value).queryForFirst();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        Logs.d("cityModel : "+new Gson().toJson(model));
+        return model;
+    }
+
+
 
     @Override
     public int create(Object item) {
         try {
-            return helper.getmDAOCity().create((CityModel) item);
+            return helper.getmDAOComplaint().create((TempComplaintModel) item);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -41,28 +51,20 @@ public class CityTableManipulate implements Crud.CityCrud, Crud {
         return 0;
     }
 
+
+
+
     @Override
     public int deleteAll() {
-
         try {
-            TableUtils.clearTable(helper.getConnectionSource(), CityModel.class);
+            TableUtils.clearTable(helper.getConnectionSource(), TempComplaintModel.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return 1;
     }
 
-    @Override
-    public CityModel getCity(String value, String key) {
-        CityModel model=null;
-        try{
-            model=helper.getmDAOCity().queryBuilder().where().eq(key,value).queryForFirst();
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        Logs.d("cityModel : "+new Gson().toJson(model));
-        return model;
-    }
+
 
 
 }

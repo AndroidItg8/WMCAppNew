@@ -86,7 +86,7 @@ class ComplaintModuleImp implements ComplaintMVP.ComplaintModule {
     }
 
     @Override
-    public void onSendLikesToServer(String url, int SubMaster_fkid, final ComplaintModel model, final ComplaintMVP.ComplaintListener listener) {
+    public void onSendLikesToServer(String url, int SubMaster_fkid, final ComplaintModel model, final int position, final ComplaintMVP.ComplaintListener listener) {
         Call<LikeModel> callLike = MyApplication.getInstance().getRetroController().sendLike(url, CommonMethod.COMPLAINT,SubMaster_fkid,1);
         callLike.enqueue(new Callback<LikeModel>() {
             @Override
@@ -95,7 +95,7 @@ class ComplaintModuleImp implements ComplaintMVP.ComplaintModule {
                 {
                     if(response.body().isFlag())
                     {
-                        listener.onSuccess(model);
+                        listener.onSuccess(model,position);
 
                     }else
                     {

@@ -89,11 +89,11 @@ public class ComplaintPresenterImp extends BaseWeakPresenter<ComplaintMVP.Compla
     }
 
     @Override
-    public void onVoteUp(String url, int pkid, ComplaintModel model) {
+    public void onVoteUp(String url, int pkid, ComplaintModel model, int position) {
         if(hasView())
         {
-             getView().showProgress();
-            module.onSendLikesToServer(url, pkid, model, this);
+             getView().showProgress(position);
+            module.onSendLikesToServer(url, pkid, model,  position,this);
         }
 
 
@@ -139,11 +139,11 @@ public class ComplaintPresenterImp extends BaseWeakPresenter<ComplaintMVP.Compla
     }
 
     @Override
-    public void onSuccess(ComplaintModel model) {
+    public void onSuccess(ComplaintModel model, int position) {
          if(hasView())
          {
              getView().hideProgress();
-             getView().onSuccessLike(model);
+             getView().onSuccessLike(model, position);
          }
 
     }

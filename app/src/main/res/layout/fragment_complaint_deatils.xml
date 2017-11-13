@@ -75,10 +75,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/rl_top">
-
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+
 
                 <ImageView
                     android:id="@+id/img_garbage"
@@ -86,26 +87,22 @@
                     android:layout_height="200dp"
                     android:scaleType="fitXY" />
 
-
                 <itg8.com.wmcapp.widget.CustomFontTextView
-                    android:id="@+id/customFontTextView"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:background="@drawable/bg_gradient"
-                    android:drawableLeft="@drawable/ic_pin"
-                    android:drawablePadding="10dp"
-                    android:gravity="center_vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingEnd="16dp"
-                    android:paddingStart="16dp"
-                    android:paddingTop="10dp"
-                    android:text="Garbage"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="12sp"
-                    app:font_value="ROBOTO_REGULAR" />
+                    android:id="@+id/txt_noImg"
+                    android:layout_gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:font_value="ROBOTO_MEDIUM"
+                    android:visibility="gone"
+                    android:text="No Image Available"/>
+
+
 
             </FrameLayout>
+
 
 
         </RelativeLayout>
@@ -116,21 +113,41 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/rl_center"
             android:layout_marginBottom="10dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginStart="25dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:background="@color/colorWhite">
+
+            <itg8.com.wmcapp.widget.CustomFontTextView
+                android:id="@+id/lbl_cityName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:drawableLeft="@drawable/ic_pin"
+                android:drawablePadding="10dp"
+                android:gravity="center_vertical"
+                android:paddingBottom="10dp"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                android:text="Nagpur"
+                android:visibility="gone"
+                android:textColor="@color/colorBlack"
+                android:textSize="12sp"
+                app:font_value="ROBOTO_REGULAR" />
 
             <itg8.com.wmcapp.widget.CustomFontTextView
                 android:id="@+id/lbl_problem_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
+                android:layout_below="@+id/lbl_cityName"
                 android:inputType="text"
                 android:text="Problem Problem Problem Problem Problem Problem Problem Problem Problem Problem Problem"
                 android:textColor="@color/colorBlack"
                 android:textSize="14sp"
                 android:textStyle="bold"
+                android:padding="10dp"
                 app:font_value="ROBOTO_MEDIUM" />
 
             <itg8.com.wmcapp.widget.CustomFontTextView
@@ -141,12 +158,13 @@
                 android:layout_marginTop="5dp"
                 android:gravity="center"
                 android:text="NAGPUR"
+                android:padding="10dp"
                 android:textColor="@color/colorBlack"
                 android:textSize="14sp"
                 app:font_value="ROBOTO_MEDIUM" />
 
             <itg8.com.wmcapp.widget.CustomFontTextView
-                android:id="@+id/lbl_vote_value"
+                android:id="@+id/lbl_votes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/lbl_address_value"
@@ -154,6 +172,19 @@
                 android:layout_marginTop="5dp"
                 android:gravity="center"
                 android:text="Votes"
+                android:textColor="@color/colorGray"
+                android:textSize="14sp"
+                app:font_value="ROBOTO_LIGHT" />
+            <itg8.com.wmcapp.widget.CustomFontTextView
+                android:id="@+id/lbl_vote_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lbl_address_value"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_toEndOf="@+id/lbl_votes"
+                android:gravity="center"
+                android:text="12"
                 android:textColor="@color/colorGray"
                 android:textSize="14sp"
                 app:font_value="ROBOTO_LIGHT" />
@@ -179,6 +210,7 @@
             android:layout_marginEnd="25dp"
             android:layout_marginStart="25dp"
             android:layout_marginTop="5dp"
+             android:id="@+id/ll_bottom"
             android:orientation="horizontal">
 
             <itg8.com.wmcapp.widget.CustomFontTextView
@@ -206,7 +238,18 @@
                 android:textColor="@color/colorGray"
                 android:textSize="14sp"
                 app:font_value="ROBOTO_LIGHT" />
+
+
         </LinearLayout>
+        <View
+            android:id="@+id/view1"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@+id/ll_bottom"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:background="@color/colorGray" />
     </RelativeLayout>
 
 </ScrollView>

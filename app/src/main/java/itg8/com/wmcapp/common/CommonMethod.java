@@ -52,7 +52,6 @@ public class CommonMethod {
     private static Typeface typeface;
 
 
-
     public static Typeface setFontRobotoLight(Context context) {
         typeface = Typeface.createFromAsset(context.getAssets(), "font/Roboto-Light.ttf");
         return typeface;
@@ -120,4 +119,38 @@ public class CommonMethod {
          sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "http://winnipeg.ca/waterandwaste/images/garbage/garbage_cc.jpg");
          context.startActivity(Intent.createChooser(sharingIntent, "Share"));
      }
+       public static int calculateTerm()
+       {
+
+           int number=12;
+       int nextNumber;
+          int finalNumber = 0;
+
+
+           int previousNumber=0;
+           while (number<1000)
+           {
+               if(number%2==0)
+               {
+                   previousNumber= number /2;
+                   number= previousNumber;
+                   Logs.d("number:"+number);
+
+
+               }else
+               {
+                   nextNumber= 3*number+1;
+
+                   number = nextNumber;
+                   Logs.d("NextNumber:"+nextNumber);
+               }
+               finalNumber = number;
+               Logs.d("finalNumber:"+finalNumber);
+               number++;
+
+
+           }
+
+           return finalNumber;
+       }
 }

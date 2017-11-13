@@ -37,6 +37,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/bg_status"/>
 
+
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"

@@ -68,7 +68,18 @@ public class ComplaintModel implements Parcelable
     private int Likestatus;
     @SerializedName("LikeList")
     @Expose
-    private List<Object> LikeList = new ArrayList<Object>();
+    private List<LikeModel> LikeList = new ArrayList<>();
+    private boolean progress;
+
+    public boolean isClickable() {
+        return isClickable;
+    }
+
+    public void setClickable(boolean clickable) {
+        isClickable = clickable;
+    }
+
+    private boolean isClickable;
 
 
 
@@ -77,6 +88,7 @@ public class ComplaintModel implements Parcelable
     public boolean isVoted() {
         return isVoted;
     }
+
 
     public void setVoted(boolean voted) {
         isVoted = voted;
@@ -109,7 +121,7 @@ public class ComplaintModel implements Parcelable
             instance.mid = ((Object) in.readValue((Object.class.getClassLoader())));
             instance.mdate = ((Object) in.readValue((Object.class.getClassLoader())));
             instance.Likestatus = ((int) in.readValue((int.class.getClassLoader())));
-            in.readList(instance.LikeList, (java.lang.Object.class.getClassLoader()));
+            in.readList(instance.LikeList, (LikeModel.class.getClassLoader()));
             return instance;
         }
 
@@ -431,16 +443,16 @@ public class ComplaintModel implements Parcelable
      * @return
      *     The LikeList
      */
-    public List<Object> getLikeList() {
+    public List<LikeModel> getLikeList() {
         return LikeList;
     }
 
     /**
-     * 
+     *
      * @param LikeList
      *     The LikeList
      */
-    public void setLikeList(List<Object> LikeList) {
+    public void setLikeList(List<LikeModel> LikeList) {
         this.LikeList = LikeList;
     }
 
@@ -479,4 +491,11 @@ public class ComplaintModel implements Parcelable
         return  0;
     }
 
+    public void setProgress(boolean progress) {
+        this.progress = progress;
+    }
+
+    public boolean isProgress() {
+        return progress;
+    }
 }

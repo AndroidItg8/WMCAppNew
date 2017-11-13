@@ -1,12 +1,17 @@
 package itg8.com.wmcapp.common;
 
+import android.annotation.TargetApi;
 import android.app.Application;
-import android.util.Log;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
+import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 
-import java.util.List;
-
-import itg8.com.wmcapp.cilty.model.CityModel;
+import itg8.com.wmcapp.complaint.model.TempComplaintModel;
 import itg8.com.wmcapp.database.CityTableManipulate;
+import itg8.com.wmcapp.database.ComplaintTableManipute;
 
 /**
  * Created by swapnilmeshram on 31/10/17.
@@ -16,10 +21,11 @@ public class MyApplication extends Application{
 
     private static final String SHARED = "MyWardhPref";
     private static final String TAG = MyApplication.class.getSimpleName();
+    private static final int MY_BACKGROUND_JOB = 0;
     private static MyApplication mInstance;
     private RetroController retroController;
     private CityTableManipulate mDAOCity = null;
-
+    private ComplaintTableManipute complaintTableManipute;
 
 
     public static synchronized MyApplication getInstance(){
@@ -83,4 +89,33 @@ public class MyApplication extends Application{
     }
 
 
+    public void saveComplaintModel(TempComplaintModel model) {
+       complaintTableManipute = new ComplaintTableManipute(getApplicationContext());
+        complaintTableManipute.create(model);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            myJobSchedular(getApplicationContext());
+        }else
+        {
+            //BroadCast Use
+        }
+
+
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void myJobSchedular(Context context) {
+        JobScheduler js =
+                (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        JobInfo.Builder builder = new JobInfo.Builder(
+                MY_BACKGROUND_JOB,
+                new ComponentName(context, JobNetworkShedule.class));
+            //MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
+
+
+        if (js != null) {
+            js.schedule(builder.build());
+        }
+    }
 }

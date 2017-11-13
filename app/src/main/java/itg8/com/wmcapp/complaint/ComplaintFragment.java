@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -25,6 +26,7 @@ import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.complaint.model.ComplaintModel;
+import itg8.com.wmcapp.complaint.model.LikeModel;
 import itg8.com.wmcapp.complaint.mvp.ComplaintMVP;
 import itg8.com.wmcapp.complaint.mvp.ComplaintPresenterImp;
 import itg8.com.wmcapp.database.CityTableManipulate;
@@ -39,6 +41,7 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int VOTED = 1;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     Unbinder unbinder;
@@ -178,11 +181,13 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
     }
 
     @Override
-    public void onSuccessLike(ComplaintModel model) {
-         model.setVoted(true);
+    public void onSuccessLike(ComplaintModel model, int position) {
+        model.setVoted(true);
+         model.setClickable(false);
+         model.setLikestatus(VOTED);
+         model.setLikeList(null);
+        adapter.hideProgress(position);
 
-        adapter.hideProgress();
-        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -192,8 +197,8 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
     }
 
     @Override
-    public void showProgress() {
-        adapter.showProgress();
+    public void showProgress(int position) {
+        adapter.showProgress(position);
 
     }
 
@@ -208,11 +213,11 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
 
     @Override
     public void onVoteUpClicked(int position, ComplaintModel model) {
-        showDialogue(model);
+        showDialogue(model, position);
 
     }
 
-    private void showDialogue(final ComplaintModel model) {
+    private void showDialogue(final ComplaintModel model, final int position) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 mContext);
 
@@ -228,7 +233,7 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
                         // if this button is clicked, close
                         // current activity
 
-                        presenter.onVoteUp(getString(R.string.url_like), model.getPkid(),model);
+                        presenter.onVoteUp(getString(R.string.url_like), model.getPkid(),model, position);
 
                         dialog.dismiss();
 

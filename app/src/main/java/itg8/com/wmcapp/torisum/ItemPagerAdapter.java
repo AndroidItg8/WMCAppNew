@@ -48,6 +48,10 @@ public class ItemPagerAdapter extends android.support.v4.view.PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         View itemView = LayoutInflater.from(mContext).inflate(R.layout.pager_item_torisum, container, false);
         final ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView);
+//        if(mItems instanceof Fileupload)
+//        {
+//            Fileupload fileupload = (Fileupload) mItems;
+//        }
         Picasso.with(mContext)
                 .load(CommonMethod.BASE_URL + mItems.get(position).getFilepath())
                 .networkPolicy(NetworkPolicy.OFFLINE)
