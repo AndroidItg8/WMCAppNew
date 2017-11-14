@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context="itg8.com.wmcapp.splash.SplashActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@android:color/transparent"
+        android:visibility="gone"
         android:fitsSystemWindows="true">
 
         <android.support.v7.widget.Toolbar
@@ -19,6 +21,7 @@
             android:background="@android:color/transparent"
             android:fitsSystemWindows="true"
             android:minHeight="?attr/actionBarSize"
+            android:visibility="gone"
             app:theme="@style/ToolbarColoredBackArrow"
             app:titleTextColor="@color/colorWhite" />
 
