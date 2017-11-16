@@ -96,7 +96,17 @@ class NoticeBoardAdater extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 // Try again online if cache failed
                                 Picasso.with(context)
                                         .load(CommonMethod.BASE_URL + models.get(holder.getAdapterPosition()).getImagePath())
-                                        .into(((NoticeBoardViewHolder) holder).imgGarbage);
+                                        .into(((NoticeBoardViewHolder) holder).imgGarbage, new Callback() {
+                                            @Override
+                                            public void onSuccess() {
+                                                ((NoticeBoardViewHolder) holder).imgGarbage.setVisibility(View.VISIBLE);
+                                            }
+
+                                            @Override
+                                            public void onError() {
+                                                ((NoticeBoardViewHolder) holder).imgGarbage.setVisibility(View.GONE);
+                                            }
+                                        });
                             }
                         });
             } else {

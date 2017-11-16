@@ -1,8 +1,9 @@
 package itg8.com.wmcapp.splash;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -10,6 +11,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -18,16 +23,25 @@ import com.j256.ormlite.dao.Dao;
 import java.sql.SQLException;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.cilty.mvp.CityMVP;
 import itg8.com.wmcapp.cilty.mvp.CityPresenterImp;
 import itg8.com.wmcapp.common.BaseActivity;
 import itg8.com.wmcapp.database.BaseDatabaseHelper;
+import itg8.com.wmcapp.home.HomeActivity;
 
 public class SplashActivity extends BaseActivity implements CityMVP.CityView {
 
     private static final String TAG = SplashActivity.class.getSimpleName();
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.imgLogo)
+    ImageView imgLogo;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
     private Fragment fragment;
     // Splash screen timer
     private static int SPLASH_TIME_OUT = 3000;
@@ -35,29 +49,39 @@ public class SplashActivity extends BaseActivity implements CityMVP.CityView {
     private CityMVP.CityPresenter presenter;
     private Snackbar snackbar;
     private Dao<CityModel, Integer> mDAOCity = null;
-    private List<CityModel> cityList= null;
+    private List<CityModel> cityList = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         presenter = new CityPresenterImp(this);
-        presenter.onGetCity(getString(R.string.url_city));
+//        presenter.onGetCity(getString(R.string.url_city));
         setSupportActionBar(toolbar);
+        Animation animation= AnimationUtils.loadAnimation(this,R.anim.splash_animation);
+        imgLogo.setAnimation(animation);
 
+        imgLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                imgLogo.clearAnimation();
+                finish();
+            }
+        });
 
 
     }
 
     private void splash(List<CityModel> cityList) {
-
 
 
     }
@@ -95,8 +119,7 @@ public class SplashActivity extends BaseActivity implements CityMVP.CityView {
 
     @Override
     public void hideProgress() {
-       // progressView.setVisibility(View.GONE);
-
+        // progressView.setVisibility(View.GONE);
 
 
     }
@@ -183,12 +206,11 @@ public class SplashActivity extends BaseActivity implements CityMVP.CityView {
             e.printStackTrace();
         }
 
-        if(mDAOCity!= null)
-        {
+        if (mDAOCity != null) {
             BaseDatabaseHelper.getBaseInstance().clearCityTable();
 
 
-            for (CityModel model:list) {
+            for (CityModel model : list) {
                 try {
                     int id = mDAOCity.create(model);
 
@@ -197,9 +219,8 @@ public class SplashActivity extends BaseActivity implements CityMVP.CityView {
                             .where()
                             .eq(CityModel.FIELD_ID, model.getID())
                             .query();
-                    Log.d(TAG,"CityList:"+new Gson().toJson(cityList));
-                }
-                catch (SQLException e) {
+                    Log.d(TAG, "CityList:" + new Gson().toJson(cityList));
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
@@ -208,12 +229,7 @@ public class SplashActivity extends BaseActivity implements CityMVP.CityView {
             splash(cityList);
 
 
-
-
         }
-
-
-
 
 
     }

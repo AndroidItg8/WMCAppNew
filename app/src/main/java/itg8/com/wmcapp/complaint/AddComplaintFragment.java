@@ -90,6 +90,10 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final int RC_STORAGE_CAMERA = 100;
+    private static final String FILE_PATH = "FILE_PATH";
+    private static final String DESCRIPTION = "Description";
+    private static final String ADDRESS = "ADDRESS";
+    private static final String IDENTITY = "identity";
     @BindView(R.id.edtAddress)
     EditText edtAddress;
     @BindView(R.id.edtDescription2)
@@ -138,6 +142,12 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     private ReceiveBroadcastReceiver receiveBroadcast;
 
 
+    String description = null;
+    String address = null;
+    String identity;
+    double latitude;
+    double longitude;
+
     public AddComplaintFragment() {
         // Required empty public constructor
     }
@@ -167,6 +177,46 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (selectedFile != null)
+            outState.putString(FILE_PATH, selectedFile.getAbsolutePath());
+        if (description != null)
+            outState.putString(DESCRIPTION, description);
+        if (address != null) {
+            outState.putString(ADDRESS, address);
+        }
+        if (rdoShowIdentity == null)
+            return;
+            if (rdoShowIdentity.isChecked())
+                identity = "YES";
+            else
+                identity = "NO";
+        outState.putString(IDENTITY, identity);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            if (savedInstanceState.getString(FILE_PATH, null) != null)
+                selectedFile = new File(savedInstanceState.getString(FILE_PATH, ""));
+            if (savedInstanceState.getString(DESCRIPTION, null) != null)
+                edtDescription2.setText(savedInstanceState.getString(DESCRIPTION, ""));
+            if (savedInstanceState.getString(ADDRESS, null) != null)
+                edtAddress.setText(savedInstanceState.getString(ADDRESS, ""));
+            if (savedInstanceState.getString(IDENTITY, null) != null) {
+                String identity = savedInstanceState.getString(IDENTITY, null);
+                if (identity.equalsIgnoreCase("YES")) {
+                    rdoShowIdentity.setChecked(true);
+                } else {
+                    rdoHideIdentity.setChecked(true);
+                }
+            }
         }
     }
 
