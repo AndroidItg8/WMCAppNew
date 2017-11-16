@@ -53,6 +53,7 @@ public interface ComplaintMVP {
         void onPaginationError();
         void onSuccess(ComplaintModel model, int position);
         void onFailed(String s);
+         void onFailedList(String s);
     }
 
     public interface ComplaintModule extends BaseDestroyModule{

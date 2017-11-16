@@ -106,8 +106,6 @@ public class ProfileFragment extends Fragment implements ProfileMVp.ProfileView 
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-
-
         unbinder = ButterKnife.bind(this, view);
         presenter = new ProfilePresenterImp(this);
         presenter.onGetProfileList(getString(R.string.url_profile));
@@ -207,13 +205,13 @@ public class ProfileFragment extends Fragment implements ProfileMVp.ProfileView 
 
     @Override
     public void onNoInternetConnect(boolean b) {
-        showSnackbar(b);
+       // showSnackbar(b);
 
     }
 
     @Override
     public void onInternetConnect(boolean b) {
-        showSnackbar(b);
+       // showSnackbar(b);
 
     }
 

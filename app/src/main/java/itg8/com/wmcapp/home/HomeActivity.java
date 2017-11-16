@@ -69,6 +69,7 @@ import itg8.com.wmcapp.prabhag.PrabhagFragment;
 import itg8.com.wmcapp.prabhag.WardMemberFragment;
 import itg8.com.wmcapp.prabhag.dummy.DummyContent;
 import itg8.com.wmcapp.prabhag.model.ContactModel;
+import itg8.com.wmcapp.profile.ProfileActivity;
 import itg8.com.wmcapp.profile.ProfileFragment;
 import itg8.com.wmcapp.signup.LoginActivity;
 import itg8.com.wmcapp.suggestion.SuggestionFragment;
@@ -270,7 +271,8 @@ public class HomeActivity extends BaseActivity
                fragment= PrabhagFragment.newInstance(1);
                 break;
             case R.id.nav_profile:
-                fragment = ProfileFragment.newInstance("", "");
+               // fragment = ProfileFragment.newInstance("", "");
+                 startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                 break;
             case R.id.nav_suggestion:
                 fragment = SuggestionFragment.newInstance("","");

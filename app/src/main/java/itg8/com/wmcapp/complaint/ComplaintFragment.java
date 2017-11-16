@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -26,7 +25,7 @@ import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.complaint.model.ComplaintModel;
-import itg8.com.wmcapp.complaint.model.LikeModel;
+import itg8.com.wmcapp.complaint.model.TempComplaintModel;
 import itg8.com.wmcapp.complaint.mvp.ComplaintMVP;
 import itg8.com.wmcapp.complaint.mvp.ComplaintPresenterImp;
 import itg8.com.wmcapp.database.CityTableManipulate;
@@ -257,7 +256,7 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
 
     @Override
     public void onShareClicked(int position, ComplaintModel model) {
-        CommonMethod.shareItem(getActivity(), generateTextToshare(model), model.getComplaintName());
+//        CommonMethod.shareItem(getActivity(), generateTextToshare(model), model.getComplaintName(), ((ComplaintModel) model).getImagePath());
 
     }
 

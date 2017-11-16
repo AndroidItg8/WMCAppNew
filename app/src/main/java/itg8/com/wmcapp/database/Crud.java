@@ -1,5 +1,7 @@
 package itg8.com.wmcapp.database;
 
+import java.util.List;
+
 import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.complaint.model.TempComplaintModel;
 
@@ -14,6 +16,9 @@ public interface Crud {
 
      public interface ComplaintCrud{
          TempComplaintModel getComplaint(String value, String key);
+
+       List<TempComplaintModel> getAllComplaint();
+          int  deleteComplaint(int value, String key);
 
      }
       public  interface CityCrud{

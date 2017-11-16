@@ -153,6 +153,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@color/colorPrimary"
                 android:text="Logout"
+                android:visibility="gone"
                 android:id="@+id/btn_ok"
                 android:textColor="@color/colorWhite"/>
         </RelativeLayout>

@@ -62,6 +62,17 @@
     <string name="hide_identity"> पहचान छुपाएं </string>
     <string name="contact_us">हमसे संपर्क करें</string>
     <string name="dismiss">खारिज</string>
+    <string name="profile">्रोफ़ाइल</string>
+    <string name="complaint_status">शिकायत स्थिति</string>
+    <string name="vote">समर्थन</string>
+    <string name="no_internet_title">कोई इंटरनेट कनेक्शन नहीं!!!</string>
+    <string name="message_dialogue">आप कब जानकारी भेजना चाहते हैं?</string>
+    <string name="immediately">तुरंत ही</string>
+    <string name="later">बाद में</string>
+
+
+
+
 
 
 

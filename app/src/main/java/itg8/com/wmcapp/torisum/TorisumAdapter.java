@@ -17,7 +17,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.common.BaseViewHolder;
 import itg8.com.wmcapp.common.CommonMethod;
+import itg8.com.wmcapp.common.OnRecyclerviewClickListener;
 import itg8.com.wmcapp.torisum.model.TorisumModel;
 import itg8.com.wmcapp.widget.CustomFontTextView;
 
@@ -31,9 +33,9 @@ public class TorisumAdapter extends RecyclerView.Adapter<TorisumAdapter.TorisumV
 
     private Context mContext;
     private List<TorisumModel> list;
-    private TorisumItemClickecListener listener;
+    private OnRecyclerviewClickListener<TorisumModel> listener;
 
-    public TorisumAdapter(Context mContext, List<TorisumModel> list, TorisumItemClickecListener listener) {
+    public TorisumAdapter(Context mContext, List<TorisumModel> list, OnRecyclerviewClickListener listener) {
 
         this.mContext = mContext;
         this.list = list;
@@ -85,7 +87,7 @@ public class TorisumAdapter extends RecyclerView.Adapter<TorisumAdapter.TorisumV
         void onItemClicked(int position, TorisumModel model);
     }
 
-    public class TorisumViewHolder extends RecyclerView.ViewHolder {
+    public class TorisumViewHolder extends BaseViewHolder<TorisumModel> {
         @BindView(R.id.img)
         ImageView img;
         @BindView(R.id.lbl_place_name)
@@ -100,12 +102,12 @@ public class TorisumAdapter extends RecyclerView.Adapter<TorisumAdapter.TorisumV
         CustomFontTextView lblReviews;
 
         public TorisumViewHolder(View itemView) {
-            super(itemView);
+            super(itemView, listener);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onItemClicked(getAdapterPosition(), list.get(getAdapterPosition()));
+                    listener.onClick(getAdapterPosition(), list.get(getAdapterPosition()));
 
                 }
             });

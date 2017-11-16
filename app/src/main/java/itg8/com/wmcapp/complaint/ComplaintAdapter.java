@@ -40,24 +40,21 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int VOTE_UP = 0;
 
 
-
-    private Context mContext;
     private ComplaintListner listner;
     private List<ComplaintModel> models;
     private int likedSize;
 
     public ComplaintAdapter(Context mContext, ComplaintListner listner) {
-        this.mContext = mContext;
         this.listner = listner;
         models = new ArrayList<>();
     }
 
     public void showProgress(int position) {
-      models.get(position).setProgress(true);
+        models.get(position).setProgress(true);
         notifyItemChanged(position);
     }
 
-    public void hideProgress( int position) {
+    public void hideProgress(int position) {
         models.get(position).setProgress(false);
         notifyItemChanged(position);
     }
@@ -66,7 +63,7 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder holder;
         if (viewType == NORMAL_VIEW) {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.item_rv_complaint, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_rv_complaint, parent, false);
             holder = new ComplaintViewHolder(view);
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_rv_progress, parent, false);
@@ -81,12 +78,12 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ComplaintViewHolder) {
-
-
-            Picasso.with(mContext)
-                    .load(CommonMethod.BASE_URL + models.get(position).getImagePath())
+            Logs.d("CompliantAdapter:" + CommonMethod.BASE_URL + models.get(position).getImagePath());
+            ((ComplaintViewHolder) holder).url = CommonMethod.BASE_URL + models.get(position).getImagePath();
+            Picasso.with(((ComplaintViewHolder) holder).imgGarbage.getContext())
+                    .load(((ComplaintViewHolder) holder).url)
                     .networkPolicy(NetworkPolicy.OFFLINE)
                     .into(((ComplaintViewHolder) holder).imgGarbage, new Callback() {
                         @Override
@@ -97,8 +94,8 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         @Override
                         public void onError() {
                             // Try again online if cache failed
-                            Picasso.with(mContext)
-                                    .load(CommonMethod.BASE_URL + models.get(holder.getAdapterPosition()).getImagePath())
+                            Picasso.with(((ComplaintViewHolder) holder).imgGarbage.getContext())
+                                    .load(((ComplaintViewHolder) holder).url)
                                     .into(((ComplaintViewHolder) holder).imgGarbage, new Callback() {
                                         @Override
                                         public void onSuccess() {
@@ -139,19 +136,19 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             }
             if (models.get(position).getLikestatus() == VOTE_UP) {
                 ((ComplaintViewHolder) holder).lblVoteUp.setText("VOTE UP");
-                ((ComplaintViewHolder) holder).lblVoteUp.setTextColor(mContext.getResources().getColor(R.color.colorBlack));
+                ((ComplaintViewHolder) holder).lblVoteUp.setTextColor(((ComplaintViewHolder) holder).lblVoteUp.getContext().getResources().getColor(R.color.colorBlack));
 
                 ((ComplaintViewHolder) holder).lblVoteUp.setClickable(true);
 
                 ((ComplaintViewHolder) holder).frame.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        listner.onVoteUpClicked(position, models.get(position));
+                        listner.onVoteUpClicked(holder.getAdapterPosition(), models.get(holder.getAdapterPosition()));
                     }
                 });
             } else {
                 ((ComplaintViewHolder) holder).lblVoteUp.setText("VOTED");
-                ((ComplaintViewHolder) holder).lblVoteUp.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
+                ((ComplaintViewHolder) holder).lblVoteUp.setTextColor(((ComplaintViewHolder) holder).lblVoteUp.getContext().getResources().getColor(R.color.colorPrimary));
                 ((ComplaintViewHolder) holder).frame.setClickable(false);
 
             }
@@ -161,12 +158,11 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((ComplaintViewHolder) holder).lblShare.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listner.onShareClicked(position, models.get(position));
+                    listner.onShareClicked(holder.getAdapterPosition(), models.get(holder.getAdapterPosition()));
                 }
             });
         }
     }
-
 
 
     @Override
@@ -235,6 +231,7 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         CircularProgressView progressViewLike;
         @BindView(R.id.frame)
         FrameLayout frame;
+        String url;
 
         public ComplaintViewHolder(View itemView) {
             super(itemView);

@@ -2,15 +2,18 @@ package itg8.com.wmcapp.complaint;
 
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +39,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -46,7 +50,6 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
@@ -58,6 +61,8 @@ import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.MyApplication;
 import itg8.com.wmcapp.common.ProgressRequestBody;
+import itg8.com.wmcapp.common.ReceiveBroadcastReceiver;
+import itg8.com.wmcapp.common.SentBroadCastReceiver;
 import itg8.com.wmcapp.complaint.model.TempComplaintModel;
 import itg8.com.wmcapp.database.CityTableManipulate;
 import itg8.com.wmcapp.home.HomeActivity;
@@ -79,11 +84,11 @@ import pub.devrel.easypermissions.EasyPermissions;
  * create an instance of this fragment.
  */
 public class AddComplaintFragment extends Fragment implements EasyPermissions.PermissionCallbacks, View.OnClickListener, CommonCallback.OnDialogClickListner, CommonMethod.ResultListener, CompoundButton.OnCheckedChangeListener, ProgressRequestBody.UploadCallbacks {
+    public static final String TAG = AddComplaintFragment.class.getSimpleName();
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    public static final String TAG = AddComplaintFragment.class.getSimpleName();
     private static final int RC_STORAGE_CAMERA = 100;
     @BindView(R.id.edtAddress)
     EditText edtAddress;
@@ -126,7 +131,11 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     private LatLng latlang;
     private File selectedFile;
     private CityTableManipulate mDAOCity;
-    private int cityId=0;
+    private int cityId = 0;
+    private boolean canSendSMS;
+    private Context mContext;
+    private SentBroadCastReceiver receiver;
+    private ReceiveBroadcastReceiver receiveBroadcast;
 
 
     public AddComplaintFragment() {
@@ -195,12 +204,23 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     public void onResume() {
         super.onResume();
         mResultReceiver.setResultListener(this);
+
+        IntentFilter filter = new IntentFilter(CommonMethod.SENT);
+        receiver = new SentBroadCastReceiver();
+        getActivity().registerReceiver(receiver, filter);
+
+        receiveBroadcast = new ReceiveBroadcastReceiver();
+        getActivity().registerReceiver(receiveBroadcast, filter);
+
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mResultReceiver.setResultListener(null);
+        getActivity().unregisterReceiver(receiver);
+        getActivity().unregisterReceiver(receiveBroadcast);
     }
 
     @Override
@@ -226,6 +246,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
 
             @Override
             public void onImagesPicked(List<File> imageFiles, EasyImage.ImageSource source, int type) {
+                Logs.d("OnImagePicked :");
                 onPhotosReturned(imageFiles);
             }
 
@@ -245,6 +266,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
             File f = imageFiles.get(imageFiles.size() - 1);
             Log.d(TAG, "imageFile : " + f.getAbsolutePath() + " size : " + (f.length() / 1024) + " MB");
             Picasso.with(getActivity()).load(f).into(imgPreview);
+
             try {
                 File compressImage = new Compressor(getContext()).compressToFile(f);
                 Log.d(TAG, "imageFile : " + compressImage.getAbsolutePath() + " size : " + (compressImage.length() / 1024) + " MB");
@@ -319,22 +341,22 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
             longitude = latlang.longitude;
         }
 
-            provideToServer(description, address, cityId, identity, latitude, longitude);
+        provideToServer(description, address, cityId, identity, latitude, longitude);
 
 
     }
 
-    private void provideToServer(final String description, final String address, final int cityId, final String identity,  final double latitude,  final double longitude) {
+    private void provideToServer(final String description, final String address, final int cityId, final String identity, final double latitude, final double longitude) {
         ProgressRequestBody prb = new ProgressRequestBody(selectedFile, this);
         MultipartBody.Part part = MultipartBody.Part.createFormData("file", selectedFile.getName(), prb);
-       RequestBody lat = createPartFromString(String.valueOf(latitude));
-      RequestBody lang = createPartFromString(String.valueOf(longitude));
-         RequestBody addr = createPartFromString(String.valueOf(address));
-       RequestBody desc = createPartFromString(String.valueOf(description));
+        RequestBody lat = createPartFromString(String.valueOf(latitude));
+        RequestBody lang = createPartFromString(String.valueOf(longitude));
+        RequestBody addr = createPartFromString(String.valueOf(address));
+        RequestBody desc = createPartFromString(String.valueOf(description));
         //TODO changes: temporary city id;
-       RequestBody city = createPartFromInt(cityId);
-      RequestBody ident = createPartFromString(identity);
-         Observable<ResponseBody> call = MyApplication.getInstance().getRetroController().addComplaint(getString(R.string.url_add_complaint), part, lat, lang, addr, desc, city, ident);
+        RequestBody city = createPartFromInt(cityId);
+        RequestBody ident = createPartFromString(identity);
+        Observable<ResponseBody> call = MyApplication.getInstance().getRetroController().addComplaint(getString(R.string.url_add_complaint), part, lat, lang, addr, desc, city, ident);
         call.subscribeOn(Schedulers.io())
                 .flatMap(new Function<ResponseBody, ObservableSource<RegistrationModel>>() {
                     @Override
@@ -357,7 +379,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
                     public void onError(Throwable e) {
                         e.printStackTrace();
 
-                        setDataToModel(latitude,longitude, address,description,cityId,identity, selectedFile.getName());
+                        setDataToModel(latitude, longitude, address, description, cityId, identity, selectedFile.getAbsolutePath());
 
                     }
 
@@ -377,41 +399,39 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
         model.setLongitude(longitude);
         model.setShowIdentity(identity);
         model.setFilePath(file);
-
-
+        model.setComplaintName("Cleaning");
+        model.setLastModifiedDate(CommonMethod.formatter.format(Calendar.getInstance().getTime()));
         openDialogue(model);
 
 
-
     }
-    private  void openDialogue(final TempComplaintModel model)
-    {
+
+    private void openDialogue(final TempComplaintModel model) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                getContext());
+                getActivity());
 
         // set title
-        alertDialogBuilder.setTitle("Vote");
+        alertDialogBuilder.setTitle(getString(R.string.no_internet_title));
 
         // set dialog message
         alertDialogBuilder
-                .setMessage("Do you want to send information ")
+                .setMessage(getString(R.string.message_dialogue))
                 .setCancelable(false)
-                .setPositiveButton("Immediately", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.immediately), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // if this button is clicked, close
                         // current activity
-
-
-
+                        Logs.d("immediately ");
+                        SendSMS("9823778532", generateSMSText(model));
                         dialog.dismiss();
 
                     }
                 })
-                .setNegativeButton("Later", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.later), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // if this button is clicked, just close
                         // the dialog box and do nothing
-                        ((MyApplication)getContext()).saveComplaintModel(model);
+                        MyApplication.getInstance().saveComplaintModel(model);
                         dialog.dismiss();
                     }
                 });
@@ -424,6 +444,35 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
 
     }
 
+    private void SendSMS(String phoneNumber, String message) {
+
+        SmsManager sms = SmsManager.getDefault();
+        PendingIntent sentPI = PendingIntent.getBroadcast(getActivity(), 0, new Intent(CommonMethod.SENT), 0);
+        PendingIntent deliveredPI = PendingIntent.getBroadcast(getActivity(), 0, new Intent(CommonMethod.DELIVERED), 0);
+        Intent intent = new Intent();
+        intent.setAction(CommonMethod.SENT);
+        getActivity().sendBroadcast(intent);
+
+        intent.setAction(CommonMethod.DELIVERED);
+        getActivity().sendBroadcast(intent);
+
+
+        try {
+            sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "exception", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+    private String generateSMSText(TempComplaintModel model) {
+        String builder;
+        builder = "Dear Sir, "+model.getComplaintName() + "\n  We  have this problem "
+                + model.getDescription()+"\n In this location"+ model.getAdd();
+        return builder;
+
+    }
 
 
     private void hideProgress() {
@@ -483,10 +532,11 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
 
     @AfterPermissionGranted(RC_STORAGE_CAMERA)
     private void checkStoragePerm() {
-        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION};
+        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.SEND_SMS};
         if (EasyPermissions.hasPermissions(getActivity(), permissions)) {
             canAccessCamera = true;
             canAccessLocation = true;
+            canSendSMS = true;
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.rationale_no_permission), RC_STORAGE_CAMERA, permissions);
         }
@@ -515,6 +565,9 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
             if (!perm.equalsIgnoreCase(Manifest.permission.ACCESS_FINE_LOCATION)) {
                 canAccessLocation = false;
             }
+            if (!perm.equalsIgnoreCase(Manifest.permission.SEND_SMS)) {
+                canSendSMS = false;
+            }
         }
     }
 
@@ -522,6 +575,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         canAccessCamera = false;
         canAccessLocation = false;
+        canSendSMS = false;
     }
 
     @Override
@@ -545,14 +599,13 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
         this.lastAddressResult = result;
         edtAddress.setText(result);
         this.latlang = mLocation;
-        if(city!=null)
-        {
+        if (city != null) {
             if (mDAOCity != null) {
                 Observable.create(new ObservableOnSubscribe<Integer>() {
                     @Override
                     public void subscribe(ObservableEmitter<Integer> e) throws Exception {
-                        CityModel cityModel = mDAOCity.getCity(city,CityModel.FIELD_NAME);
-                        if(cityModel!=null)
+                        CityModel cityModel = mDAOCity.getCity(city, CityModel.FIELD_NAME);
+                        if (cityModel != null)
                             e.onNext(cityModel.getID());
                     }
                 }).subscribeOn(Schedulers.io())
@@ -565,7 +618,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
 
                             @Override
                             public void onNext(Integer integer) {
-                                AddComplaintFragment.this.cityId=integer;
+                                AddComplaintFragment.this.cityId = integer;
                             }
 
                             @Override
@@ -652,4 +705,6 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
 
 
     }
+
+
 }

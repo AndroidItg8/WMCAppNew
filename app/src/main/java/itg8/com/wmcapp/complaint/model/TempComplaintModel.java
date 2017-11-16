@@ -24,7 +24,11 @@ public class TempComplaintModel implements Parcelable {
     public static final String FIELD_SHOW_IDENTITY ="show_identity";
     public static final String FIELD_FILE_PATH ="file_path";
     public static final String FIELD_DESCRIPTION ="description";
-    @DatabaseField(generatedId = true)
+    public static final String FIELD_CATEGORY_FKID ="category_id";
+    public static final String FIELD_TBL_ID ="tbl_id";
+    public static final String FIELD_LAST_MODIFIED_DATE ="date";
+
+    @DatabaseField(generatedId = true, columnName = FIELD_TBL_ID )
     @Expose
     private long tblId;
     @DatabaseField(columnName = FIELD_LATITIUDE )
@@ -40,6 +44,39 @@ public class TempComplaintModel implements Parcelable {
     @Expose
     private int cityId;
 
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    private String cityName;
+
+    public String getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(String lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    @DatabaseField(columnName = FIELD_LAST_MODIFIED_DATE)
+    @Expose
+     private String lastModifiedDate;
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    @DatabaseField(columnName = FIELD_CATEGORY_FKID)
+    @Expose
+    private String categoryId;
     public String getAdd() {
         return add;
     }
@@ -127,13 +164,9 @@ public class TempComplaintModel implements Parcelable {
         this.cityId = cityId;
     }
 
-
-
     public void setShowIdentity(String showIdentity) {
         this.showIdentity = showIdentity;
     }
-
-
 
     public TempComplaintModel() {
     }
@@ -154,6 +187,9 @@ public class TempComplaintModel implements Parcelable {
         dest.writeString(this.filePath);
         dest.writeString(this.add);
         dest.writeString(this.description);
+        dest.writeString(this.categoryId);
+        dest.writeString(this.lastModifiedDate);
+        dest.writeString(this.cityName);
     }
 
     protected TempComplaintModel(Parcel in) {
@@ -166,6 +202,9 @@ public class TempComplaintModel implements Parcelable {
         this.filePath = in.readString();
         this.add = in.readString();
         this.description = in.readString();
+        this.categoryId = in.readString();
+        this.lastModifiedDate  = in.readString();
+        this.cityName  = in.readString();
     }
 
     public static final Parcelable.Creator<TempComplaintModel> CREATOR = new Parcelable.Creator<TempComplaintModel>() {

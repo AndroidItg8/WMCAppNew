@@ -1,15 +1,11 @@
 package itg8.com.wmcapp.common;
 
-import android.app.job.JobInfo;
 import android.app.job.JobParameters;
-import android.app.job.JobScheduler;
 import android.app.job.JobService;
-import android.app.job.JobWorkItem;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 
+import android.support.annotation.RequiresApi;
+import android.util.Log;
 
 
 /**
@@ -21,11 +17,17 @@ public class JobNetworkShedule extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
-        return false;
+        Log.d("JobNetworkShedule ", "onStartJob");
+
+        MyApplication.getInstance().uploadAllRemaining();
+
+
+
+        return true;
     }
 
     @Override
     public boolean onStopJob(JobParameters jobParameters) {
-        return false;
+        return true;
     }
 }

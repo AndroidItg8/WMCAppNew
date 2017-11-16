@@ -1,6 +1,7 @@
 package itg8.com.wmcapp.torisum;
 
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -21,6 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.common.OnRecyclerviewClickListener;
 import itg8.com.wmcapp.torisum.model.TorisumModel;
 import itg8.com.wmcapp.torisum.mvp.TorisumPresenterImp;
 import itg8.com.wmcapp.torisum.mvp.TourismMVP;
@@ -30,7 +32,7 @@ import itg8.com.wmcapp.torisum.mvp.TourismMVP;
  * Use the {@link TorisumFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TorisumFragment extends Fragment implements TorisumAdapter.TorisumItemClickecListener, TourismMVP.TourismView {
+public class TorisumFragment extends Fragment implements OnRecyclerviewClickListener<TorisumModel>, TourismMVP.TourismView {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -109,14 +111,7 @@ public class TorisumFragment extends Fragment implements TorisumAdapter.TorisumI
         unbinder.unbind();
     }
 
-    @Override
-    public void onItemClicked(int position, TorisumModel model) {
-        Fragment fragment = TorisumDetailsFragment.newInstance(model, "");
-        FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.frame_container, fragment).addToBackStack(TorisumDetailsFragment.class.getSimpleName()).commit();
 
-
-    }
 
     @Override
     public void onTourismListAvailable(List<TorisumModel> list) {
@@ -193,4 +188,15 @@ public class TorisumFragment extends Fragment implements TorisumAdapter.TorisumI
     private void hideSnackbar() {
         snackbar.dismiss();
     }
+
+    @Override
+    public void onClick(int position, TorisumModel model) {
+        Fragment fragment = TorisumDetailsFragment.newInstance(model, "");
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.frame_container, fragment).addToBackStack(TorisumDetailsFragment.class.getSimpleName()).commit();
+
+
+    }
+
+
 }

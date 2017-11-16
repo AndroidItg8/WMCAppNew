@@ -1,27 +1,31 @@
 package itg8.com.wmcapp.common;
 
+import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.support.v4.app.FragmentActivity;
+import android.telephony.SmsManager;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import itg8.com.wmcapp.torisum.model.TorisumModel;
-
 /**
  * Created by Android itg 8 on 11/1/2017.
  */
 
-public class CommonMethod {
+public final class CommonMethod {
 
     public static final String BASE_URL = "http://192.168.1.54:8080";
     public static final String RECEIVER = "myReceiver";
@@ -37,6 +41,11 @@ public class CommonMethod {
     public static final int COMPLAINT = 1;
     public static final int NOTICE = 2;
     public static final int TOURISM = 3;
+    public static final String FROM_COMPLAINT = "FROM_COMPLAINT";
+    public static final String SENT = "SENT";
+    public static final String DELIVERED = "DELIVERED";
+    public static final  DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss", Locale.getDefault());
+
 
 
 //    1) Complaint
@@ -77,6 +86,19 @@ public class CommonMethod {
 //        String finalString = formatter.format(date);
         return date;
     }
+    public static Calendar convertStringToComplaintDate(String assignDate) {
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Calendar date = Calendar.getInstance();
+        try{
+            date.setTime(formatter.parse(assignDate));
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+//        String finalString = formatter.format(date);
+        return date;
+    }
 
     public static String getFormattedDateTime(String assigndate){
         Calendar calendar=convertStringToDate(assigndate);
@@ -98,6 +120,18 @@ public class CommonMethod {
         context.startActivity(intent);
     }
 
+    public static void sendSMS(String phoneNo, String message, Context mContext) {
+        SmsManager smsManager = SmsManager.getDefault();
+
+        Logs.d("SendSMS B4");
+     //   smsManager.sendTextMessage(phoneNo, null, message, null, null);
+        Logs.d("SendSMS After");
+
+
+
+
+    }
+
     public static interface ResultListener{
         void onResultAddress(String result, LatLng mLocation, String city);
     }
@@ -110,14 +144,18 @@ public class CommonMethod {
             return "NOT AVAILABLE";
     }
 
-     public  static void  shareItem(Context context, String  body, String title)
+     public  static void  shareItem(Context context, String body, String title, Uri uri)
      {
-         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-//         sharingIntent.setType("text/plain");
+         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
          sharingIntent.setType("image/*");
+          if(uri != null)
+            sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
          sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, title);
-         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "http://winnipeg.ca/waterandwaste/images/garbage/garbage_cc.jpg");
+         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, body);
+         sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
          context.startActivity(Intent.createChooser(sharingIntent, "Share"));
+
+
      }
        public static int calculateTerm()
        {
@@ -153,4 +191,66 @@ public class CommonMethod {
 
            return finalNumber;
        }
+    public static void  SendSMS(final String phoneNumber, final String message, final Activity mContext)
+    {
+        SmsManager sms = SmsManager.getDefault();
+        PendingIntent sentPI = PendingIntent.getBroadcast(mContext, 0, new Intent(CommonMethod.SENT), 0);
+        PendingIntent deliveredPI = PendingIntent.getBroadcast(mContext, 0, new Intent(CommonMethod.DELIVERED), 0);
+        mContext.registerReceiver(new BroadcastReceiver(){
+            @Override
+            public void onReceive(Context arg0, Intent arg1)
+            {
+                switch (getResultCode())
+                {
+                    case Activity.RESULT_OK:
+                        Logs.d("OnResult OK");
+                        break;
+                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                        Logs.d("RESULT_ERROR_GENERIC_FAILURE");
+
+                        break;
+                    case SmsManager.RESULT_ERROR_NO_SERVICE:
+                        Logs.d("RESULT_ERROR_NO_SERVICE");
+
+                        break;
+                    case SmsManager.RESULT_ERROR_NULL_PDU:
+                        Logs.d("RESULT_ERROR_NULL_PDU");
+
+                        break;
+                    case SmsManager.RESULT_ERROR_RADIO_OFF:
+                        Logs.d("RESULT_ERROR_RADIO_OFF");
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }, new IntentFilter(CommonMethod.SENT));
+        mContext.registerReceiver(new BroadcastReceiver(){
+            @Override
+            public void onReceive(Context arg0, Intent arg1)
+            {
+                switch (getResultCode())
+                {
+                    case Activity.RESULT_OK:
+                        Logs.d("OnResult OK");
+
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        Logs.d("RESULT_CANCELED ");
+
+                        break;
+                }
+            }
+        }, new IntentFilter(CommonMethod.DELIVERED));
+        try{
+            sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
+        }catch(Exception e){
+            e.printStackTrace();
+            Toast.makeText(mContext, "exception", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+
 }

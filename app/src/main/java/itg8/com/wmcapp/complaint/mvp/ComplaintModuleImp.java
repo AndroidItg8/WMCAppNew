@@ -76,6 +76,8 @@ class ComplaintModuleImp implements ComplaintMVP.ComplaintModule {
                             Logs.d("IN IOException: "+throwable.getMessage());
                         }
                         listener.onPaginationError();
+                         listener.onFailedList("Download failed");
+
                     }
 
                     @Override

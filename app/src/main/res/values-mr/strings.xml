@@ -42,6 +42,17 @@
     <string name="hospital"> रूग्णालय</string>
     <string name="contact_us">आमच्याशी संपर्क साधा</string>
     <string name="dismiss">डिसमिस करा</string>
+    <string name="profile">प्रोफाइल</string>
+    <string name="complaint_status">तक्रार स्थिती</string>
+    <string name="vote">समर्थन</string>
+    <string name="no_internet_title">इंटरनेट कनेक्शन नाही!!!</string>
+    <string name="message_dialogue">आपण माहिती कधी पाठवू इच्छिता?</string>
+    <string name="immediately">लगेच</string>
+    <string name="later">नंतर</string>
+
+
+
+
 
 
 </resources>

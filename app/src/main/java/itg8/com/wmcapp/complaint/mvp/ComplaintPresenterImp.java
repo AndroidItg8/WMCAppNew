@@ -158,4 +158,13 @@ public class ComplaintPresenterImp extends BaseWeakPresenter<ComplaintMVP.Compla
 
 
     }
+
+    @Override
+    public void onFailedList(String s) {
+        if(hasView())
+        {
+            getView().hideProgress();
+            getView().onFailedLike(s);
+        }
+    }
 }
