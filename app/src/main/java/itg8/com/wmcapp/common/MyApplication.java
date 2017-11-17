@@ -160,9 +160,7 @@ public class MyApplication extends Application {
          if(listTempComplaintModel!= null && listTempComplaintModel.size()>0) {
 
 
-             for (TempComplaintModel model: listTempComplaintModel
-                     ) {
-
+             for (TempComplaintModel model: listTempComplaintModel) {
                  sendModelToServer(
                          model.getDescription(),
                          model.getComplaintName(),
@@ -174,11 +172,9 @@ public class MyApplication extends Application {
                          model.getTblId(),
                          model.getShowIdentity());
                  Logs.d("Model"+new Gson().toJson(model));
-
-
              }
-
-             }
+         }
+         
 
 
     }

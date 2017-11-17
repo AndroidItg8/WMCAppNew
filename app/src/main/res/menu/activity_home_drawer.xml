@@ -14,11 +14,11 @@
             android:title="complaint" />
         <item
             android:id="@+id/nav_news"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_news"
             android:title="@string/new_updates" />
             <item
             android:id="@+id/nav_tourism"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_tour"
             android:title="@string/torisum" />
         </menu>
     </item>
@@ -27,7 +27,7 @@
 
         <item
             android:id="@+id/nav_praphag"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_word"
             android:title="@string/prabhag" />
 
         </menu>
@@ -37,11 +37,11 @@
 
         <item
             android:id="@+id/nav_suggestion"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_suggestion"
             android:title="@string/suggestion" />
             <item
                 android:id="@+id/nav_emgs_no"
-                android:icon="@drawable/ic_menu_manage"
+                android:icon="@drawable/ic_ememrgency"
                 android:title="@string/emegency_numbers" />
         <item
             android:id="@+id/nav_feedback"
@@ -56,23 +56,23 @@
         <menu>
             <item
                 android:id="@+id/nav_profile"
-                android:icon="@drawable/ic_menu_gallery"
+                android:icon="@drawable/ic_profile"
                 android:title="@string/profile" />
             <item
                 android:id="@+id/nav_contact"
-                android:icon="@drawable/ic_menu_manage"
+                android:icon="@drawable/ic_contact"
                 android:title="@string/contact" />
             <item
                 android:id="@+id/nav_change_pswd"
-                android:icon="@drawable/ic_menu_manage"
+                android:icon="@drawable/ic_password"
                 android:title="@string/change_pswd" />
             <item
                 android:id="@+id/nav_registration"
-                android:icon="@drawable/ic_menu_manage"
+                android:icon="@drawable/ic_registration"
                 android:title="@string/registration" />
             <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_menu_manage"
+                android:icon="@drawable/ic_006_logout"
                 android:title="@string/logout" />
 
         </menu>

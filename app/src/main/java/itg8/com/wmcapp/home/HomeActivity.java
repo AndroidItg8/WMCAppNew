@@ -99,6 +99,7 @@ public class HomeActivity extends BaseActivity
     private List<CityModel> cityList = null;
     private Language langauge=null;
     private CityAdapter cityAdapter;
+    private NoticeBoardFragment fragments;
 
 
     @Override
@@ -113,6 +114,7 @@ public class HomeActivity extends BaseActivity
         presenter.onGetCity(getString(R.string.url_city));
         int result=   CommonMethod.calculateTerm();
         Logs.d("Result"+result);
+         checkLogin();
 
 
 //        startActivity(new Intent(this, TestActivity.class));
@@ -145,6 +147,14 @@ public class HomeActivity extends BaseActivity
         callFragment(fragment);
     }
 
+    private void checkLogin() {
+        if(Prefs.getString(CommonMethod.HEADER)== null)
+        {
+            callLoginActivity();
+            finish();
+
+        }
+    }
 
 
     @Override
@@ -258,6 +268,7 @@ public class HomeActivity extends BaseActivity
         switch (item.getItemId()) {
             case R.id.nav_notice_board:
                 fragment = NoticeBoardFragment.newInstance("", "");
+
                 break;
             case R.id.nav_complaint:
                 fragment = ComplaintFragment.newInstance("", "");
@@ -296,6 +307,7 @@ public class HomeActivity extends BaseActivity
                 break;
             case R.id.nav_logout:
                 clearNLogout();
+
                 break;
         }
         if (fragment != null) {
