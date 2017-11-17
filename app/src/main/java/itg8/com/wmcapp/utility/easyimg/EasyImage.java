@@ -346,7 +346,7 @@ public class EasyImage implements Constants {
             callbacks.onImagesPicked(singleFileList(photoFile), ImageSource.DOCUMENTS, restoreType(activity));
 
             if (configuration(activity).shouldCopyPickedImagesToPublicGalleryAppFolder()) {
-                EasyImageFiles.copyFilesInSeparateThread(activity, singleFileList(photoFile));
+                EasyImageFiles.copyFilesInSeparateThread(activity, singleFileList(photoFile),null);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -371,7 +371,7 @@ public class EasyImage implements Constants {
             }
 
             if (configuration(activity).shouldCopyPickedImagesToPublicGalleryAppFolder()) {
-                EasyImageFiles.copyFilesInSeparateThread(activity, files);
+                EasyImageFiles.copyFilesInSeparateThread(activity, files, null);
             }
 
             callbacks.onImagesPicked(files, ImageSource.GALLERY, restoreType(activity));
@@ -397,7 +397,7 @@ public class EasyImage implements Constants {
                 callbacks.onImagePickerError(e, ImageSource.CAMERA, restoreType(activity));
             } else {
                 if (configuration(activity).shouldCopyTakenPhotosToPublicGalleryAppFolder()) {
-                    EasyImageFiles.copyFilesInSeparateThread(activity, singleFileList(photoFile));
+                    EasyImageFiles.copyFilesInSeparateThread(activity, singleFileList(photoFile), null);
                 }
 
                 callbacks.onImagesPicked(files, ImageSource.CAMERA, restoreType(activity));

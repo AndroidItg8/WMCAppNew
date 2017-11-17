@@ -107,10 +107,12 @@ public class HomeActivity extends BaseActivity
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+//        MyApplication.getInstance().uploadAllRemaining();
+
         presenter = new CityPresenterImp(this);
         presenter.onGetCity(getString(R.string.url_city));
-      int result=   CommonMethod.calculateTerm();
-      Logs.d("Result"+result);
+        int result=   CommonMethod.calculateTerm();
+        Logs.d("Result"+result);
 
 
 //        startActivity(new Intent(this, TestActivity.class));

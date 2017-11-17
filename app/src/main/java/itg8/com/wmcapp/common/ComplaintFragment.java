@@ -119,9 +119,11 @@ public class ComplaintFragment extends Fragment implements EasyPermissions.Permi
 
         EasyImage.configuration(getActivity())
                 .setImagesFolderName(getString(R.string.app_name))
+                .setAllowMultiplePickInGallery(false);
+/*
                 .setCopyTakenPhotosToPublicGalleryAppFolder(true)
                 .setCopyPickedImagesToPublicGalleryAppFolder(true)
-                .setAllowMultiplePickInGallery(false);
+*/
 
         imgAdd.setOnClickListener(this);
         imgMoreMenu.setOnClickListener(this);

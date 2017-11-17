@@ -6,7 +6,6 @@ import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Build;
@@ -23,25 +22,20 @@ import java.io.IOException;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.Scheduler;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.schedulers.TestScheduler;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.complaint.model.TempComplaintModel;
 import itg8.com.wmcapp.database.CityTableManipulate;
 import itg8.com.wmcapp.database.ComplaintTableManipute;
-import itg8.com.wmcapp.registration.RegistrationModel;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by swapnilmeshram on 31/10/17.
@@ -124,6 +118,8 @@ public class MyApplication extends Application {
     public void saveComplaintModel(TempComplaintModel model) {
         complaintTableManipute = new ComplaintTableManipute(getApplicationContext());
         complaintTableManipute.create(model);
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             myJobSchedular(getApplicationContext());
         } else {
@@ -159,32 +155,37 @@ public class MyApplication extends Application {
 
     public void uploadAllRemaining() {
         complaintTableManipute = new ComplaintTableManipute(getApplicationContext());
-        List<TempComplaintModel> listTempComplaintModel = complaintTableManipute.getAllComplaint();
+        final List<TempComplaintModel> listTempComplaintModel = complaintTableManipute.getAllComplaint();
         Log.d("MyApplication ", "uploadAllRemaining");
+         if(listTempComplaintModel!= null && listTempComplaintModel.size()>0) {
 
 
-        for (TempComplaintModel model: listTempComplaintModel
-             ) {
+             for (TempComplaintModel model: listTempComplaintModel
+                     ) {
 
-           sendModelToServer(
-                   model.getDescription(),
-                   model.getComplaintName(),
-                   model.getAdd(),
-                   model.getLatitude(),
-                   model.getLongitude(),
-                   model.getFilePath(),
-                   model.getCityId(),
-                   model.getTblId(),
-                   model.getShowIdentity());
-           Logs.d("Model"+new Gson().toJson(model));
+                 sendModelToServer(
+                         model.getDescription(),
+                         model.getComplaintName(),
+                         model.getAdd(),
+                         model.getLatitude(),
+                         model.getLongitude(),
+                         model.getFilePath(),
+                         model.getCityId(),
+                         model.getTblId(),
+                         model.getShowIdentity());
+                 Logs.d("Model"+new Gson().toJson(model));
 
 
-        }
+             }
+
+             }
+
 
     }
 
-    private void sendModelToServer(String description, String complaintName, String add, Double latitude, Double longitude, String filePath, int cityId, final long tblId, String showIdentity) {
-        ProgressRequestBody prb = new ProgressRequestBody(new File(filePath), new ProgressRequestBody.UploadCallbacks() {
+    private Observable<ResponseBody> sendModelToServer(String description, String complaintName, String add, Double latitude, Double longitude, String filePath, int cityId, final long tblId, String showIdentity) {
+       File file = new File(filePath);
+        ProgressRequestBody prb = new ProgressRequestBody(file, new ProgressRequestBody.UploadCallbacks() {
             @Override
             public void onProgressUpdate(int percentage) {
 
@@ -202,7 +203,7 @@ public class MyApplication extends Application {
 
             }
         });
-        MultipartBody.Part part = MultipartBody.Part.createFormData("file", filePath, prb);
+        MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), prb);
         RequestBody lat = createPartFromString(String.valueOf(latitude));
         RequestBody lang = createPartFromString(String.valueOf(longitude));
         RequestBody addr = createPartFromString(String.valueOf(add));
@@ -212,41 +213,43 @@ public class MyApplication extends Application {
         RequestBody city = createPartFromInt(cityId);
         RequestBody ident = createPartFromString(showIdentity);
         Observable<ResponseBody> call = getRetroController().addComplaint(getString(R.string.url_add_complaint),part, lat, lang, name, desc, city, ident);
-        call.subscribeOn(Schedulers.io())
-                .flatMap(new Function<ResponseBody, ObservableSource<Long>>() {
-                    @Override
-                    public ObservableSource<Long> apply(ResponseBody responseBody) throws Exception {
-                        return createRegModelFromResponse(responseBody, tblId);
-                    }
-                }).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Long>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(Long o) {
-                         complaintTableManipute.deleteComplaint(Integer.parseInt(String.valueOf(o)),TempComplaintModel.FIELD_TBL_ID);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+        return call;
+//        call.subscribeOn(Schedulers.io())
+//                .flatMap(new Function<ResponseBody, ObservableSource<Long>>() {
+//                    @Override
+//                    public ObservableSource<Long> apply(ResponseBody responseBody) throws Exception {
+//                        return createRegModelFromResponse(responseBody, tblId);
+//                    }
+//                }).observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Observer<Long>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(Long o) {
+//                         complaintTableManipute.deleteComplaint(Integer.parseInt(String.valueOf(o)),TempComplaintModel.FIELD_TBL_ID);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        e.printStackTrace();
+//
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
     }
 
     private ObservableSource<Long> createRegModelFromResponse(ResponseBody responseBody, long tblId) {
         try {
             String s = responseBody.string();
+            Logs.d("Response Complaint Model:"+s);
             JSONObject object = new JSONObject(s);
             if (object.getBoolean("flag")) {
                 return Observable.just(tblId);
@@ -267,4 +270,5 @@ public class MyApplication extends Application {
     private RequestBody createPartFromInt(int val) {
         return RequestBody.create(MediaType.parse("text/plain"), String.valueOf(val));
     }
+
 }

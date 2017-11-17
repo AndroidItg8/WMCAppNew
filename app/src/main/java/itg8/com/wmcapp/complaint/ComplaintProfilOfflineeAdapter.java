@@ -1,6 +1,9 @@
 package itg8.com.wmcapp.complaint;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +15,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -54,7 +58,7 @@ public class ComplaintProfilOfflineeAdapter extends RecyclerView.Adapter<Complai
                 holder.tempCompliantUrl =  holder.tempComplaintModel.getFilePath();
 
                 Picasso.with(holder.imgGarbage.getContext())
-                        .load(holder.tempCompliantUrl)
+                        .load(Uri.fromFile(new File(holder.tempCompliantUrl)))
                         .networkPolicy(NetworkPolicy.OFFLINE)
                         .error(R.drawable.bpkuti)
                         .into(holder.imgGarbage, new Callback() {
@@ -67,12 +71,16 @@ public class ComplaintProfilOfflineeAdapter extends RecyclerView.Adapter<Complai
                             public void onError() {
                                 // Try again online if cache failed
                                 Picasso.with(holder.imgGarbage.getContext())
-                                        .load(holder.tempCompliantUrl)
+                                        .load(Uri.fromFile(new File(holder.tempCompliantUrl)))
                                         .into(holder.imgGarbage);
                             }
                         });
+//
 
-            } else {
+
+            }
+
+            else {
                 holder.imgGarbage.setVisibility(View.GONE);
             }
 

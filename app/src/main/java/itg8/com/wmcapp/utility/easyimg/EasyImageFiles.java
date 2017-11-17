@@ -23,9 +23,11 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.Logs;
 
-class EasyImageFiles implements Constants {
+ public class EasyImageFiles implements Constants {
+
 
     private static String getFolderName(@NonNull Context context) {
         return EasyImage.configuration(context).getFolderName();
@@ -49,6 +51,7 @@ class EasyImageFiles implements Constants {
             in.close();
         } catch (Exception e) {
             e.printStackTrace();
+
         }
     }
 
@@ -57,55 +60,71 @@ class EasyImageFiles implements Constants {
         writeToFile(in, dst);
     }
 
-    static void copyFilesInSeparateThread(final Context context, final List<File> filesToCopy) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<File> copiedFiles = new ArrayList<>();
-                int i = 1;
-                for (File fileToCopy : filesToCopy) {
-                    File dstDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), getFolderName(context));
-                    if (!dstDir.exists()) dstDir.mkdirs();
+    static void scanCopiedImages(Context context, List<File> copiedImages, final CommonMethod.OnImageFileListner listner) {
+        if(copiedImages.size()>0) {
 
-                    String[] filenameSplit = fileToCopy.getName().split("\\.");
-                    String extension = "." + filenameSplit[filenameSplit.length-1];
-                    String filename = String.format("IMG_%s_%d.%s", new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()), i, extension);
 
-                    File dstFile = new File(dstDir, filename);
-                    try {
-                        dstFile.createNewFile();
-                        copyFile(fileToCopy, dstFile);
-                        copiedFiles.add(dstFile);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    i++;
-                }
-                scanCopiedImages(context, copiedFiles);
+            String[] paths = new String[copiedImages.size()];
+            for (int i = 0; i < copiedImages.size(); i++) {
+                paths[i] = copiedImages.get(i).toString();
             }
-        }).run();
+
+            MediaScannerConnection.scanFile(context,
+                    paths, null,
+                    new MediaScannerConnection.OnScanCompletedListener() {
+                        public void onScanCompleted(String path, Uri uri) {
+                            Logs.d("Scanned " + path + ":");
+                            Logs.d("-> uri=" + uri);
+
+                            listner.onGetImageFileSucces(path);
+
+                        }
+
+                    });
+        }else {
+            listner.onGetImageFileFailed("Failed to Scanned image");
+        }
+
+
+
+    }
+
+     public static void copyFilesInSeparateThread(final Context context, final List<File> filesToCopy, final CommonMethod.OnImageFileListner listner ) {
+        if(listner != null) {
+            Logs.d("FilesToCopies"+filesToCopy);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    List<File> copiedFiles = new ArrayList<>();
+                    int i = 1;
+                    for (File fileToCopy : filesToCopy) {
+                        File dstDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), getFolderName(context));
+                        if (!dstDir.exists()) dstDir.mkdirs();
+
+                        String[] filenameSplit = fileToCopy.getName().split("\\.");
+                        String extension = "." + filenameSplit[filenameSplit.length - 1];
+                        String filename = String.format("IMG_%s_%d.%s", new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime()), i, extension);
+
+                        File dstFile = new File(dstDir, filename);
+                        try {
+                            dstFile.createNewFile();
+                            copyFile(fileToCopy, dstFile);
+                            copiedFiles.add(dstFile);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        i++;
+                    }
+                    scanCopiedImages(context, copiedFiles, listner);
+                }
+            }).run();
+        }
     }
 
     static List<File> singleFileList(File file) {
         List<File> list = new ArrayList<>();
         list.add(file);
         return list;
-    }
-
-    static void scanCopiedImages(Context context, List<File> copiedImages) {
-        String[] paths = new String[copiedImages.size()];
-        for (int i = 0; i < copiedImages.size(); i++) {
-            paths[i] = copiedImages.get(i).toString();
-        }
-
-        MediaScannerConnection.scanFile(context,
-                paths, null,
-                new MediaScannerConnection.OnScanCompletedListener() {
-                    public void onScanCompleted(String path, Uri uri) {
-                        Logs.d("Scanned " + path + ":");
-                        Logs.d("-> uri=" + uri);
-                    }
-                });
     }
 
     static File pickedExistingPicture(@NonNull Context context, Uri photoUri) throws IOException {

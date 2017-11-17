@@ -1,45 +1,25 @@
 package itg8.com.wmcapp.complaint;
 
 
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.telephony.SmsManager;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
-import itg8.com.wmcapp.common.CommonMethod;
-import itg8.com.wmcapp.common.Logs;
+
 import itg8.com.wmcapp.common.ReceiveBroadcastReceiver;
 import itg8.com.wmcapp.common.SentBroadCastReceiver;
-import itg8.com.wmcapp.complaint.model.ComplaintModel;
-import itg8.com.wmcapp.complaint.model.TempComplaintModel;
+
 import itg8.com.wmcapp.complaint.mvp.ComplaintMVP;
-import itg8.com.wmcapp.complaint.mvp.ComplaintPresenterImp;
 import itg8.com.wmcapp.database.ComplaintTableManipute;
 
 /**
@@ -65,10 +45,7 @@ public class UnSendComplaintFragment extends Fragment  {
     private String mParam1;
     private String mParam2;
     private Context mContext;
-    private ComplaintMVP.ComplaintPresenter presenter;
     private ComplaintTableManipute complaintTableManipute;
-    private SentBroadCastReceiver receiver;
-    private ReceiveBroadcastReceiver receiveBroadcast;
 
 
     public UnSendComplaintFragment() {
@@ -245,127 +222,5 @@ public class UnSendComplaintFragment extends Fragment  {
     }
 
 
-//    @Override
-//    public void onSyncItemClicked(int position, TempComplaintModel model) {
-//
-//
-//    }
-//
-//    @Override
-//    public void onShareItemClicked(int position, Object model, ImageView view) {
-//        if (model instanceof TempComplaintModel) {
-//            TempComplaintModel complaintModel = (TempComplaintModel) model;
-//            CommonMethod.shareItem(mContext, generateTextToshare(complaintModel), (complaintModel.getComplaintName()), getLocalBitmapUri(view, model));
-//        } else if (model instanceof ComplaintModel) {
-//            ComplaintModel complaintModels = (ComplaintModel) model;
-//            CommonMethod.shareItem(mContext, generateTextToshare(complaintModels), (complaintModels.getComplaintName()), getLocalBitmapUri(view, model));
-//
-//        }
-//    }
-//
-//
-//    public Uri getLocalBitmapUri(ImageView imageView, Object model) {
-//        // Extract Bitmap from ImageView drawable
-//        String path = "";
-//        if (model instanceof TempComplaintModel) {
-//            TempComplaintModel complaintModel = (TempComplaintModel) model;
-//            path = complaintModel.getFilePath();
-//        } else if (model instanceof ComplaintModel) {
-//            ComplaintModel complaintModels = (ComplaintModel) model;
-//            path = complaintModels.getImagePath();
-//
-//        }
-//
-////        Drawable drawable = imageView.getDrawable();
-////        Bitmap bmp = null;
-////        if (drawable instanceof BitmapDrawable){
-////            bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-////        } else {
-////            return null;
-////        }
-//        // Store image to default external storage directory
-//        Uri bmpUri = null;
-//        // Use methods on Context to access package-specific directories on external storage.
-//        // This way, you don't need to request external read/write permission.
-//        // See https://youtu.be/5xVh-7ywKpE?t=25m25s
-////            File file =  new File(mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
-//        File file = new File(path);
-////            FileOutputStream out = new FileOutputStream(file);
-////            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
-////            out.close();
-//        // **Warning:** This will fail for API >= 24, use a FileProvider as shown below instead.
-////            if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-////                bmpUri = FileProvider.getUriForFile( mContext,"itg8.com.wmcapp.fileprovider", file);
-////            }else {
-//        bmpUri = Uri.fromFile(file);
-////            }
-//
-//
-//        return bmpUri;
-//    }
-//
-//    private String generateTextToshare(Object model) {
-//        if (model instanceof TempComplaintModel) {
-//            TempComplaintModel models = (TempComplaintModel) model;
-//            return "This  Complaint \n" + models.getComplaintName() + "\n Description: " + models.getDescription() + "Address:\n" + models.getCityName();
-//
-//        } else {
-//            ComplaintModel modelComplaint = (ComplaintModel) model;
-//            return "This  Complaint \n" + modelComplaint.getComplaintName() + "\n Description: " + modelComplaint.getComplaintDescription() + "Address:\n" + modelComplaint.getCityName();
-//
-//        }
-//    }
-//
-//    @Override
-//    public void onSMSItemClicked(int position, TempComplaintModel model) {
-//        SendSMS("9823857732", generateSMSText(model));
-//    }
-//
-//    private void SendSMS(String phoneNumber, String message) {
-//
-//        SmsManager sms = SmsManager.getDefault();
-//        PendingIntent sentPI = PendingIntent.getBroadcast(getActivity(), 0, new Intent(CommonMethod.SENT), 0);
-//        PendingIntent deliveredPI = PendingIntent.getBroadcast(getActivity(), 0, new Intent(CommonMethod.DELIVERED), 0);
-//        Intent intent = new Intent();
-//        intent.setAction(CommonMethod.SENT);
-//        getActivity().sendBroadcast(intent);
-//        intent.setAction(CommonMethod.DELIVERED);
-//        getActivity().sendBroadcast(intent);
-//
-//
-//        try {
-//            sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            Toast.makeText(getActivity(), "exception", Toast.LENGTH_LONG).show();
-//        }
-//    }
-//
-//
-//    private String generateSMSText(TempComplaintModel model) {
-//        String builder;
-//        builder = "Dear Sir, " + model.getComplaintName() + "\n  We  have this problem "
-//                + model.getDescription() + "\n In this location" + model.getAdd();
-//        return builder;
-//
-//    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-//        IntentFilter filter = new IntentFilter(CommonMethod.SENT);
-//        receiver = new SentBroadCastReceiver();
-//        getActivity().registerReceiver(receiver, filter);
-//
-//        receiveBroadcast = new ReceiveBroadcastReceiver();
-//        getActivity().registerReceiver(receiveBroadcast, filter);
-//    }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-//        getActivity().unregisterReceiver(receiver);
-//        getActivity().unregisterReceiver(receiveBroadcast);
-    }
 }

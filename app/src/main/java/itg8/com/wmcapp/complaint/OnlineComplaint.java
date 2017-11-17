@@ -15,14 +15,10 @@ import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -32,7 +28,6 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.CommonMethod;
-import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.OnRecyclerviewClickListener;
 import itg8.com.wmcapp.common.ReceiveBroadcastReceiver;
 import itg8.com.wmcapp.common.SentBroadCastReceiver;
@@ -54,6 +49,8 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     Unbinder unbinder;
+    @BindView(R.id.ll_no_item)
+    LinearLayout llNoItem;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -62,6 +59,7 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
     private Context mContext;
     private BroadcastReceiver receiveBroadcast;
     private ComplaintMVP.ComplaintPresenter presenter;
+    private List<ComplaintModel> listOfComplaint;
 
 
     public OnlineComplaint() {
@@ -101,23 +99,29 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_online_complaint, container, false);
         unbinder = ButterKnife.bind(this, view);
-
-
         presenter = new ComplaintPresenterImp(this);
         presenter.onLoadMoreItem(getString(R.string.url_complaint));
+
+        if (listOfComplaint != null && listOfComplaint.size() > 0) {
+             CommonMethod.showHideItem(recyclerView, llNoItem);
+            setRecyclerView(listOfComplaint);
+        } else {
+            CommonMethod.showHideItem( llNoItem,recyclerView);
+
+        }
         return view;
     }
 
     @Override
     public void onComplaintListAvailable(List<ComplaintModel> o) {
+        CommonMethod.showHideItem(recyclerView, llNoItem);
         setListAndRecyclerView(o);
     }
 
     private void setListAndRecyclerView(List<ComplaintModel> o) {
-
+        listOfComplaint = o;
         setRecyclerView(o);
     }
-
 
 
     private void sortComplaintList(List<ComplaintModel> o) {
@@ -136,11 +140,9 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
 //
 
 
-
-
-
     @Override
     public void onNoMoreList() {
+        CommonMethod.showHideItem(recyclerView, llNoItem);
 
     }
 
@@ -168,7 +170,6 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
     public void onFailedLike(String s) {
 
 
-
     }
 
     @Override
@@ -192,27 +193,7 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
         }
     }
 
-//
-//    @Override
-//    public void onSyncItemClicked(int position, TempComplaintModel model) {
-//
-//
-//    }
-//
-//    @Override
-//    public void onShareItemClicked(int position, Object model, ImageView view) {
-//        if (model instanceof TempComplaintModel) {
-//            TempComplaintModel complaintModel = (TempComplaintModel) model;
-//            CommonMethod.shareItem(mContext, generateTextToshare(complaintModel), (complaintModel.getComplaintName()), getLocalBitmapUri(view, model));
-//        }
-//    }
-//
-//    @Override
-//    public void onSMSItemClicked(int position, TempComplaintModel model) {
-//        SendSMS("9823857732", generateSMSText(model));
-//    }
-
-    public Uri getLocalBitmapUri( Object model) {
+    public Uri getLocalBitmapUri(Object model) {
         // Extract Bitmap from ImageView drawable
         String path = "";
         if (model instanceof TempComplaintModel) {
@@ -266,34 +247,6 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
 
 
 
-    private void SendSMS(String phoneNumber, String message) {
-
-        SmsManager sms = SmsManager.getDefault();
-        PendingIntent sentPI = PendingIntent.getBroadcast(getActivity(), 0, new Intent(CommonMethod.SENT), 0);
-        PendingIntent deliveredPI = PendingIntent.getBroadcast(getActivity(), 0, new Intent(CommonMethod.DELIVERED), 0);
-        Intent intent = new Intent();
-        intent.setAction(CommonMethod.SENT);
-        getActivity().sendBroadcast(intent);
-        intent.setAction(CommonMethod.DELIVERED);
-        getActivity().sendBroadcast(intent);
-
-
-        try {
-            sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(getActivity(), "exception", Toast.LENGTH_LONG).show();
-        }
-    }
-
-
-    private String generateSMSText(TempComplaintModel model) {
-        String builder;
-        builder = "Dear Sir, " + model.getComplaintName() + "\n  We  have this problem "
-                + model.getDescription() + "\n In this location" + model.getAdd();
-        return builder;
-
-    }
 
     @Override
     public void onResume() {
@@ -316,7 +269,7 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
     @Override
     public void onClick(int position, ComplaintModel model) {
 
-        CommonMethod.shareItem(mContext, generateTextToshare(model), (model.getComplaintName()), getLocalBitmapUri( model));
+        CommonMethod.shareItem(mContext, generateTextToshare(model), (model.getComplaintName()), getLocalBitmapUri(model));
 
     }
 

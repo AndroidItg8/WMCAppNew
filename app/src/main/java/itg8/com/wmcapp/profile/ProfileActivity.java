@@ -65,10 +65,9 @@ public class ProfileActivity extends BaseActivity {
             callFragment(fragment);
 
         }
-
-
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+
     }
 
 }

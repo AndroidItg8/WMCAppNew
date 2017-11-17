@@ -40,6 +40,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -72,6 +73,7 @@ import itg8.com.wmcapp.utility.FetchAddressIntentService;
 import itg8.com.wmcapp.utility.compressor.Compressor;
 import itg8.com.wmcapp.utility.easyimg.DefaultCallback;
 import itg8.com.wmcapp.utility.easyimg.EasyImage;
+import itg8.com.wmcapp.utility.easyimg.EasyImageFiles;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -148,6 +150,8 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     String identity;
     double latitude;
     double longitude;
+    private String fileName;
+    private AlertDialog alertDialog;
 
     public AddComplaintFragment() {
         // Required empty public constructor
@@ -430,7 +434,8 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
                     public void onError(Throwable e) {
                         e.printStackTrace();
 
-                        setDataToModel(latitude, longitude, address, description, cityId, identity, selectedFile.getAbsolutePath());
+                        setDataToModel(latitude, longitude, address, description, cityId, identity, selectedFile);
+
 
                     }
 
@@ -441,18 +446,51 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
                 });
     }
 
-    private void setDataToModel(double latitude, double longitude, String address, String description, int cityId, String identity, String file) {
-        TempComplaintModel model = new TempComplaintModel();
+    private void setDataToModel(final double latitude, final double longitude, final String address, final String description, final int cityId, final String identity, File file) {
+
+        final TempComplaintModel model = new TempComplaintModel();
         model.setAdd(address);
         model.setDescription(description);
         model.setCityId(cityId);
         model.setLatitude(latitude);
         model.setLongitude(longitude);
         model.setShowIdentity(identity);
-        model.setFilePath(file);
         model.setComplaintName("Cleaning");
         model.setLastModifiedDate(CommonMethod.formatter.format(Calendar.getInstance().getTime()));
-        openDialogue(model);
+
+        Logs.d("file:"+file);
+        List<File> files = new ArrayList<>();
+        files.add(file);
+        EasyImageFiles.copyFilesInSeparateThread(getActivity(), files, new CommonMethod.OnImageFileListner() {
+            @Override
+            public void onGetImageFileSucces(String file) {
+            Logs.d("FileName:"+file);
+            model.setFilePath(file);
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+
+                        openDialogue(model);
+                    }
+
+            });
+            }
+
+            @Override
+            public void onGetImageFileFailed(String s) {
+                Logs.d("OnFailed:"+s);
+                model.setFilePath(null);
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        openDialogue(model);
+
+
+            }
+        });
+            }
+        });
+
+
+
 
 
     }
@@ -488,10 +526,12 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
                 });
 
         // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog = alertDialogBuilder.create();
 
         // show it
+
         alertDialog.show();
+
 
     }
 

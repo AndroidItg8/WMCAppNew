@@ -82,17 +82,7 @@ public interface RetroController {
 //    City_fkid:1
 
     //
-    @FormUrlEncoded
-    @POST()
-    @Headers("Content-Type:application/x-www-form-urlencoded")
-    Call<RegistrationModel> AddComplaint(@Url String url,
-                                         @Field("Category_fkid") String coategoryId,
-                                         @Field("ComplaintName") String complaintName,
-                                         @Field("ComplaintDescription") String description,
-                                         @Field("Longitutde") String longititude,
-                                         @Field("Latitude") String latitiude,
-                                         @Field("City_fkid") String cityId
-    );
+
 
 
     @GET()

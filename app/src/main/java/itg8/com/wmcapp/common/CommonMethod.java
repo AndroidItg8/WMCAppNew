@@ -8,8 +8,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -132,6 +135,12 @@ public final class CommonMethod {
 
     }
 
+    public static void showHideItem(View show, View hide) {
+        show.setVisibility(View.VISIBLE);
+        hide.setVisibility(View.GONE);
+
+    }
+
     public static interface ResultListener{
         void onResultAddress(String result, LatLng mLocation, String city);
     }
@@ -191,66 +200,12 @@ public final class CommonMethod {
 
            return finalNumber;
        }
-    public static void  SendSMS(final String phoneNumber, final String message, final Activity mContext)
-    {
-        SmsManager sms = SmsManager.getDefault();
-        PendingIntent sentPI = PendingIntent.getBroadcast(mContext, 0, new Intent(CommonMethod.SENT), 0);
-        PendingIntent deliveredPI = PendingIntent.getBroadcast(mContext, 0, new Intent(CommonMethod.DELIVERED), 0);
-        mContext.registerReceiver(new BroadcastReceiver(){
-            @Override
-            public void onReceive(Context arg0, Intent arg1)
-            {
-                switch (getResultCode())
-                {
-                    case Activity.RESULT_OK:
-                        Logs.d("OnResult OK");
-                        break;
-                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                        Logs.d("RESULT_ERROR_GENERIC_FAILURE");
 
-                        break;
-                    case SmsManager.RESULT_ERROR_NO_SERVICE:
-                        Logs.d("RESULT_ERROR_NO_SERVICE");
 
-                        break;
-                    case SmsManager.RESULT_ERROR_NULL_PDU:
-                        Logs.d("RESULT_ERROR_NULL_PDU");
-
-                        break;
-                    case SmsManager.RESULT_ERROR_RADIO_OFF:
-                        Logs.d("RESULT_ERROR_RADIO_OFF");
-
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }, new IntentFilter(CommonMethod.SENT));
-        mContext.registerReceiver(new BroadcastReceiver(){
-            @Override
-            public void onReceive(Context arg0, Intent arg1)
-            {
-                switch (getResultCode())
-                {
-                    case Activity.RESULT_OK:
-                        Logs.d("OnResult OK");
-
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        Logs.d("RESULT_CANCELED ");
-
-                        break;
-                }
-            }
-        }, new IntentFilter(CommonMethod.DELIVERED));
-        try{
-            sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
-        }catch(Exception e){
-            e.printStackTrace();
-            Toast.makeText(mContext, "exception", Toast.LENGTH_LONG).show();
-        }
-    }
-
+       public interface OnImageFileListner{
+        void onGetImageFileSucces(String file);
+           void onGetImageFileFailed(String s);
+       }
 
 
 }
