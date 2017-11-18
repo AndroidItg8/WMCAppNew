@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--<ExpandableListView-->
+        <!--android:id="@+id/expandableListView"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"-->
+        <!--android:divider="@color/colorGray"-->
+        <!--android:dividerHeight="1px" />-->
+
+    <com.mindorks.placeholderview.ExpandablePlaceHolderView
+        android:id="@+id/expandableView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"/>
+
+</RelativeLayout>

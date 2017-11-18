@@ -72,7 +72,7 @@
 
     <EditText
         android:layout_margin="05dp"
-        android:id="@+id/txt_rating_desc"
+        android:id="@+id/txt_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="top|left"

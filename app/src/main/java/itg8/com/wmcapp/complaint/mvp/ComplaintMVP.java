@@ -38,11 +38,11 @@ public interface ComplaintMVP {
 
         void onResume();
 
-        void onLoadMore();
+        void onLoadMore(int from);
 
-        void onLoadMoreItem(String string);
+        void onLoadMoreItem(String url, int from);
 
-        RecyclerView.OnScrollListener scrollListener(LinearLayoutManager layoutManager);
+        RecyclerView.OnScrollListener scrollListener(LinearLayoutManager layoutManager, int fromComplaint);
 
         void onVoteUp(String string, int pkid, ComplaintModel model, int position);
     }
@@ -57,7 +57,7 @@ public interface ComplaintMVP {
     }
 
     public interface ComplaintModule extends BaseDestroyModule{
-        void onStartLoadingList(String loadUrl, int page, int limit, ComplaintListener listener);
+        void onStartLoadingList(String loadUrl, int page, int limit, int from, ComplaintListener listener);
 
         void onSendLikesToServer(String url, int SubMaster_fkid, ComplaintModel model, int position, ComplaintListener listener);
     }

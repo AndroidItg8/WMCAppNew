@@ -8,6 +8,7 @@ import itg8.com.wmcapp.complaint.model.LikeModel;
 import itg8.com.wmcapp.profile.ProfileModel;
 import itg8.com.wmcapp.registration.RegistrationModel;
 import itg8.com.wmcapp.torisum.model.TorisumModel;
+import itg8.com.wmcapp.torisum.model.TourismFilterModel;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -83,10 +84,13 @@ public interface RetroController {
 
     //
 
-
+//    skip:0
+//    pageSize:10
+//    User_Wise:0
+//    cityid:0
 
     @GET()
-    Observable<ResponseBody> loadComplaint(@Url String url, @Query("skip") int page, @Query("pageSize") int limit, @Query("cityid") int cityId);
+    Observable<ResponseBody> loadComplaint(@Url String url, @Query("skip") int page, @Query("pageSize") int limit, @Query("User_Wise") int from,@Query("cityid") int cityId);
 
     @GET()
     Observable<ResponseBody> loadNoticeBoard(@Url String url, @Query("skip") int page, @Query("pageSize") int limit, @Query("cityid") int cityId);
@@ -116,4 +120,16 @@ public interface RetroController {
     @POST()
     @Headers("Content-Type:application/x-www-form-urlencoded")
     Call<LikeModel> sendLike(@Url String url, @Field("Master_fkid") int complaint, @Field("SubMaster_fkid") int subMaster_fkid, @Field("Likes") int i);
+
+    @GET()
+    Call<List<TourismFilterModel>> loadCategoryTourism(@Url String loadUrl);
+
+    @Multipart
+    @POST()
+    Observable<ResponseBody> addSuggestion(@Url String url,
+                                           @Part MultipartBody.Part file,
+                                           @Part("description") RequestBody title,
+                                           @Part("title") RequestBody desc);
+
+
 }

@@ -3,6 +3,7 @@ package itg8.com.wmcapp.complaint;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -55,6 +57,7 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
     private LinearLayoutManager layoutManager;
     private CityTableManipulate cityManipulate;
     private CityModel city;
+
 
     public ComplaintFragment() {
         // Required empty public constructor
@@ -98,7 +101,7 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
         cityManipulate = new CityTableManipulate(mContext);
         initPagination();
         init();
-        presenter.onLoadMoreItem(getString(R.string.url_complaint));
+        presenter.onLoadMoreItem(getString(R.string.url_complaint), CommonMethod.FROM_COMPLAINT);
 
         return view;
     }
@@ -110,9 +113,9 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
     private void init() {
         layoutManager = new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new ComplaintAdapter(mContext, this);
+        adapter = new ComplaintAdapter(mContext, CommonMethod.FROM_COMPLAINT,this);
         recyclerView.setAdapter(adapter);
-        recyclerView.addOnScrollListener(presenter.scrollListener(layoutManager));
+        recyclerView.addOnScrollListener(presenter.scrollListener(layoutManager,CommonMethod.FROM_COMPLAINT));
 
     }
 
@@ -256,22 +259,53 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
 
     @Override
     public void onShareClicked(int position, ComplaintModel model) {
-//        CommonMethod.shareItem(getActivity(), generateTextToshare(model), model.getComplaintName(), ((ComplaintModel) model).getImagePath());
+        CommonMethod.shareItem(mContext, generateTextToshare(model), (model.getComplaintName()), getLocalBitmapUri(model));
+
 
     }
 
-    private String generateTextToshare(ComplaintModel model) {
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            return Html.fromHtml("Problems:<b>" + model.getComplaintDescription() + "</b> \nAddress: " + model.getComplaintName() + "\n<a href=\"" + CommonMethod.BASE_URL + model.getImagePath()+"\">"+CommonMethod.BASE_URL + model.getImagePath()+"</a>",0).toString();
-            return Html.fromHtml("Problems:<b>" + model.getComplaintDescription() + "</b> \nAddress: " + model.getComplaintName() + "\n</br><a href=\"http://winnipeg.ca/waterandwaste/images/garbage/garbage_cc.jpg\">http://winnipeg.ca/waterandwaste/images/garbage/garbage_cc.jpg</a>", 0).toString();
-        } else {
-            return Html.fromHtml("Problems:<b>" + model.getComplaintDescription() + "</b> \nAddress: " + model.getComplaintName() + "\n</br><a href=\"http://winnipeg.ca/waterandwaste/images/garbage/garbage_cc.jpg\">http://winnipeg.ca/waterandwaste/images/garbage/garbage_cc.jpg</a>").toString();
+    public Uri getLocalBitmapUri(Object model) {
+        // Extract Bitmap from ImageView drawable
+        String path = "";
+        if (model instanceof TempComplaintModel) {
+            TempComplaintModel complaintModel = (TempComplaintModel) model;
+            path = complaintModel.getFilePath();
+        } else if (model instanceof ComplaintModel) {
+            ComplaintModel complaintModels = (ComplaintModel) model;
+            path = complaintModels.getImagePath();
 
         }
 
+        Uri bmpUri = null;
+        File file = new File(path);
+        bmpUri = Uri.fromFile(file);
+        return bmpUri;
     }
+
+    private String generateTextToshare(Object model) {
+        if (model instanceof TempComplaintModel) {
+            TempComplaintModel models = (TempComplaintModel) model;
+            return "This  Complaint \n" + models.getComplaintName() + "\n Description: " + models.getDescription() + "Address:\n" + models.getCityName();
+
+        } else {
+            ComplaintModel modelComplaint = (ComplaintModel) model;
+            return "This  Complaint \n" + modelComplaint.getComplaintName() + "\n Description: " + modelComplaint.getComplaintDescription() + "Address:\n" + modelComplaint.getCityName();
+
+        }
+    }
+
+//    private String generateTextToshare(ComplaintModel model) {
+//
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+////            return Html.fromHtml("Problems:<b>" + model.getComplaintDescription() + "</b> \nAddress: " + model.getComplaintName() + "\n<a href=\"" + CommonMethod.BASE_URL + model.getImagePath()+"\">"+CommonMethod.BASE_URL + model.getImagePath()+"</a>",0).toString();
+//            return Html.fromHtml("Problems:<b>" + model.getComplaintDescription() + "</b> \nAddress: " + model.getComplaintName() + "\n</br><a href=\"http://winnipeg.ca/waterandwaste/images/garbage/garbage_cc.jpg\">http://winnipeg.ca/waterandwaste/images/garbage/garbage_cc.jpg</a>", 0).toString();
+//        } else {
+//            return Html.fromHtml("Problems:<b>" + model.getComplaintDescription() + "</b> \nAddress: " + model.getComplaintName() + "\n</br><a href=\"http://winnipeg.ca/waterandwaste/images/garbage/garbage_cc.jpg\">http://winnipeg.ca/waterandwaste/images/garbage/garbage_cc.jpg</a>").toString();
+//
+//        }
+//
+//    }
 
 
 }

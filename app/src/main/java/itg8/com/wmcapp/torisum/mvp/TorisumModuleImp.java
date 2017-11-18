@@ -5,6 +5,7 @@ import java.util.List;
 import itg8.com.wmcapp.common.NoConnectivityException;
 import itg8.com.wmcapp.common.RetroController;
 import itg8.com.wmcapp.torisum.model.TorisumModel;
+import itg8.com.wmcapp.torisum.model.TourismFilterModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,6 +55,44 @@ Call<List<TorisumModel> > call = controller.getTorisumList(loadUrl);
      }
  });
 
+
+
+    }
+
+    @Override
+    public void onStartLoadingCategoryFilter(RetroController controller, String loadUrl, final TourismMVP.TourismListener listener) {
+        Call<List<TourismFilterModel> > call = controller.loadCategoryTourism(loadUrl);
+        call.enqueue(new Callback<List<TourismFilterModel>>() {
+            @Override
+            public void onResponse(Call<List<TourismFilterModel>> call, Response<List<TourismFilterModel>> response) {
+                if(response.isSuccessful())
+                {
+                    if(response.body()!= null)
+                    {
+                        listener.onTourismCategoryFilterListAvailbe(response.body());
+                    }else
+                    {
+                        listener.onError("Download Failed");
+                    }
+                }else
+                {
+                    listener.onError("Download Failed");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<TourismFilterModel>> call, Throwable t) {
+                t.printStackTrace();
+                if(t instanceof NoConnectivityException)
+                {
+                    listener.onInternetError(true);
+                }else
+                {
+                    listener.onError(t.getMessage());
+                }
+
+            }
+        });
 
 
     }

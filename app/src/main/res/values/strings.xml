@@ -92,4 +92,7 @@
     <string name="message_dialogue">When do you want to send information?</string>
     <string name="immediately">Immediately</string>
     <string name="later">Later</string>
+    <string name="url_filter_category">/api/CustomerApp/CateSubcatTourismList</string>
+    <string name="url_add_suggestion">/api/UploadFileApp/SaveSuggestion</string>
+    <string name="url_edit_profile">/CustomerApp/EditUserProfile</string>
 </resources>

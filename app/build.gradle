@@ -75,6 +75,7 @@ dependencies {
     //firebase  social login
     implementation 'com.google.firebase:firebase-auth:11.6.0'
     implementation 'com.google.android.gms:play-services-auth:11.6.0'
+    implementation 'com.mindorks:placeholderview:0.7.1'
 
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'

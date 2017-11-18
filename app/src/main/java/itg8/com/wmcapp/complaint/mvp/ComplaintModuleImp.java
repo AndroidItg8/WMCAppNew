@@ -30,6 +30,8 @@ import retrofit2.Response;
  */
 
 class ComplaintModuleImp implements ComplaintMVP.ComplaintModule {
+
+
     Observable<ResponseBody> call;
     @Override
     public void onDestroy() {
@@ -37,8 +39,13 @@ class ComplaintModuleImp implements ComplaintMVP.ComplaintModule {
     }
 
     @Override
-    public void onStartLoadingList(String loadUrl, int page, int limit, final ComplaintMVP.ComplaintListener listener) {
-        call= MyApplication.getInstance().getRetroController().loadComplaint(loadUrl,page,limit,0);
+    public void onStartLoadingList(String loadUrl, int page, int limit, int from, final ComplaintMVP.ComplaintListener listener) {
+        if(from == CommonMethod.FROM_COMPLAINT) {
+            call = MyApplication.getInstance().getRetroController().loadComplaint(loadUrl, page, limit, 0,0);
+        }else
+        {
+            call = MyApplication.getInstance().getRetroController().loadComplaint(loadUrl, page, limit, 1,0);
+        }
         call.subscribeOn(Schedulers.io())
                 .flatMap(new Function<ResponseBody, ObservableSource<List<ComplaintModel>>>() {
                     @Override

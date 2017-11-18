@@ -174,6 +174,24 @@
                 android:textSize="14sp"
                 app:font_value="ROBOTO_LIGHT" />
 
+            <itg8.com.wmcapp.widget.CustomFontTextView
+                android:id="@+id/lbl_share_online"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_share_black_24dp"
+                android:drawablePadding="10dp"
+                android:layout_below="@+id/lbl_address_value"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="15dp"
+                android:visibility="gone"
+                android:layout_alignParentEnd="true"
+
+                android:gravity="center_vertical"
+                android:text="Share"
+                android:textColor="@color/colorGray"
+                android:textSize="14sp"
+                app:font_value="ROBOTO_LIGHT" />
+
 
         </RelativeLayout>
 
@@ -195,6 +213,7 @@
             android:layout_marginEnd="25dp"
             android:layout_marginStart="25dp"
             android:layout_marginTop="5dp"
+            android:id="@+id/ll_vote_up"
             android:orientation="horizontal">
 
             <FrameLayout

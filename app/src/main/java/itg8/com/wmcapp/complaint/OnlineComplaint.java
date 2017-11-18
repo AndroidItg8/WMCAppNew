@@ -1,17 +1,14 @@
 package itg8.com.wmcapp.complaint;
 
 
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,29 +16,28 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.common.CommonMethod;
-import itg8.com.wmcapp.common.OnRecyclerviewClickListener;
 import itg8.com.wmcapp.common.ReceiveBroadcastReceiver;
 import itg8.com.wmcapp.common.SentBroadCastReceiver;
 import itg8.com.wmcapp.complaint.model.ComplaintModel;
 import itg8.com.wmcapp.complaint.model.TempComplaintModel;
 import itg8.com.wmcapp.complaint.mvp.ComplaintMVP;
 import itg8.com.wmcapp.complaint.mvp.ComplaintPresenterImp;
+import itg8.com.wmcapp.database.CityTableManipulate;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link OnlineComplaint#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintView, OnRecyclerviewClickListener<ComplaintModel> {
+public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintView, ComplaintAdapter.ComplaintListner {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -60,6 +56,10 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
     private BroadcastReceiver receiveBroadcast;
     private ComplaintMVP.ComplaintPresenter presenter;
     private List<ComplaintModel> listOfComplaint;
+    private LinearLayoutManager layoutManager;
+    private ComplaintAdapter adapter;
+    private CityTableManipulate cityManipulate;
+    private CityModel city;
 
 
     public OnlineComplaint() {
@@ -100,97 +100,19 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
         View view = inflater.inflate(R.layout.fragment_online_complaint, container, false);
         unbinder = ButterKnife.bind(this, view);
         presenter = new ComplaintPresenterImp(this);
-        presenter.onLoadMoreItem(getString(R.string.url_complaint));
-
-        if (listOfComplaint != null && listOfComplaint.size() > 0) {
-             CommonMethod.showHideItem(recyclerView, llNoItem);
-            setRecyclerView(listOfComplaint);
-        } else {
-            CommonMethod.showHideItem( llNoItem,recyclerView);
-
-        }
+        init();
+        presenter.onLoadMoreItem(getString(R.string.url_complaint), CommonMethod.FROM_COMPLAINT_USER);
         return view;
     }
 
-    @Override
-    public void onComplaintListAvailable(List<ComplaintModel> o) {
-        CommonMethod.showHideItem(recyclerView, llNoItem);
-        setListAndRecyclerView(o);
-    }
 
-    private void setListAndRecyclerView(List<ComplaintModel> o) {
-        listOfComplaint = o;
-        setRecyclerView(o);
-    }
+    private void init() {
+        layoutManager = new LinearLayoutManager(mContext);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new ComplaintAdapter(mContext, CommonMethod.FROM_COMPLAINT_USER, this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(presenter.scrollListener(layoutManager, CommonMethod.FROM_COMPLAINT_USER));
 
-
-    private void sortComplaintList(List<ComplaintModel> o) {
-        Collections.sort(o, new Comparator<ComplaintModel>() {
-            public int compare(ComplaintModel m1, ComplaintModel m2) {
-                return m1.getLastModifiedDate().compareToIgnoreCase(m2.getLastModifiedDate());
-            }
-        });
-    }
-
-    private void setRecyclerView(List<ComplaintModel> complaintMergeList) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        recyclerView.setAdapter(new ComplaintProfileOnlineAdapter(mContext, complaintMergeList, this));
-    }
-
-//
-
-
-    @Override
-    public void onNoMoreList() {
-        CommonMethod.showHideItem(recyclerView, llNoItem);
-
-    }
-
-    @Override
-    public void onShowPaginationLoading(boolean show) {
-
-    }
-
-    @Override
-    public void onPaginationError(boolean show) {
-
-    }
-
-    @Override
-    public void hideProgress() {
-
-    }
-
-    @Override
-    public void onSuccessLike(ComplaintModel model, int position) {
-
-    }
-
-    @Override
-    public void onFailedLike(String s) {
-
-
-    }
-
-    @Override
-    public void showProgress(int position) {
-
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        // presenter.onAttach(context);
-        mContext = context;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        if (mContext != null) {
-            presenter.onDetach();
-            mContext = null;
-        }
     }
 
     public Uri getLocalBitmapUri(Object model) {
@@ -205,31 +127,9 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
 
         }
 
-//        Drawable drawable = imageView.getDrawable();
-//        Bitmap bmp = null;
-//        if (drawable instanceof BitmapDrawable){
-//            bmp = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-//        } else {
-//            return null;
-//        }
-        // Store image to default external storage directory
         Uri bmpUri = null;
-        // Use methods on Context to access package-specific directories on external storage.
-        // This way, you don't need to request external read/write permission.
-        // See https://youtu.be/5xVh-7ywKpE?t=25m25s
-//            File file =  new File(mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
         File file = new File(path);
-//            FileOutputStream out = new FileOutputStream(file);
-//            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
-//            out.close();
-        // **Warning:** This will fail for API >= 24, use a FileProvider as shown below instead.
-//            if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-//                bmpUri = FileProvider.getUriForFile( mContext,"itg8.com.wmcapp.fileprovider", file);
-//            }else {
         bmpUri = Uri.fromFile(file);
-//            }
-
-
         return bmpUri;
     }
 
@@ -244,8 +144,6 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
 
         }
     }
-
-
 
 
     @Override
@@ -266,16 +164,114 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
         getActivity().unregisterReceiver(receiveBroadcast);
     }
 
-    @Override
-    public void onClick(int position, ComplaintModel model) {
-
-        CommonMethod.shareItem(mContext, generateTextToshare(model), (model.getComplaintName()), getLocalBitmapUri(model));
-
-    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (mContext != null)
+            mContext = null;
+        presenter.onDetach();
+    }
+
+    @Override
+    public void onComplaintListAvailable(List<ComplaintModel> o) {
+        cityManipulate = new CityTableManipulate(mContext);
+        for (ComplaintModel model : o
+                ) {
+            city = cityManipulate.getCity(String.valueOf(model.getCityFkid()), CityModel.FIELD_ID);
+            model.setCityName(city != null ? city.getName() : null);
+        }
+
+
+        adapter.addItems(o);
+    }
+
+    @Override
+    public void onNoMoreList() {
+
+    }
+
+    @Override
+    public void onShowPaginationLoading(boolean show) {
+        if (show) {
+            adapter.addFooter();
+//            recyclerView.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    adapter.notifyItemInserted();
+//                }
+//            });
+        } else {
+            adapter.removeFooter();
+        }
+    }
+
+    @Override
+    public void onPaginationError(boolean show) {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    public void onSuccessLike(ComplaintModel model, int position) {
+//        model.setVoted(true);
+//        model.setClickable(false);
+//        model.setLikestatus(VOTED);
+//        model.setLikeList(null);
+//        adapter.hideProgress(position);
+
+    }
+
+    @Override
+    public void onFailedLike(String s) {
+        Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void showProgress(int position) {
+        adapter.showProgress(position);
+
+    }
+
+    @Override
+    public void onComplaintItemClicked(int position, ComplaintModel model) {
+//        Fragment fragment = ComplaintDeatilsFragment.newInstance(model, "");
+//        FragmentManager fm = getFragmentManager();
+//        fm.beginTransaction().replace(R.id.frame_container, fragment).addToBackStack(ComplaintDeatilsFragment.class.getSimpleName()).commit();
+
+
+    }
+
+    @Override
+    public void onVoteUpClicked(int position, ComplaintModel model) {
+
+    }
+
+    @Override
+    public void onShareClicked(int position, ComplaintModel model) {
+        CommonMethod.shareItem(mContext, generateTextToshare(model), (model.getComplaintName()), getLocalBitmapUri(model));
+
+    }
+
+
+//
 }

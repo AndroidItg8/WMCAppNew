@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import java.util.List;
 
 import itg8.com.wmcapp.common.BaseWeakPresenter;
+import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.complaint.model.ComplaintModel;
 
 /**
@@ -53,18 +54,18 @@ public class ComplaintPresenterImp extends BaseWeakPresenter<ComplaintMVP.Compla
     }
 
     @Override
-    public void onLoadMore() {
-        getItems(page,LIMIT);
+    public void onLoadMore(int from) {
+        getItems(page,LIMIT, from);
     }
 
     @Override
-    public void onLoadMoreItem(String url) {
+    public void onLoadMoreItem(String url, int from) {
         this.loadUrl=url;
-        onLoadMore();
+        onLoadMore(from);
     }
 
     @Override
-    public RecyclerView.OnScrollListener scrollListener(final LinearLayoutManager linearLayoutManager) {
+    public RecyclerView.OnScrollListener scrollListener(final LinearLayoutManager linearLayoutManager, final int from) {
         return new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -80,7 +81,7 @@ public class ComplaintPresenterImp extends BaseWeakPresenter<ComplaintMVP.Compla
 
                         page++;
 
-                        getItems(page,LIMIT);
+                        getItems(page,LIMIT,from);
                     }
                 }
 
@@ -99,12 +100,12 @@ public class ComplaintPresenterImp extends BaseWeakPresenter<ComplaintMVP.Compla
 
     }
 
-    private void getItems(int page, int limit) {
+    private void getItems(int page, int limit, int from) {
         if(hasView()){
             getView().onPaginationError(false);
             getView().onShowPaginationLoading(true);
             isLoading=true;
-            module.onStartLoadingList(loadUrl,page,limit,this);
+            module.onStartLoadingList(loadUrl,page,limit,from,this);
         }
     }
 

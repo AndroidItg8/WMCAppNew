@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
@@ -40,11 +41,16 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int VOTE_UP = 0;
 
 
+    private final Context mContext;
+    private final int from;
+
     private ComplaintListner listner;
     private List<ComplaintModel> models;
     private int likedSize;
 
-    public ComplaintAdapter(Context mContext, ComplaintListner listner) {
+    public ComplaintAdapter(Context mContext, int fromComplaint, ComplaintListner listner) {
+        this.mContext = mContext;
+        this.from = fromComplaint;
         this.listner = listner;
         models = new ArrayList<>();
     }
@@ -115,6 +121,7 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((ComplaintViewHolder) holder).lblCityName.setText(CommonMethod.checkEmpty(models.get(position).getCityName()));
             ((ComplaintViewHolder) holder).lblAddressValue.setText(CommonMethod.checkEmpty(models.get(position).getComplaintName()));
             ((ComplaintViewHolder) holder).lblProblemValue.setText(CommonMethod.checkEmpty(models.get(position).getComplaintDescription()));
+
             ((ComplaintViewHolder) holder).lblVoteValue.setText(CommonMethod.checkEmpty(String.valueOf(models.get(position).getLikeList().size())));
             if (models.get(position).getLikeList() != null) {
                 likedSize = models.get(position).getLikeList().size();
@@ -132,6 +139,22 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             } else {
                 ((ComplaintViewHolder) holder).progressViewLike.setVisibility(View.GONE);
                 ((ComplaintViewHolder) holder).lblVoteUp.setVisibility(View.VISIBLE);
+
+            }
+            if (from == CommonMethod.FROM_COMPLAINT) {
+                ((ComplaintViewHolder) holder).lblShareOnline.setVisibility(View.GONE);
+                ((ComplaintViewHolder) holder).llVoteUp.setVisibility(View.VISIBLE);
+                ((ComplaintViewHolder) holder).view.setVisibility(View.VISIBLE);
+            } else {
+                ((ComplaintViewHolder) holder).lblShareOnline.setVisibility(View.VISIBLE);
+                ((ComplaintViewHolder) holder).llVoteUp.setVisibility(View.GONE);
+                ((ComplaintViewHolder) holder).view.setVisibility(View.GONE);
+                ((ComplaintViewHolder) holder).lblShareOnline.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listner.onShareClicked(holder.getAdapterPosition(), models.get(holder.getAdapterPosition()));
+                    }
+                });
 
             }
             if (models.get(position).getLikestatus() == VOTE_UP) {
@@ -232,6 +255,10 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         @BindView(R.id.frame)
         FrameLayout frame;
         String url;
+        @BindView(R.id.lbl_share_online)
+        CustomFontTextView lblShareOnline;
+        @BindView(R.id.ll_vote_up)
+        LinearLayout llVoteUp;
 
         public ComplaintViewHolder(View itemView) {
             super(itemView);

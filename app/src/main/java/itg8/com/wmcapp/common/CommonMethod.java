@@ -44,7 +44,8 @@ public final class CommonMethod {
     public static final int COMPLAINT = 1;
     public static final int NOTICE = 2;
     public static final int TOURISM = 3;
-    public static final String FROM_COMPLAINT = "FROM_COMPLAINT";
+    public static final int FROM_COMPLAINT = 0;
+    public static final int FROM_COMPLAINT_USER = 1;
     public static final String SENT = "SENT";
     public static final String DELIVERED = "DELIVERED";
     public static final  DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss", Locale.getDefault());
