@@ -69,6 +69,8 @@
     <string name="invalid_number">Please Enter 10 digit Number</string>
     <string name="pswd">Password does not match.</string>
     <string name="url_registration">/api/CustomerApp/Register</string>
+    <string name="url_profile_edit">/api/CustomerApp/EditUserProfile</string>
+    <string name="url_edit_profile">/api/CustomerApp/EditUserProfile</string>
     <string name="fail_to_load">Fail to load information</string>
     <string name="rationale_no_internet">No Internet Connection</string>
     <string name="invalid_pass_not">Password must be minimum 6 character</string>
@@ -94,5 +96,13 @@
     <string name="later">Later</string>
     <string name="url_filter_category">/api/CustomerApp/CateSubcatTourismList</string>
     <string name="url_add_suggestion">/api/UploadFileApp/SaveSuggestion</string>
-    <string name="url_edit_profile">/CustomerApp/EditUserProfile</string>
+    <string name="title_activity_emergency">EmergencyActivity</string>
+    <string name="other">Other</string>
+    <string name="update">Update</string>
+    <string name="url_prabhag">/api/CustomerApp/PrabhagList</string>
+    <string name="user_name">User Name</string>
+    <string name="mobile_number">10 digit mobile number</string>
+    <string name="person_name">Edit Profile</string>
+    <string name="password">6 digit password</string>
+    <string name="emaiId">Email Id/ Mobile Number</string>
 </resources>

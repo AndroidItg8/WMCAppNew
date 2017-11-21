@@ -10,6 +10,7 @@ import android.view.View;
 
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.BaseActivity;
+import itg8.com.wmcapp.registration.RegistrationFragment;
 
 public class LoginActivity extends BaseActivity implements LoginFragment.OnAttachActivityListener {
 
@@ -40,4 +41,6 @@ public class LoginActivity extends BaseActivity implements LoginFragment.OnAttac
     public void onAttachActivity() {
         finish();
     }
+
+
 }

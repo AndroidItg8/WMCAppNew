@@ -3,6 +3,7 @@ package itg8.com.wmcapp.splash;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.cilty.CityFragment;
 import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.cilty.mvp.CityMVP;
 import itg8.com.wmcapp.cilty.mvp.CityPresenterImp;
@@ -63,7 +65,9 @@ public class SplashActivity extends BaseActivity implements CityMVP.CityView {
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         presenter = new CityPresenterImp(this);
+        presenter.onGetCity(getString(R.string.url_city));
 //        presenter.onGetCity(getString(R.string.url_city));
         setSupportActionBar(toolbar);
         Animation animation= AnimationUtils.loadAnimation(this,R.anim.splash_animation);
@@ -82,9 +86,11 @@ public class SplashActivity extends BaseActivity implements CityMVP.CityView {
     }
 
     private void splash(List<CityModel> cityList) {
-
-
+        Fragment  fragment= CityFragment.newInstance(cityList,"");
+        callFragment(fragment);
     }
+
+
 
     @Override
     public void onGetCityList(List<CityModel> list) {

@@ -30,9 +30,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.OnRecyclerviewClickListener;
-import itg8.com.wmcapp.torisum.model.HeadingView;
-import itg8.com.wmcapp.torisum.model.InfoView;
-import itg8.com.wmcapp.torisum.model.SubCatList;
+
 import itg8.com.wmcapp.torisum.model.TorisumModel;
 import itg8.com.wmcapp.torisum.model.TourismFilterModel;
 import itg8.com.wmcapp.torisum.mvp.TorisumPresenterImp;
@@ -70,7 +68,6 @@ public class TorisumFragment extends Fragment implements OnRecyclerviewClickList
     private String mParam2;
     private TourismMVP.TourismPresenter presenter;
     private int page;
-    private int from;
     private Snackbar snackbar;
     private List<TourismFilterModel> listOfTourismFilter;
     private Context mContext;
@@ -167,15 +164,13 @@ listOfTourismFilter =tourismFilterModelList;
 
     @Override
     public void onNoInternetConnection(boolean b) {
-        from = FROM_INTERNET;
-        showSnackerbar(from, "Not connected to internet...Please try again", b);
+        showSnackerbar(FROM_INTERNET, "Not connected to internet...Please try again", b);
 
     }
 
     @Override
     public void onError(String message) {
-        from = FROM_ERROR;
-        showSnackerbar(from, message, false);
+        showSnackerbar(FROM_ERROR, message, false);
 
     }
 

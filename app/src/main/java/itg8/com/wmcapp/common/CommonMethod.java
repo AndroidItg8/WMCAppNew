@@ -49,7 +49,8 @@ public final class CommonMethod {
     public static final String SENT = "SENT";
     public static final String DELIVERED = "DELIVERED";
     public static final  DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss", Locale.getDefault());
-
+    public static final String IS_LOGIN_FIRST_TIME = "IS_LOGIN_FIRST_TIME";
+    public static final String FROM_FIRST_TIME_LOGIN = "FROM_FIRST_TIME_LOGIN";
 
 
 //    1) Complaint

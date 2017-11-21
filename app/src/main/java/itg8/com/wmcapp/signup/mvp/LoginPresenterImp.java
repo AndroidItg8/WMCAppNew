@@ -74,6 +74,15 @@ public class LoginPresenterImp extends BaseWeakPresenter<LoginMvp.LoginView> imp
         }
     }
 
+    @Override
+    public void onFirstTimeLogin(String success) {
+        if(hasView())
+        {
+            getView().hideProgress();
+            getView().onFirstTimeLogin(success);
+        }
+    }
+
 
     @Override
     public void onUsernameInvalid(String err) {

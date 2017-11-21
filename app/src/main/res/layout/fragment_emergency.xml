@@ -1,228 +1,34 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="itg8.com.wmcapp.emergency.EmergencyFragment">
-
-    <itg8.com.wmcapp.widget.CustomFontTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:layout_margin="20dp"
-        android:textColor="@color/colorBlack"
-        android:textStyle="bold"
-        app:font_value="ROBOTO_MEDIUM"
-        android:text="@string/emegency_numbers"
-        android:layout_centerHorizontal="true"/>
-
-
-    <LinearLayout
-        android:id="@+id/ll_emergency"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_centerInParent="true"
-        android:orientation="horizontal"
-        android:weightSum="2">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:weightSum="2">
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/card_hospital"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    app:cardBackgroundColor="@color/colorHospital"
-                    app:cardCornerRadius="8dp"
-                    app:cardPreventCornerOverlap="true"
-                    app:cardUseCompatPadding="true">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:id="@+id/img_hospital"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="20dp"
-                            app:srcCompat="@drawable/ic_hospital" />
-
-                        <itg8.com.wmcapp.widget.CustomFontTextView
-                            android:id="@+id/name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginBottom="10dp"
-                            android:layout_marginTop="10dp"
-                            android:gravity="center"
-                            android:text="@string/hospital"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="16sp"
-                            app:font_value="ROBOTO_MEDIUM" />
+        android:layout_height="match_parent">
 
 
-                    </RelativeLayout>
-                </android.support.v7.widget.CardView>
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recyclerView"/>
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/card_fire"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    app:cardBackgroundColor="@color/colorFire"
-                    app:cardCornerRadius="8dp"
-                    app:cardPreventCornerOverlap="true"
-                    app:cardUseCompatPadding="true">
+        <com.github.rahatarmanahmed.cpv.CircularProgressView
+            android:id="@+id/progressView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_margin="10dp"
+            android:visibility="gone"
+            app:cpv_color="@color/colorPrimary"
+            app:cpv_indeterminate="true"
+            app:cpv_thickness="2dp"
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="10dp">
+            />
 
-                        <ImageView
-                            android:id="@+id/img_fire"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="20dp"
-                            app:srcCompat="@drawable/ic_fires" />
-
-                        <itg8.com.wmcapp.widget.CustomFontTextView
-                            android:id="@+id/lbl_fire"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:gravity="center"
-                            android:text="@string/fire"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="16sp"
-                            app:font_value="ROBOTO_MEDIUM" />
+    </RelativeLayout>
 
 
-                    </RelativeLayout>
-                </android.support.v7.widget.CardView>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:weightSum="2">
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/card_ambulance"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"
-                    app:cardBackgroundColor="@color/colorGoogle"
-                    app:cardCornerRadius="8dp"
-                    app:cardPreventCornerOverlap="true"
-                    app:cardUseCompatPadding="true">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="10dp">
-
-                        <ImageView
-                            android:id="@+id/img_ambulance"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="20dp"
-                            app:srcCompat="@drawable/ic_ambulance" />
-
-                        <itg8.com.wmcapp.widget.CustomFontTextView
-                            android:id="@+id/lbl_ambulance"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-
-                            android:gravity="center"
-                            android:text="@string/ambulance"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="16sp"
-                            app:font_value="ROBOTO_MEDIUM" />
-
-
-                    </RelativeLayout>
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/card_police"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    app:cardBackgroundColor="@color/colorPolice"
-                    app:cardCornerRadius="8dp"
-                    app:cardPreventCornerOverlap="true"
-                    app:cardUseCompatPadding="true">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="10dp">
-
-                        <ImageView
-                            android:id="@+id/img_police"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="20dp"
-
-                            app:srcCompat="@drawable/ic_polices" />
-
-                        <itg8.com.wmcapp.widget.CustomFontTextView
-                            android:id="@+id/lbl_police"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-
-                            android:gravity="center"
-                            android:text="@string/police"
-                            android:textColor="@color/colorWhite"
-                            android:textSize="16sp"
-                            app:font_value="ROBOTO_MEDIUM" />
-
-
-                    </RelativeLayout>
-
-                </android.support.v7.widget.CardView>
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-
-</RelativeLayout>
+</FrameLayout>

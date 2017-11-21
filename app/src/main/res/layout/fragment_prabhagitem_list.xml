@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
     android:name="itg8.com.wmcapp.prabhag.PrabhagFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layoutManager="LinearLayoutManager"
-    tools:context="itg8.com.wmcapp.prabhag.PrabhagFragment"
-    tools:listitem="@layout/fragment_prabhagitem" />
+    tools:context="itg8.com.wmcapp.prabhag.PrabhagFragment">
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/list"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/fragment_prabhagitem" />
+
+    <com.github.rahatarmanahmed.cpv.CircularProgressView
+        android:id="@+id/progressView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="16dp"
+        android:layout_gravity="center"
+         app:cpv_thickness="2dp"
+        app:cpv_color="@color/colorPrimary"
+        app:cpv_indeterminate="true"
+        android:visibility="gone" />
+</FrameLayout>
+
+

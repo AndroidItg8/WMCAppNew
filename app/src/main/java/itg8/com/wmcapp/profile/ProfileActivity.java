@@ -5,18 +5,23 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.BaseActivity;
+import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.complaint.ComplaintVoteFragment;
 import itg8.com.wmcapp.complaint.UnSendComplaintFragment;
 import itg8.com.wmcapp.notification.NotificationFragment;
+import itg8.com.wmcapp.signup.LoginFragment;
 
-public class ProfileActivity extends BaseActivity {
+public class ProfileActivity extends BaseActivity implements LoginFragment.OnAttachActivityListener {
 
 
     @BindView(R.id.frame_container)
@@ -65,9 +70,20 @@ public class ProfileActivity extends BaseActivity {
             callFragment(fragment);
 
         }
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        if(getIntent().getBooleanExtra(CommonMethod.FROM_FIRST_TIME_LOGIN, false))
+        {
+            navigation.setVisibility(View.GONE);
+        }else
+        {
+            navigation.setVisibility(View.VISIBLE);
+            navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        }
 
 
     }
 
+    @Override
+    public void onAttachActivity() {
+        finish();
+    }
 }

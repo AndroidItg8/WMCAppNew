@@ -29,7 +29,7 @@ public interface LoginMvp {
          void onNoInternetConnect(boolean b);
 
 
-
+         void onFirstTimeLogin(String success);
      }
       public interface LoginPresenter
       {
@@ -56,5 +56,6 @@ public interface LoginMvp {
         void showProgress();
         void hideProgress();
         void onNoInternetConnect(boolean b);
+        void onFirstTimeLogin(String success);
     }
 }

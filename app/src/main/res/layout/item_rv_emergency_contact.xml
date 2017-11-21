@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardPreventCornerOverlap="true"
+    app:cardCornerRadius="08dp"
+    android:elevation="08dp"
+    app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp">
+
+        <itg8.com.wmcapp.widget.CustomFontTextView
+            android:id="@+id/lbl_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Orange City Hospital and Research Institute"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            android:layout_marginTop="10dp"
+            app:font_value="ROBOTO_REGULAR" />
+
+        <itg8.com.wmcapp.widget.CustomFontTextView
+            android:id="@+id/lbl_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lbl_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="05dp"
+            android:layout_marginTop="05dp"
+            android:text="19, Veer Sawarkar Square, Nagpur, Pande Layout, New Sneh Nagar, Nagpur, Maharashtra 440015"
+            android:textColor="@color/colorGray"
+            android:textSize="12sp"
+            android:visibility="visible"
+            app:font_value="ROBOTO_REGULAR" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:layout_below="@+id/lbl_address"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+        <itg8.com.wmcapp.widget.CustomFontTextView
+            android:id="@+id/lbl_contact"
+            android:layout_width="0dp"
+            android:layout_weight="1.7"
+            android:layout_height="wrap_content"
+            android:autoLink="phone"
+            android:text=" 09225260606"
+            app:font_value="ROBOTO_MEDIUM"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_weight="0.3"
+            android:background="@drawable/custom_call" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

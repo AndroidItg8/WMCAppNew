@@ -1,7 +1,6 @@
 package itg8.com.wmcapp.home;
 
 import android.app.Dialog;
-import android.content.ComponentCallbacks;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -27,18 +26,14 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.gson.Gson;
-import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import itg8.com.wmcapp.R;
@@ -55,22 +50,16 @@ import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.CustomDialogFragment;
 import itg8.com.wmcapp.common.Language;
 import itg8.com.wmcapp.common.Logs;
-import itg8.com.wmcapp.common.Logs;
-import itg8.com.wmcapp.common.MyApplication;
 import itg8.com.wmcapp.common.Prefs;
 import itg8.com.wmcapp.complaint.ComplaintFragment;
 import itg8.com.wmcapp.contact.ContactUsFragment;
-import itg8.com.wmcapp.database.BaseDatabaseHelper;
 import itg8.com.wmcapp.database.CityTableManipulate;
 import itg8.com.wmcapp.emergency.EmergencyFragment;
 import itg8.com.wmcapp.feedback.FeedbackFragment;
 import itg8.com.wmcapp.news.NewsFragment;
 import itg8.com.wmcapp.prabhag.PrabhagFragment;
 import itg8.com.wmcapp.prabhag.WardMemberFragment;
-import itg8.com.wmcapp.prabhag.dummy.DummyContent;
-import itg8.com.wmcapp.prabhag.model.ContactModel;
 import itg8.com.wmcapp.profile.ProfileActivity;
-import itg8.com.wmcapp.profile.ProfileFragment;
 import itg8.com.wmcapp.signup.LoginActivity;
 import itg8.com.wmcapp.suggestion.SuggestionFragment;
 import itg8.com.wmcapp.torisum.TorisumFragment;
@@ -82,7 +71,7 @@ import static itg8.com.wmcapp.common.CallType.WARD_MEMBER;
 public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, CommonCallback.OnImagePickListener,
         CustomDialogFragment.DialogItemClickListener,
-        PrabhagFragment.OnListFragmentInteractionListener, CityMVP.CityView, CityAdapter.CityItemClickedListener {
+        PrabhagFragment.onPrabhagClickedListener, CityMVP.CityView, CityAdapter.CityItemClickedListener {
 
     private static final String TAG = HomeActivity.class.getSimpleName();
     private static int english = 0;
@@ -111,7 +100,7 @@ public class HomeActivity extends BaseActivity
 //        MyApplication.getInstance().uploadAllRemaining();
 
         presenter = new CityPresenterImp(this);
-        presenter.onGetCity(getString(R.string.url_city));
+
         int result=   CommonMethod.calculateTerm();
         Logs.d("Result"+result);
          checkLogin();
@@ -331,8 +320,6 @@ public class HomeActivity extends BaseActivity
 
 
     }
-
-
     private void showWard() {
         isFrom = WARD;
         callFragment(PrabhagFragment.newInstance(1));
@@ -340,17 +327,9 @@ public class HomeActivity extends BaseActivity
 
     private void showWardMemberDetail() {
         isFrom = WARD_MEMBER;
-        callFragment(WardMemberFragment.newInstance(getDummyContacts()));
+//        callFragment(WardMemberFragment.newInstance(prabhagModel.getWardList().get(position).getMemberList()));
     }
 
-
-
-    public List<ContactModel> getDummyContacts() {
-        List<ContactModel> models=new ArrayList<>();
-        models.add(new ContactModel());
-        models.add(new ContactModel());
-        return models;
-    }
 
 
 
@@ -385,14 +364,7 @@ public class HomeActivity extends BaseActivity
         }
     }
 
-    @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
-        if (isFrom == PRABHAG) {
-            showWard();
-        }else if(isFrom == WARD){
-            showWardMemberDetail();
-        }
-    }
+
 
     @Override
     public void onGetCityList(final List<CityModel> list) {
@@ -571,6 +543,15 @@ public class HomeActivity extends BaseActivity
     public void setDialogCallbackListener(CommonCallback.OnDialogClickListner callbacks) {
         listner = callbacks;
 
+    }
+
+    @Override
+    public void onPrabhagSelected() {
+        if (isFrom == PRABHAG) {
+            showWard();
+        }else if(isFrom == WARD){
+            showWardMemberDetail();
+        }
     }
 }
 

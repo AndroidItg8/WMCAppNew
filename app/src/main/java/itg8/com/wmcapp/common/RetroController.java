@@ -5,6 +5,8 @@ import java.util.List;
 import io.reactivex.Observable;
 import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.complaint.model.LikeModel;
+import itg8.com.wmcapp.emergency.model.EmergencyModel;
+import itg8.com.wmcapp.prabhag.model.PrabhagModel;
 import itg8.com.wmcapp.profile.ProfileModel;
 import itg8.com.wmcapp.registration.RegistrationModel;
 import itg8.com.wmcapp.torisum.model.TorisumModel;
@@ -49,18 +51,39 @@ public interface RetroController {
 //    FullName:Aman Ambarte
 //    MobileNumber:786786786786
 //    UserRoles:AppUser
-//    Email:Aman@gmail.com
 
+    //    FullName:Aman Ambarte
+////AddressLine1:drfgser
+////AddressLine2:gsdfgsdfg
+//    ContactNumber:786786786786
+//    EmailId:itech3@gmail.com
+//    LastModifiedDate:2017-11-17 06:28:19.177
+//    Lid:
+////pkid:10
+//    User_fkid:fca66149-b6f7-4498-adfa-7e54b2621179
+//    UserName:itech3@gmail.com
+//    RoleName:AppUser
     @FormUrlEncoded
     @POST()
     @Headers("Content-Type:application/x-www-form-urlencoded")
     Call<RegistrationModel> sendRegistrationInfoToserver(@Url String url,
-                                                         @Field("Password") String password,
-                                                         @Field("ConfirmPassword") String cPassword,
                                                          @Field("FullName") String name,
-                                                         @Field("MobileNumber") String mobile,
-                                                         @Field("UserRoles") String appUser,
-                                                         @Field("Email") String emailId);
+                                                         @Field("AddressLine1") String address,
+                                                         @Field("AddressLine2") String city,
+                                                         @Field("ContactNumber") String mobile,
+                                                         @Field("EmailId") String emailId,
+                                                         @Field("LastModifiedDate") String dateLast,
+                                                         @Field("Lid") String lid,
+                                                         @Field("pkid") String pid,
+                                                         @Field("User_fkid") String fid,
+                                                         @Field("UserName") String userName,
+                                                         @Field("RoleName") String appUser
+    );
+
+
+//    Email:Aman@gmail.com
+
+//    RegisteredDate:2017-11-17 06:28:19.177
 
     //    OldPassword:WMC123
 //    NewPassword:123456
@@ -90,7 +113,7 @@ public interface RetroController {
 //    cityid:0
 
     @GET()
-    Observable<ResponseBody> loadComplaint(@Url String url, @Query("skip") int page, @Query("pageSize") int limit, @Query("User_Wise") int from,@Query("cityid") int cityId);
+    Observable<ResponseBody> loadComplaint(@Url String url, @Query("skip") int page, @Query("pageSize") int limit, @Query("User_Wise") int from, @Query("cityid") int cityId);
 
     @GET()
     Observable<ResponseBody> loadNoticeBoard(@Url String url, @Query("skip") int page, @Query("pageSize") int limit, @Query("cityid") int cityId);
@@ -131,5 +154,27 @@ public interface RetroController {
                                            @Part("description") RequestBody title,
                                            @Part("title") RequestBody desc);
 
+    @GET()
+    Call<List<EmergencyModel>> getEmergency(@Url String url);
 
+    //    Email:jay@gmail.com
+//    Password:123456
+//    ConfirmPassword:123456
+//    UserRoles:AppUser
+//    MobileNumber:9823778532
+//    FullName:ayesha
+    @FormUrlEncoded
+    @POST()
+    @Headers("Content-Type:application/x-www-form-urlencoded")
+    Call<RegistrationModel> registartion(@Url String url,
+                                         @Field("Email") String emial,
+                                         @Field("Password") String passd,
+                                         @Field("ConfirmPassword") String cpassd,
+                                         @Field("UserRoles") String AppUser,
+                                         @Field("MobileNumber") String mobile,
+                                         @Field("FullName") String name
+    );
+
+    @GET()
+    Call<List<PrabhagModel>> getPragbhagList(@Url String loadUrl);
 }

@@ -13,7 +13,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import itg8.com.wmcapp.R;
-import itg8.com.wmcapp.prabhag.model.ContactModel;
+import itg8.com.wmcapp.prabhag.model.PrabhagModel;
 
 /**
  * Created by swapnilmeshram on 02/11/17.
@@ -21,18 +21,18 @@ import itg8.com.wmcapp.prabhag.model.ContactModel;
 
 class ContactRvAdapter extends RecyclerView.Adapter<ContactRvAdapter.ViewHolder> {
 
-    private List<ContactModel> contactList;
 
     interface OnContactClickListener {
-        void onMessageClicked(ContactModel model);
+        void onMessageClicked(PrabhagModel model);
 
-        void onCallClicked(ContactModel model);
+        void onCallClicked(PrabhagModel model);
     }
 
 
+    private List<PrabhagModel> contactList;
     OnContactClickListener listener;
 
-    public ContactRvAdapter(List<ContactModel> contactList,OnContactClickListener listener) {
+    public ContactRvAdapter(List<PrabhagModel> contactList, OnContactClickListener listener) {
         this.contactList = contactList;
         this.listener=listener;
     }

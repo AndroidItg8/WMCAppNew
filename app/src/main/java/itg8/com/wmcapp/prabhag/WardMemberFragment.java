@@ -5,7 +5,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -26,7 +25,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
-import itg8.com.wmcapp.prabhag.model.ContactModel;
+import itg8.com.wmcapp.prabhag.model.MemberList;
+import itg8.com.wmcapp.prabhag.model.PrabhagModel;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -60,7 +60,6 @@ public class WardMemberFragment extends Fragment implements ContactRvAdapter.OnC
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private List<ContactModel> contactList;
     private boolean hasCallPermission;
 
 
@@ -73,12 +72,13 @@ public class WardMemberFragment extends Fragment implements ContactRvAdapter.OnC
      * this fragment using the provided parameters.
      *
      * @return A new instance of fragment WardMemberFragment.
+     * @param memberList
      */
     // TODO: Rename and change types and number of parameters
-    public static WardMemberFragment newInstance(List<ContactModel> modelList) {
+    public static WardMemberFragment newInstance(List<MemberList> memberList) {
         WardMemberFragment fragment = new WardMemberFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(ARG_PARAM1, (ArrayList<? extends Parcelable>) modelList);
+       // args.putParcelableArrayList(ARG_PARAM1, (ArrayList<? extends Parcelable>) modelList);
         fragment.setArguments(args);
         return fragment;
     }
@@ -87,7 +87,7 @@ public class WardMemberFragment extends Fragment implements ContactRvAdapter.OnC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            contactList = getArguments().getParcelableArrayList(ARG_PARAM1);
+          //  contactList = getArguments().getParcelableArrayList(ARG_PARAM1);
         }
     }
 
@@ -98,7 +98,8 @@ public class WardMemberFragment extends Fragment implements ContactRvAdapter.OnC
         View view = inflater.inflate(R.layout.fragment_ward_member, container, false);
         unbinder = ButterKnife.bind(this, view);
         rvContact.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
-        ContactRvAdapter adapter=new ContactRvAdapter(contactList,this);
+        List<PrabhagModel> list = new ArrayList<>();
+        ContactRvAdapter adapter=new ContactRvAdapter(list,this);
         rvContact.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContact.setAdapter(adapter);
         checkCallPermission();
@@ -127,7 +128,7 @@ public class WardMemberFragment extends Fragment implements ContactRvAdapter.OnC
     }
 
     @Override
-    public void onCallClicked(ContactModel model) {
+    public void onCallClicked(PrabhagModel model) {
         //TODO implement: change below code as per model data after tel;
         if(!hasCallPermission)
             return;
@@ -149,7 +150,7 @@ public class WardMemberFragment extends Fragment implements ContactRvAdapter.OnC
 
 
     @Override
-    public void onMessageClicked(ContactModel model) {
+    public void onMessageClicked(PrabhagModel model) {
         Intent smsIntent = new Intent(Intent.ACTION_VIEW);
         //TODO implementation put contact number after provided for sms
         Uri data = Uri.parse("sms:");

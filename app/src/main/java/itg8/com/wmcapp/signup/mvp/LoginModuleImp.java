@@ -57,31 +57,39 @@ public class LoginModuleImp implements LoginMvp.LoginModule {
                if (response.isSuccessful()) {
                    if (response.body() != null) {
                        try {
-                           String res = null;
-                           try {
-                               res = response.body().string();
-                           } catch (IOException e) {
-                               e.printStackTrace();
-                           }
+                           String res = response.body().string();
                            JSONObject object = new JSONObject(res);
                            if (object.has("access_token")) {
                                Prefs.putString(CommonMethod.HEADER, object.getString("access_token"));
-                                MyApplication.getInstance().resetRetroAfterLogin();
+                               MyApplication.getInstance().resetRetroAfterLogin();
+//                                listener.onSuccess();
+                               if (object.has("Firstlogin")) {
+                                   if (object.getString("Firstlogin").equalsIgnoreCase("0")) {
+                                       listener.onFirstTimeLogin("Success");
+                                   }
+                                   else {
                                        listener.onSuccess();
-
+                                   }
                                } else {
-                                   listener.onFail("Failed to Login");
+                                   listener.onFirstTimeLogin("Success");
                                }
-                           } catch (JSONException e) {
+                           }else
+                           {
+                               listener.onFail("Invalid User");
+                           }
+
+
+
+                       } catch (IOException e) {
+                           e.printStackTrace();
+                       } catch (JSONException e) {
                            e.printStackTrace();
                        }
                    }
+
                } else {
                    listener.onFail(response.message());
                }
-
-
-
            }
 
            @Override

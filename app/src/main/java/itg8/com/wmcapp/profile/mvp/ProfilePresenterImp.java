@@ -1,8 +1,13 @@
 package itg8.com.wmcapp.profile.mvp;
 
 
+import android.text.TextUtils;
+import android.view.View;
+
 import java.util.List;
 
+import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.common.BaseWeakPresenter;
 import itg8.com.wmcapp.common.MyApplication;
 import itg8.com.wmcapp.profile.ProfileModel;
@@ -46,6 +51,25 @@ public class ProfilePresenterImp extends BaseWeakPresenter<ProfileMVp.ProfileVie
             getView().onSuccess(list);
 
         }
+    }
+
+    @Override
+    public void onGetCityList(String url) {
+        if(hasView()) {
+            showProgress();
+            module.onGetCityListFromServer(MyApplication.getInstance().getRetroController(),url, this);
+        }
+    }
+
+    @Override
+    public void onSuccessCity(List<CityModel> list) {
+        if(hasView())
+        {
+            hideProgress();
+            getView().onSuccessCityList(list);
+
+        }
+
     }
 
     @Override
@@ -102,13 +126,46 @@ public class ProfilePresenterImp extends BaseWeakPresenter<ProfileMVp.ProfileVie
     }
 
     @Override
-    public void onInternetConnect(boolean b) {
+    public void onSaveSuccess(String status) {
         if(hasView())
         {
             hideProgress();
-            getView().onInternetConnect(b);
+            getView().onSuccessSave(status);
         }
 
+    }
 
+
+
+    @Override
+    public void onUpdateButtonClicked(View view) {
+        if (hasView()) {
+            boolean isValid = true;
+            String address = getView().getAddress();
+            String email = getView().getEmail();
+            String city = getView().getCity();
+            String name = getView().getName();
+            String mobile = getView().getMobile();
+//            if (TextUtils.isEmpty(address)) {
+//                isValid = false;
+//                getView().onAddressInvalid(view.getContext().getString(R.string.empty));
+//            }
+//            if (TextUtils.isEmpty(city)) {
+//                isValid = false;
+//                getView().onCityInvalid(view.getContext().getString(R.string.empty));
+//            }
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                isValid = false;
+                getView().onEmailInvalid(view.getContext().getString(R.string.invalid_email));
+            }
+
+
+            if (isValid) {
+                getView().showProgress();
+                module.onSendToServer((MyApplication.getInstance().getRetroController()), view.getContext().getString(R.string.url_edit_profile),name,mobile,address, email,city, this);
+
+            }
+
+        }
     }
 }

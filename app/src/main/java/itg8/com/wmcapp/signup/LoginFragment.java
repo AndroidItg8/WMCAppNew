@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +21,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -46,6 +46,8 @@ import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.Prefs;
 import itg8.com.wmcapp.home.HomeActivity;
+import itg8.com.wmcapp.profile.ProfileActivity;
+import itg8.com.wmcapp.registration.RegistrationFragment;
 import itg8.com.wmcapp.signup.mvp.LoginMvp;
 import itg8.com.wmcapp.signup.mvp.LoginPresenterImp;
 import itg8.com.wmcapp.widget.CustomFontTextView;
@@ -56,7 +58,7 @@ import itg8.com.wmcapp.widget.CustomFontTextView;
  * Use the {@link LoginFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.OnClickListener  {
+public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -100,8 +102,7 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
     Button btnG;
     @BindView(R.id.ll_snack)
     LinearLayout llSnack;
-
-
+    OnAttachActivityListener listener;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -111,7 +112,7 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
     private FirebaseAuth mAuth;
     private Context mContext;
     private String from;
-    OnAttachActivityListener listener;
+    private FragmentTransaction ft;
 
 
     public LoginFragment() {
@@ -213,9 +214,8 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
         Intent intent = new Intent(getContext(), HomeActivity.class);
         startActivity(intent);
 //         getActivity().finish();
-         listener.onAttachActivity();
 
-
+        listener.onAttachActivity();
 
 
     }
@@ -262,6 +262,22 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
     public void onNoInternetConnect(boolean b) {
         showSnackbar(b);
 
+    }
+
+    @Override
+    public void onFirstTimeLogin(String success) {
+        Prefs.putString(CommonMethod.IS_LOGIN_FIRST_TIME, success);
+//        RegistrationFragment fragment = RegistrationFragment.newInstance(CommonMethod.IS_LOGIN_FIRST_TIME, success);
+//        ft = getFragmentManager().beginTransaction();
+//        ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+//        ft.replace(R.id.frame_container, fragment);
+//        ft.addToBackStack(fragment.getClass().getSimpleName());
+//        ft.commit();
+
+        Intent intent =new Intent(getActivity(), ProfileActivity.class);
+         intent.putExtra(CommonMethod.FROM_FIRST_TIME_LOGIN,true);
+                startActivity(intent);
+        listener.onAttachActivity();
     }
 
 
@@ -405,8 +421,8 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-        if(context instanceof OnAttachActivityListener)
-        listener= (OnAttachActivityListener) context;
+        if (context instanceof OnAttachActivityListener)
+            listener = (OnAttachActivityListener) context;
         else
             throw new IllegalStateException("Activity should implement OnAttachActivityListener");
     }
@@ -420,7 +436,10 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
         }
         presenter.onDestroy();
     }
-     public interface OnAttachActivityListener{
+
+
+
+    public interface OnAttachActivityListener {
         void onAttachActivity();
-     }
+    }
 }

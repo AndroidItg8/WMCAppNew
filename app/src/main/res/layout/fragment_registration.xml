@@ -9,10 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
-
-
-    <android.support.v7.widget.CardView
+        <android.support.v7.widget.CardView
         android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,8 +36,7 @@
                 android:id="@+id/input_layout_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/colorBlack"
-                android:theme="@style/inputText">
+                android:visibility="visible">
 
                 <EditText
                     android:id="@+id/input_name"
@@ -52,6 +48,7 @@
                     android:inputType="text"
                     android:lines="1"
                     android:maxLines="1"
+                    android:visibility="visible"
                     android:textColor="@color/colorBlack"
                     android:textColorHint="@color/colorGray"
                     android:textSize="15sp" />
@@ -61,9 +58,7 @@
                 android:id="@+id/input_layout_mobile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/colorBlack"
-                android:visibility="visible"
-                android:theme="@style/inputText">
+                android:visibility="visible">
 
                 <EditText
                     android:id="@+id/input_mobile"
@@ -85,8 +80,8 @@
                 android:id="@+id/input_layout_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/colorBlack"
-                android:theme="@style/inputText">
+                android:visibility="visible"
+      >
 
                 <EditText
                     android:id="@+id/input_email"
@@ -98,6 +93,7 @@
                     android:inputType="textEmailAddress"
                     android:lines="1"
                     android:maxLines="1"
+                    android:visibility="visible"
                     android:textColor="@color/colorBlack"
                     android:textColorHint="@color/colorGray"
                     android:textSize="15sp" />
@@ -159,8 +155,8 @@
                 android:id="@+id/input_layout_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/colorBlack"
-                android:theme="@style/inputText">
+                android:visibility="visible"
+       >
 
                 <EditText
                     android:id="@+id/input_password"
@@ -170,7 +166,7 @@
                     android:layout_marginTop="10dp"
                     android:hint="Password"
                     android:inputType="textPassword"
-
+                    android:visibility="visible"
                     android:lines="1"
                     android:maxLines="1"
                     android:textColor="@color/colorBlack"
@@ -183,6 +179,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/colorBlack"
+                android:visibility="gone"
+
                 android:theme="@style/inputText">
 
                 <EditText
@@ -195,6 +193,8 @@
                     android:inputType="textPassword"
                     android:lines="1"
                     android:maxLines="1"
+                    android:visibility="gone"
+
                     android:textColor="@color/colorBlack"
                     android:textColorHint="@color/colorBlack"
                     android:textSize="15sp" />
@@ -211,8 +211,7 @@
             android:layout_margin="10dp"
             android:layout_centerHorizontal="true"
             android:visibility="visible"
-            android:layout_below="@+id/card"
-            />
+            android:layout_below="@+id/card" />
 
         <Button
             android:id="@+id/btn_signUp"

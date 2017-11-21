@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@color/colorWhite"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -10,12 +10,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:orientation="vertical">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/bpkuti"
+            android:visibility="gone"
             android:padding="40dp"/>
 
 
@@ -30,7 +32,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-
                 android:singleLine="true"
                 android:textColor="@color/colorBlack"
                 android:textSize="15sp"
@@ -45,7 +46,6 @@
             android:textColor="@color/colorWhite"
             android:layout_margin="16dp"
             android:id="@+id/btn_submit"
-
             android:background="@color/colorPrimary"
             android:text="submit"/>
     </LinearLayout>

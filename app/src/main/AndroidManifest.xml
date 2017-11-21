@@ -31,10 +31,11 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -73,11 +74,16 @@
         <activity
             android:name=".splash.SplashActivity"
             android:label="@string/title_activity_splash"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+
+
+        </activity>
+
         <activity
             android:name=".signup.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+             android:windowSoftInputMode="adjustPan"/>
 
         <receiver android:name=".common.NetworkChangeReceiver">
             <intent-filter>
@@ -88,17 +94,17 @@
 
         <activity
             android:name=".profile.ProfileActivity"
-            android:label="@string/title_activity_profile"/>
+            android:label="@string/title_activity_profile" />
 
-        <!--<provider-->
-            <!--android:name="android.support.v4.content.FileProvider"-->
-            <!--android:authorities="itg8.com.wmcapp.fileprovider"-->
-            <!--android:exported="false"-->
-            <!--android:grantUriPermissions="true">-->
-            <!--<meta-data-->
-                <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
-                <!--android:resource="@xml/fileprovider" />-->
-        <!--</provider>-->
+        <!-- <provider -->
+        <!-- android:name="android.support.v4.content.FileProvider" -->
+        <!-- android:authorities="itg8.com.wmcapp.fileprovider" -->
+        <!-- android:exported="false" -->
+        <!-- android:grantUriPermissions="true"> -->
+        <!-- <meta-data -->
+        <!-- android:name="android.support.FILE_PROVIDER_PATHS" -->
+        <!-- android:resource="@xml/fileprovider" /> -->
+        <!-- </provider> -->
     </application>
 
 </manifest>

@@ -1,18 +1,23 @@
 package itg8.com.wmcapp.registration;
 
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
@@ -22,7 +27,9 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.MyApplication;
+import itg8.com.wmcapp.common.NoConnectivityException;
 import itg8.com.wmcapp.common.RetroController;
+import itg8.com.wmcapp.signup.LoginFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,6 +44,8 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int FROM_ERROR = 2;
+    private static final int FROM_INERNET = 1;
 
     Unbinder unbinder;
     @BindView(R.id.input_name)
@@ -65,12 +74,21 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     CircularProgressView progressView;
     @BindView(R.id.btn_signUp)
     Button btnSignUp;
+    @BindView(R.id.input_address)
+    EditText inputAddress;
+    @BindView(R.id.input_layout_address)
+    TextInputLayout inputLayoutAddress;
+    @BindView(R.id.card)
+    CardView card;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private Call<RegistrationModel> call;
-    private boolean isDestroyed=false;
+    private boolean isDestroyed = false;
+    private Snackbar snackbar;
+    private Context mContext;
+    private OnAttachRegistrationListener listener;
 
 
     public RegistrationFragment() {
@@ -110,9 +128,10 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_registration, container, false);
         unbinder = ButterKnife.bind(this, view);
-         init();
+        init();
         return view;
     }
+
 
     private void init() {
         btnSignUp.setOnClickListener(this);
@@ -130,124 +149,175 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+         listener = (OnAttachRegistrationListener) context;
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
     private void senDataToserver() {
         if (validate()) {
             postDataIntoServer(
                     inputName.getText().toString().trim(),
                     inputEmail.getText().toString().trim(),
                     inputMobile.getText().toString().trim(),
-                    inputPassword.getText().toString().trim(),
-                    inputCpassword.getText().toString().trim()
+                    inputPassword.getText().toString().trim()
             );
         }
 
     }
 
-    private void postDataIntoServer(String name, String email, String mobile, String password, String cpassword) {
+    private void postDataIntoServer(String name, String email, String mobile, String password) {
         String url = getString(R.string.url_registration);
         showProgress();
         RetroController api = MyApplication.getInstance().getRetroController();
+//    Email:jay@gmail.com
+//    Password:123456
+//    ConfirmPassword:123456
+//    UserRoles:AppUser
+//    MobileNumber:9823778532
+//    FullName:ayesha
 
-        call = api.sendRegistrationInfoToserver(url,password, cpassword,name,mobile,"AppUser",email);
-         call.enqueue(new Callback<RegistrationModel>() {
-             @Override
-             public void onResponse(Call<RegistrationModel> call, Response<RegistrationModel> response) {
+        call = api.registartion(url, email,password,password,"AppUser",mobile, name );
+        call.enqueue(new Callback<RegistrationModel>() {
+            @Override
+            public void onResponse(Call<RegistrationModel> call, Response<RegistrationModel> response) {
 
-                 hideProgress();
+                hideProgress();
 
-                 if (response.isSuccessful()) {
-                     if (response.body().isFlag()) {
-                         showToast("Registration Successfully");
+                if (response.isSuccessful()) {
+                    if (response.body().isFlag()) {
+                        showSnackbar(false,FROM_ERROR,response.body().getStatus());
+                    } else {
+                        showSnackbar(false,FROM_ERROR,response.body().getStatus());
+                    }
+                } else {
+                    showSnackbar(false,FROM_ERROR,response.body().getStatus());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RegistrationModel> call, Throwable t) {
+                t.printStackTrace();
+
+                if(t instanceof NoConnectivityException)
+                    showSnackbar(true,FROM_INERNET,t.getMessage());
+
+                else
+                    showSnackbar(false,FROM_ERROR,t.getMessage());
 
 
-                     }else
-                     {
-                         showToast(response.body().getStatus());
-
-                     }
-                 } else {
-                     showToast("Download Failed");
-                 }
-             }
-
-             @Override
-             public void onFailure(Call<RegistrationModel> call, Throwable t) {
-                 t.printStackTrace();
-                 showToast(t.getMessage());
-
-             }
-         });
+            }
+        });
 
 
     }
 
+    private void showSnackbar(boolean isConnected, int from,String message) {
 
+        int color = 0;
+        if(from == FROM_INERNET) {
+            if (!isConnected) {
+
+                color = Color.WHITE;
+                hideSnackbar();
+
+            } else {
+                color = Color.RED;
+            }
+        }else
+        {
+            color = Color.WHITE;
+        }
+        snackbar = Snackbar
+                .make(btnSignUp, message, Snackbar.LENGTH_INDEFINITE);
+
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+
+        textView.setTextColor(color);
+        textView.setMaxLines(2);
+        snackbar.show();
+
+
+        snackbar.setAction("OK", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onSnackbarOkClicked(view);
+
+            }
+        });
+        snackbar.show();
+    }
+
+    private void onSnackbarOkClicked(View view) {
+        hideSnackbar();
+        listener.onAttachFragmnet();
+//        getChildFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+
+
+    }
+
+    public void hideSnackbar() {
+        if (snackbar != null && snackbar.isShown()) {
+            snackbar.dismiss();
+        }
+    }
     private boolean validate() {
         String email = inputEmail.getText().toString();
         String name = inputName.getText().toString();
         String MobileNumber = inputMobile.getText().toString();
         String password = inputPassword.getText().toString();
-        String cpassword = inputCpassword.getText().toString();
+
         boolean validate = true;
         if (TextUtils.isEmpty(name)) {
-            inputName.setError(getString(R.string.empty));
+            inputLayoutName.setError(getString(R.string.empty));
             validate = false;
         }
         if (TextUtils.isEmpty(password)) {
-            inputPassword.setError(getString(R.string.empty));
-            validate = false;
-        }if (TextUtils.isEmpty(cpassword)) {
-            inputCpassword.setError(getString(R.string.empty));
+            inputLayoutPassword.setError(getString(R.string.empty));
             validate = false;
         }
-         else if(!password.equalsIgnoreCase(cpassword)) {
+        if (TextUtils.isEmpty(MobileNumber)) {
+            inputLayoutMobile.setError(getString(R.string.empty));
             validate = false;
-            inputPassword.setError(getString(R.string.pswd));
-            inputCpassword.setError(getString(R.string.pswd));
+
+        }else {
+            if (MobileNumber.length()!= 10) {
+                inputLayoutMobile.setError(getString(R.string.invalid_number));
+                validate = false;
+            }
         }
 
-        if (TextUtils.isEmpty(email)) {
-            inputEmail.setError(getString(R.string.empty));
-            validate = false;
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            validate = false;
-            inputEmail.setError(getString(R.string.invalid_email));
-
-        }
-        if (MobileNumber.length() != 10) {
-            validate = false;
-            inputMobile.setError(getString(R.string.invalid_number));
-        } else if (TextUtils.isEmpty(MobileNumber)) {
-            inputMobile.setError(getString(R.string.empty));
-            validate = false;
-        }
-
-
+//        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+//            inputLayoutEmail.setError(getString(R.string.invalid_email));
+//            validate = false;
+//        }
 
         return validate;
     }
 
 
-
-
     private void showProgress() {
-        if (!isDestroyed)
             progressView.setVisibility(View.VISIBLE);
 
     }
 
 
-
     private void hideProgress() {
-        if (!isDestroyed)
             progressView.setVisibility(View.GONE);
     }
 
-    private void showToast(String s) {
-        if (!isDestroyed)
-            Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+    public interface OnAttachRegistrationListener {
+        void onAttachFragmnet();
     }
-
-
 
 }

@@ -21,7 +21,7 @@ import itg8.com.wmcapp.registration.RegistrationFragment;
  * Use the {@link SignUpFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SignUpFragment extends Fragment {
+public class SignUpFragment extends Fragment implements  RegistrationFragment.OnAttachRegistrationListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -85,12 +85,10 @@ public class SignUpFragment extends Fragment {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-
-            LoginViewPagerAdapter adapter = new LoginViewPagerAdapter(getActivity().getSupportFragmentManager());
+        LoginViewPagerAdapter adapter = new LoginViewPagerAdapter(getChildFragmentManager());
             adapter.addFragment(new LoginFragment(), "Login");
             adapter.addFragment(new RegistrationFragment(), "Registration");
-
-            viewPager.setAdapter(adapter);
+                viewPager.setAdapter(adapter);
 
     }
 
@@ -98,5 +96,26 @@ public class SignUpFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onAttachFragmnet() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition()-1);
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 }
