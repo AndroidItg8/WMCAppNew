@@ -33,7 +33,7 @@ public class LoginPresenterImp extends BaseWeakPresenter<LoginMvp.LoginView> imp
     }
 
     @Override
-    public void onLoginClicked(View view) {
+    public void onLoginClicked(View view, boolean isMobile) {
         if (hasView()) {
             boolean isValid = true;
             String password = getView().getPassword();
@@ -46,11 +46,23 @@ public class LoginPresenterImp extends BaseWeakPresenter<LoginMvp.LoginView> imp
                 isValid = false;
                 getView().onPasswordInvalid(view.getContext().getString(R.string.empty));
             }
+             if(isMobile)
+             {
+                 if(username.length() != 10)
+                 {
+                     isValid = false;
+                     getView().onUsernameInvalid(view.getContext().getString(R.string.invalid_number));
+                 }
 
-            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
-                isValid = false;
-                getView().onUsernameInvalid(view.getContext().getString(R.string.invalid_email));
-            }
+             }else
+             {
+                 if (!android.util.Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
+                     isValid = false;
+                     getView().onUsernameInvalid(view.getContext().getString(R.string.invalid_email));
+                 }
+             }
+
+
             if (password.length() < 6) {
                 isValid = false;
                 getView().onPasswordInvalid(view.getContext().getString(R.string.invalid_pass));

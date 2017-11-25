@@ -14,6 +14,7 @@ import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.BaseViewHolder;
 import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.OnRecyclerviewClickListener;
+import itg8.com.wmcapp.emergency.model.Contact;
 import itg8.com.wmcapp.emergency.model.EmergencyModel;
 import itg8.com.wmcapp.widget.CustomFontTextView;
 
@@ -25,10 +26,9 @@ public class EmergencyAdapter extends RecyclerView.Adapter<EmergencyAdapter.View
 
     private Context mContext;
     private List<EmergencyModel> list;
-    private OnRecyclerviewClickListener<EmergencyModel> listener;
+    ItemClickedListner listener;
 
-
-    public EmergencyAdapter(Context mContext, List<EmergencyModel> list, OnRecyclerviewClickListener<EmergencyModel> listener) {
+    public EmergencyAdapter(Context mContext, List<EmergencyModel> list, ItemClickedListner listener) {
         this.mContext = mContext;
         this.list = list;
         this.listener = listener;
@@ -43,7 +43,7 @@ public class EmergencyAdapter extends RecyclerView.Adapter<EmergencyAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.lblName.setText(CommonMethod.checkEmpty(list.get(position).getDeptName()));
+        holder.lblName.setText(CommonMethod.checkEmpty(list.get(position).getCatgoryName()));
 
 
 
@@ -54,20 +54,23 @@ public class EmergencyAdapter extends RecyclerView.Adapter<EmergencyAdapter.View
         return list.size();
     }
 
-    public class ViewHolder extends BaseViewHolder<EmergencyModel> {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.lbl_name)
         CustomFontTextView lblName;
         @BindView(R.id.lbl_symbol)
         CustomFontTextView lblSymbol;
         public ViewHolder(View itemView) {
-            super(itemView, listener);
+            super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listener.onClick(getAdapterPosition(), list.get(getAdapterPosition()));
+                    listener.onItemClicked(getAdapterPosition(),  list.get(getAdapterPosition()));
                 }
             });
         }
+    }
+    public interface ItemClickedListner{
+        void onItemClicked(int position,EmergencyModel model);
     }
 }

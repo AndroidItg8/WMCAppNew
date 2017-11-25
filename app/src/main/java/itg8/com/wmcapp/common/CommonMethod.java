@@ -12,10 +12,15 @@ import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -23,6 +28,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
+import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.profile.ProfileModel;
 
 /**
  * Created by Android itg 8 on 11/1/2017.
@@ -51,6 +59,14 @@ public final class CommonMethod {
     public static final  DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss", Locale.getDefault());
     public static final String IS_LOGIN_FIRST_TIME = "IS_LOGIN_FIRST_TIME";
     public static final String FROM_FIRST_TIME_LOGIN = "FROM_FIRST_TIME_LOGIN";
+    public static final int PRABHAG = 1;
+    public static final int WARD = 2;
+    public static final int WARD_MEMEBER = 3;
+    // these two are for snackbar.
+    public static final int FROM_INTERNET = 1;
+    public static final int FROM_ERROR = 2;
+    public static final String USER_NAME = "USER_NAME";
+    public static final String USER_MOBILE = "USER_MOBILE";
 
 
 //    1) Complaint
@@ -143,6 +159,17 @@ public final class CommonMethod {
 
     }
 
+    public static void clearText(EditText title) {
+        title.setText(" ");
+    }
+
+    public static String checkEmptyProfile(String customername) {
+        if(customername != null)
+        return customername;
+        else
+            return "UNKNOWN PERSON";
+    }
+
     public static interface ResultListener{
         void onResultAddress(String result, LatLng mLocation, String city);
     }
@@ -204,10 +231,60 @@ public final class CommonMethod {
        }
 
 
+       public  static  void setUserPicaso(final Context mContext, final String subUrl, final ImageView imgGarbage )
+       {
+           Picasso.with(mContext)
+                   .load(CommonMethod.BASE_URL+subUrl)
+                   .networkPolicy(NetworkPolicy.OFFLINE)
+                   .into(imgGarbage, new Callback() {
+                       @Override
+                       public void onSuccess() {
+
+                       }
+
+                       @Override
+                       public void onError() {
+                           // Try again online if cache failed
+                           Picasso.with(mContext)
+                                   .load(CommonMethod.BASE_URL+subUrl)
+                                   .error(R.drawable.ic_face_black_24dp)
+                                   .into(imgGarbage, new Callback() {
+                                       @Override
+                                       public void onSuccess() {
+                                       //   imgGarbage.setVisibility(View.VISIBLE);
+
+                                       }
+
+                                       @Override
+                                       public void onError() {
+                                         // imgGarbage.setVisibility(View.GONE);
+                                       }
+                                   });
+                       }
+                   });
+
+
+       }
+
        public interface OnImageFileListner{
         void onGetImageFileSucces(String file);
            void onGetImageFileFailed(String s);
        }
+        public  interface OnBackPressListener{
+        void onBackPress();
+        }
+         public interface  onSetToolbarTitle{
+             void onSetTitle(String name);
+         }
+
+         public interface ProfileSetListener
+         {
+             void onSetProfile(ProfileModel model);
+             void onFailed(String s);
+         }
 
 
+    public interface OnMoveComplaintListener {
+        void moveComplaint();
+    }
 }

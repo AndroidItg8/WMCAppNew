@@ -3,7 +3,6 @@ package itg8.com.wmcapp.signup.mvp;
 import android.view.View;
 
 
-import itg8.com.wmcapp.common.Retro;
 import itg8.com.wmcapp.common.RetroController;
 
 /**
@@ -34,7 +33,7 @@ public interface LoginMvp {
       public interface LoginPresenter
       {
           void onDestroy();
-          void onLoginClicked(View view);
+          void onLoginClicked(View view, boolean isMobile);
           void onNoInternetConnect(boolean b);
 
 

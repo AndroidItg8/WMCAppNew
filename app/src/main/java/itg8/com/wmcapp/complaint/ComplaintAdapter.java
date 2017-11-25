@@ -1,6 +1,8 @@
 package itg8.com.wmcapp.complaint;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -122,9 +124,9 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((ComplaintViewHolder) holder).lblAddressValue.setText(CommonMethod.checkEmpty(models.get(position).getComplaintName()));
             ((ComplaintViewHolder) holder).lblProblemValue.setText(CommonMethod.checkEmpty(models.get(position).getComplaintDescription()));
 
-            ((ComplaintViewHolder) holder).lblVoteValue.setText(CommonMethod.checkEmpty(String.valueOf(models.get(position).getLikeList().size())));
             if (models.get(position).getLikeList() != null) {
                 likedSize = models.get(position).getLikeList().size();
+                ((ComplaintViewHolder) holder).lblVoteValue.setText(CommonMethod.checkEmpty(String.valueOf(models.get(position).getLikeList().size())));
                 Logs.d("LikeSize:" + likedSize);
 
             } else {
@@ -160,15 +162,14 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             if (models.get(position).getLikestatus() == VOTE_UP) {
                 ((ComplaintViewHolder) holder).lblVoteUp.setText("VOTE UP");
                 ((ComplaintViewHolder) holder).lblVoteUp.setTextColor(((ComplaintViewHolder) holder).lblVoteUp.getContext().getResources().getColor(R.color.colorBlack));
-
-                ((ComplaintViewHolder) holder).lblVoteUp.setClickable(true);
-
-                ((ComplaintViewHolder) holder).frame.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        listner.onVoteUpClicked(holder.getAdapterPosition(), models.get(holder.getAdapterPosition()));
-                    }
-                });
+                ((ComplaintViewHolder) holder).frame.setClickable(true);
+//                ((ComplaintViewHolder) holder).frame.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        listner.onVoteUpClicked(holder.getAdapterPosition(), models.get(holder.getAdapterPosition()));
+//                        Logs.d("onVoteUpClicked:");
+//                    }
+//                });
             } else {
                 ((ComplaintViewHolder) holder).lblVoteUp.setText("VOTED");
                 ((ComplaintViewHolder) holder).lblVoteUp.setTextColor(((ComplaintViewHolder) holder).lblVoteUp.getContext().getResources().getColor(R.color.colorPrimary));
@@ -178,12 +179,12 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((ComplaintViewHolder) holder).lblVoteValue.setText(String.valueOf(likedSize));
 
 
-            ((ComplaintViewHolder) holder).lblShare.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    listner.onShareClicked(holder.getAdapterPosition(), models.get(holder.getAdapterPosition()));
-                }
-            });
+//            ((ComplaintViewHolder) holder).lblShare.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    listner.onShareClicked(holder.getAdapterPosition(), models.get(holder.getAdapterPosition()));
+//                }
+//            });
         }
     }
 
@@ -269,6 +270,22 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     listner.onComplaintItemClicked(getAdapterPosition(), models.get(getAdapterPosition()));
                 }
             });
+            frame.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View view) {
+                     listner.onVoteUpClicked(getAdapterPosition(),models.get(getAdapterPosition()));
+                 }
+             });
+              lblShare.setOnClickListener(new View.OnClickListener() {
+                  @Override
+                  public void onClick(View view) {
+                    listner.onShareClicked(getAdapterPosition(), models.get(getAdapterPosition()));
+
+                  }
+              });
+
+
+
         }
     }
 }

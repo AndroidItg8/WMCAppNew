@@ -21,6 +21,8 @@
             android:button="@drawable/rgb_selector"
             android:checked="true"
             android:gravity="center"
+            android:layout_gravity="center"
+
             android:text="English" />
 
         <View
@@ -37,6 +39,8 @@
             android:layout_weight="1"
             android:button="@drawable/rgb_selector"
             android:gravity="center"
+            android:layout_gravity="center"
+
             android:text="हिंदी" />
 
         <View
@@ -53,6 +57,8 @@
             android:layout_weight="1"
             android:button="@drawable/rgb_selector"
             android:gravity="center"
+            android:layout_gravity="center"
+
             android:text="मराठी" />
 
         <View
@@ -70,6 +76,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/rg_language"
         android:layout_marginTop="10dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
         android:background="@color/colorPrimary"
         android:text="@string/dismiss"
         android:textColor="@color/colorWhite" />

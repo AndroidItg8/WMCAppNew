@@ -86,7 +86,6 @@ public class UnSendComplaintFragment extends Fragment  {
         View view = inflater.inflate(R.layout.fragment_un_send_complaint, container, false);
         unbinder = ButterKnife.bind(this, view);
         complaintTableManipute = new ComplaintTableManipute(mContext);
-
         setupViewPager(viewpager);
         tabs.setupWithViewPager(viewpager);
 
@@ -94,7 +93,7 @@ public class UnSendComplaintFragment extends Fragment  {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getFragmentManager());
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
         adapter.addFragment(new OnlineComplaint(), "Online");
         adapter.addFragment(new OfflineComplaint(), "Offline");
         viewPager.setAdapter(adapter);

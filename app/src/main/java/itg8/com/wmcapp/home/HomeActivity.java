@@ -26,10 +26,14 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -42,14 +46,13 @@ import itg8.com.wmcapp.change_password.ChangePswdFragment;
 import itg8.com.wmcapp.cilty.CityAdapter;
 import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.cilty.mvp.CityMVP;
-import itg8.com.wmcapp.cilty.mvp.CityPresenterImp;
 import itg8.com.wmcapp.common.BaseActivity;
-import itg8.com.wmcapp.common.CallType;
 import itg8.com.wmcapp.common.CommonCallback;
 import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.CustomDialogFragment;
 import itg8.com.wmcapp.common.Language;
 import itg8.com.wmcapp.common.Logs;
+import itg8.com.wmcapp.common.MyApplication;
 import itg8.com.wmcapp.common.Prefs;
 import itg8.com.wmcapp.complaint.ComplaintFragment;
 import itg8.com.wmcapp.contact.ContactUsFragment;
@@ -58,21 +61,22 @@ import itg8.com.wmcapp.emergency.EmergencyFragment;
 import itg8.com.wmcapp.feedback.FeedbackFragment;
 import itg8.com.wmcapp.news.NewsFragment;
 import itg8.com.wmcapp.prabhag.PrabhagFragment;
-import itg8.com.wmcapp.prabhag.WardMemberFragment;
 import itg8.com.wmcapp.profile.ProfileActivity;
+import itg8.com.wmcapp.profile.ProfileModel;
 import itg8.com.wmcapp.signup.LoginActivity;
 import itg8.com.wmcapp.suggestion.SuggestionFragment;
 import itg8.com.wmcapp.torisum.TorisumFragment;
-
-import static itg8.com.wmcapp.common.CallType.PRABHAG;
-import static itg8.com.wmcapp.common.CallType.WARD;
-import static itg8.com.wmcapp.common.CallType.WARD_MEMBER;
+import itg8.com.wmcapp.widget.CircularImageView;
+import itg8.com.wmcapp.widget.CustomFontTextView;
 
 public class HomeActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, CommonCallback.OnImagePickListener,
+        implements NavigationView.OnNavigationItemSelectedListener,
+        CommonCallback.OnImagePickListener,
         CustomDialogFragment.DialogItemClickListener,
-        PrabhagFragment.onPrabhagClickedListener, CityMVP.CityView, CityAdapter.CityItemClickedListener {
-
+        CommonMethod.OnBackPressListener,
+        CommonMethod.OnMoveComplaintListener,
+        CityMVP.CityView, CityAdapter.CityItemClickedListener {
+    //   PrabhagFragment.onPrabhagClickedListener,
     private static final String TAG = HomeActivity.class.getSimpleName();
     private static int english = 0;
     private static int hindi = 1;
@@ -80,32 +84,38 @@ public class HomeActivity extends BaseActivity
     Fragment fragment = null;
     CommonCallback.OnDialogClickListner listner;
     String[] items = {"Pick From Camera", "Pick From File"};
-    private CallType isFrom;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    CommonMethod.ProfileSetListener listener;
+    private int isFrom;
     private List<CityModel> list;
     private Snackbar snackbar;
     private CityMVP.CityPresenter presenter;
     private CityTableManipulate mDAOCity = null;
     private List<CityModel> cityList = null;
-    private Language langauge=null;
+    private Language langauge = null;
     private CityAdapter cityAdapter;
     private NoticeBoardFragment fragments;
+    private TextView lblName;
+    private TextView lblMobile;
+    private CircularImageView imageView;
+    private NavigationView navigationView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+
 //        MyApplication.getInstance().uploadAllRemaining();
 
-        presenter = new CityPresenterImp(this);
+        //  presenter = new CityPresenterImp(this);
 
-        int result=   CommonMethod.calculateTerm();
-        Logs.d("Result"+result);
-         checkLogin();
-
-
+        int result = CommonMethod.calculateTerm();
+        Logs.d("Result" + result);
+        checkLogin();
 //        startActivity(new Intent(this, TestActivity.class));
 
 
@@ -120,27 +130,49 @@ public class HomeActivity extends BaseActivity
 
         mDAOCity = new CityTableManipulate(this);
 
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        if (Prefs.getString(CommonMethod.HEADER) == null) {
-
-
+        View view = navigationView.getHeaderView(0);
+        if (view != null) {
+            lblName = view.findViewById(R.id.lbl_header_name);
+            lblMobile = view.findViewById(R.id.lbl_header_mobile);
+            imageView = view.findViewById(R.id.imageView);
         }
-        fragment = NoticeBoardFragment.newInstance("", "");
-        callFragment(fragment);
+        Menu menu = navigationView.getMenu();
+        menu.findItem(R.id.nav_registration).setVisible(false);
+        navigationView.setNavigationItemSelectedListener(this);
+        lblName.setText(Prefs.getString(CommonMethod.USER_NAME));
+        lblMobile.setText(Prefs.getString(CommonMethod.USER_MOBILE));
+        {
+            MyApplication.getInstance().getProfile(new CommonMethod.ProfileSetListener() {
+                @Override
+                public void onSetProfile(ProfileModel model) {
+                    if (model != null) {
+                        Picasso.with(getApplicationContext()).load(CommonMethod.BASE_URL+model.getPicProfle()).into(imageView);}}
+
+                @Override
+                public void onFailed(String s) {
+
+
+                }
+            });
+        }
+
+        callFragmentWithoutStack(NoticeBoardFragment.newInstance("", ""));
     }
 
     private void checkLogin() {
-        if(Prefs.getString(CommonMethod.HEADER)== null)
-        {
+        if (Prefs.getString(CommonMethod.HEADER) == null) {
             callLoginActivity();
             finish();
+        } else {
+
 
         }
     }
@@ -166,8 +198,8 @@ public class HomeActivity extends BaseActivity
                 openBottomSheetForLanguage();
                 break;
             case R.id.action_city:
-                if (cityList != null && cityList.size() > 0)
-                    openBottomSheetForCity(cityList);
+                CityTableManipulate cityTableManipulate = new CityTableManipulate(this);
+                openBottomSheetForCity(cityTableManipulate.getAll());
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -187,7 +219,7 @@ public class HomeActivity extends BaseActivity
         Button btnDismiss = view.findViewById(R.id.btn_dismiss);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         cityAdapter = new CityAdapter(getApplicationContext(), cityList, this);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(),DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(cityAdapter);
         btnDismiss.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -253,54 +285,67 @@ public class HomeActivity extends BaseActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-
+        String from = null;
         switch (item.getItemId()) {
             case R.id.nav_notice_board:
+                from = "NoticeBoard";
                 fragment = NoticeBoardFragment.newInstance("", "");
-
                 break;
             case R.id.nav_complaint:
+                from = "Complaint";
                 fragment = ComplaintFragment.newInstance("", "");
                 break;
             case R.id.nav_tourism:
+                from = "Tourism";
+
                 fragment = TorisumFragment.newInstance("", "");
                 break;
             case R.id.nav_news:
-                 fragment = NewsFragment.newInstance("", "");
+                from = "News and Event";
+
+                fragment = NewsFragment.newInstance("", "");
                 break;
             case R.id.nav_praphag:
-                isFrom = PRABHAG;
-               fragment= PrabhagFragment.newInstance(1);
+                from = "Prabhag";
+                isFrom = CommonMethod.PRABHAG;
+                fragment = PrabhagFragment.newInstance(isFrom);
                 break;
             case R.id.nav_profile:
-               // fragment = ProfileFragment.newInstance("", "");
-                 startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                from = "Profile";
+                // fragment = ProfileFragment.newInstance("", "");
+                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                 break;
             case R.id.nav_suggestion:
-                fragment = SuggestionFragment.newInstance("","");
+                from = "Suggestion";
+                fragment = SuggestionFragment.newInstance("", "");
                 break;
             case R.id.nav_feedback:
-                fragment = FeedbackFragment.newInstance("","");
+                from = "Feedback";
+                fragment = FeedbackFragment.newInstance("", "");
                 break;
             case R.id.nav_emgs_no:
-                fragment = EmergencyFragment.newInstance("","");
+                from = "Emergency";
+                fragment = EmergencyFragment.newInstance("", "");
                 break;
             case R.id.nav_contact:
+                from = "Contact";
                 fragment = ContactUsFragment.newInstance("", "");
                 break;
-                case R.id.nav_change_pswd:
+            case R.id.nav_change_pswd:
+                from = "Change Password";
                 fragment = ChangePswdFragment.newInstance("", "");
                 break;
             case R.id.nav_registration:
+                from = "Registration";
                 callLoginActivity();
                 break;
             case R.id.nav_logout:
                 clearNLogout();
-
                 break;
         }
         if (fragment != null) {
             callFragment(fragment);
+            toolbar.setTitle(from);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -320,17 +365,16 @@ public class HomeActivity extends BaseActivity
 
 
     }
+
     private void showWard() {
-        isFrom = WARD;
-        callFragment(PrabhagFragment.newInstance(1));
+        isFrom = CommonMethod.WARD;
+        callFragment(PrabhagFragment.newInstance(isFrom));
     }
 
     private void showWardMemberDetail() {
-        isFrom = WARD_MEMBER;
+        isFrom = CommonMethod.WARD_MEMEBER;
 //        callFragment(WardMemberFragment.newInstance(prabhagModel.getWardList().get(position).getMemberList()));
     }
-
-
 
 
     @Override
@@ -341,15 +385,16 @@ public class HomeActivity extends BaseActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
 
-            if (isFrom == WARD)
-                isFrom = PRABHAG;
-            else if (isFrom == PRABHAG)
-                isFrom = null;
-            else if (isFrom == WARD_MEMBER)
-                isFrom = WARD;
+            if (isFrom == CommonMethod.WARD)
+                isFrom = CommonMethod.PRABHAG;
+            else if (isFrom == CommonMethod.PRABHAG)
+                isFrom = 0;
+            else if (isFrom == CommonMethod.WARD_MEMEBER)
+                isFrom = CommonMethod.WARD;
             super.onBackPressed();
         }
     }
+
     @Override
     public void onImagePickClick() {
         CustomDialogFragment.newInstance(items).show(getSupportFragmentManager(), CustomDialogFragment.TAG);
@@ -365,41 +410,40 @@ public class HomeActivity extends BaseActivity
     }
 
 
-
     @Override
     public void onGetCityList(final List<CityModel> list) {
         Observable.create(new ObservableOnSubscribe<Boolean>() {
             @Override
             public void subscribe(ObservableEmitter<Boolean> e) throws Exception {
-                storeCity(list);
+//                storeCity(list);
             }
         })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<Boolean>() {
-            @Override
-            public void onSubscribe(Disposable d) {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-            }
+                    }
 
-            @Override
-            public void onNext(Boolean aBoolean) {
-                if(aBoolean){
-                    Logs.d("Stored in db");
-                }else {
-                    Logs.d("Fail to store in db");
-                }
-            }
+                    @Override
+                    public void onNext(Boolean aBoolean) {
+                        if (aBoolean) {
+                            Logs.d("Stored in db");
+                        } else {
+                            Logs.d("Fail to store in db");
+                        }
+                    }
 
-            @Override
-            public void onError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
 
-            }
+                    }
 
-            @Override
-            public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-            }
-        });
+                    }
+                });
 //        try {
 //            saveBrandToDatabase(list);
 //        } catch (SQLException e) {
@@ -436,13 +480,13 @@ public class HomeActivity extends BaseActivity
 
     @Override
     public void showProgress() {
-       // progressView.setVisibility(View.VISIBLE);
+        // progressView.setVisibility(View.VISIBLE);
 
     }
 
     @Override
     public void hideProgress() {
-      //  progressView.setVisibility(View.GONE);
+        //  progressView.setVisibility(View.GONE);
 
 
     }
@@ -524,8 +568,8 @@ public class HomeActivity extends BaseActivity
 
         if (mDAOCity != null) {
             for (CityModel model : list) {
-                    int id = mDAOCity.create(model);
-                 //   Log.d(TAG, "CityId:" + id);
+                int id = mDAOCity.create(model);
+                //   Log.d(TAG, "CityId:" + id);
             }
 
         }
@@ -546,12 +590,25 @@ public class HomeActivity extends BaseActivity
     }
 
     @Override
-    public void onPrabhagSelected() {
-        if (isFrom == PRABHAG) {
-            showWard();
-        }else if(isFrom == WARD){
-            showWardMemberDetail();
-        }
+    public void onBackPress() {
+        onBackPressed();
     }
+
+    @Override
+    public void moveComplaint() {
+        callFragmentWithoutStack(ComplaintFragment.newInstance("",""));
+    }
+
+
+//    @Override
+//    public void onPrabhagSelected() {
+//        if (isFrom == PRABHAG) {
+//            showWard();
+//        }else if(isFrom == WARD){
+//            showWardMemberDetail();
+//        }
+//    }
+
+
 }
 

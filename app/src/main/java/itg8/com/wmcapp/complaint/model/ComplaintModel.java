@@ -18,7 +18,7 @@ public class ComplaintModel implements Parcelable
     private int pkid;
     @SerializedName("User_fkid")
     @Expose
-    private Object UserFkid;
+    private String UserFkid;
     @SerializedName("Category_fkid")
     @Expose
     private int CategoryFkid;
@@ -48,21 +48,28 @@ public class ComplaintModel implements Parcelable
     private int CityFkid;
     @SerializedName("ShowIdentity")
     @Expose
-    private Object ShowIdentity;
+    private String ShowIdentity;
 
 
     @SerializedName("ImagePath")
     @Expose
     private String ImagePath;
+
+    @SerializedName("UserFullename")
+    @Expose
+    private String UserFullename;
+    @SerializedName("UserProfilepic")
+    @Expose
+    private String UserProfilepic;
     @SerializedName("Lid")
     @Expose
-    private Object Lid;
+    private String Lid;
     @SerializedName("mid")
     @Expose
-    private Object mid;
+    private String mid;
     @SerializedName("mdate")
     @Expose
-    private Object mdate;
+    private String mdate;
     @SerializedName("Likestatus")
     @Expose
     private int Likestatus;
@@ -94,43 +101,24 @@ public class ComplaintModel implements Parcelable
         isVoted = voted;
     }
 
-    private boolean isVoted;
-    public final static Parcelable.Creator<ComplaintModel> CREATOR = new Creator<ComplaintModel>() {
-
-
-        @SuppressWarnings({
-            "unchecked"
-        })
-        public ComplaintModel createFromParcel(Parcel in) {
-            ComplaintModel instance = new ComplaintModel();
-            instance.pkid = ((int) in.readValue((int.class.getClassLoader())));
-            instance.UserFkid = ((Object) in.readValue((Object.class.getClassLoader())));
-            instance.CategoryFkid = ((int) in.readValue((int.class.getClassLoader())));
-            instance.ComplaintName = ((String) in.readValue((String.class.getClassLoader())));
-            instance.ComplaintDescription = ((String) in.readValue((String.class.getClassLoader())));
-            instance.LastModifiedDate = ((String) in.readValue((String.class.getClassLoader())));
-            instance.AddedDate = ((String) in.readValue((String.class.getClassLoader())));
-            instance.Active = ((int) in.readValue((int.class.getClassLoader())));
-            instance.Longitutde = ((String) in.readValue((String.class.getClassLoader())));
-            instance.Latitude = ((String) in.readValue((String.class.getClassLoader())));
-            instance.cityName = ((String) in.readValue((String.class.getClassLoader())));
-            instance.CityFkid = ((int) in.readValue((int.class.getClassLoader())));
-            instance.ShowIdentity = ((Object) in.readValue((Object.class.getClassLoader())));
-            instance.ImagePath = ((String) in.readValue((String.class.getClassLoader())));
-            instance.Lid = ((Object) in.readValue((Object.class.getClassLoader())));
-            instance.mid = ((Object) in.readValue((Object.class.getClassLoader())));
-            instance.mdate = ((Object) in.readValue((Object.class.getClassLoader())));
-            instance.Likestatus = ((int) in.readValue((int.class.getClassLoader())));
-            in.readList(instance.LikeList, (LikeModel.class.getClassLoader()));
-            return instance;
-        }
-
-        public ComplaintModel[] newArray(int size) {
-            return (new ComplaintModel[size]);
-        }
-
+    public String getUserFullename() {
+        return UserFullename;
     }
-    ;
+
+    public void setUserFullename(String userFullename) {
+        UserFullename = userFullename;
+    }
+
+    public String getUserProfilepic() {
+        return UserProfilepic;
+    }
+
+    public void setUserProfilepic(String userProfilepic) {
+        UserProfilepic = userProfilepic;
+    }
+
+    private boolean isVoted;
+
 
     /**
      * 
@@ -155,7 +143,7 @@ public class ComplaintModel implements Parcelable
      * @return
      *     The UserFkid
      */
-    public Object getUserFkid() {
+    public String getUserFkid() {
         return UserFkid;
     }
 
@@ -164,7 +152,7 @@ public class ComplaintModel implements Parcelable
      * @param UserFkid
      *     The User_fkid
      */
-    public void setUserFkid(Object UserFkid) {
+    public void setUserFkid(String UserFkid) {
         this.UserFkid = UserFkid;
     }
 
@@ -335,7 +323,7 @@ public class ComplaintModel implements Parcelable
      * @return
      *     The ShowIdentity
      */
-    public Object getShowIdentity() {
+    public String getShowIdentity() {
         return ShowIdentity;
     }
 
@@ -344,7 +332,7 @@ public class ComplaintModel implements Parcelable
      * @param ShowIdentity
      *     The ShowIdentity
      */
-    public void setShowIdentity(Object ShowIdentity) {
+    public void setShowIdentity(String ShowIdentity) {
         this.ShowIdentity = ShowIdentity;
     }
 
@@ -371,7 +359,7 @@ public class ComplaintModel implements Parcelable
      * @return
      *     The Lid
      */
-    public Object getLid() {
+    public String getLid() {
         return Lid;
     }
 
@@ -380,7 +368,7 @@ public class ComplaintModel implements Parcelable
      * @param Lid
      *     The Lid
      */
-    public void setLid(Object Lid) {
+    public void setLid(String Lid) {
         this.Lid = Lid;
     }
 
@@ -389,7 +377,7 @@ public class ComplaintModel implements Parcelable
      * @return
      *     The mid
      */
-    public Object getMid() {
+    public String getMid() {
         return mid;
     }
 
@@ -398,7 +386,7 @@ public class ComplaintModel implements Parcelable
      * @param mid
      *     The mid
      */
-    public void setMid(Object mid) {
+    public void setMid(String mid) {
         this.mid = mid;
     }
 
@@ -407,7 +395,7 @@ public class ComplaintModel implements Parcelable
      * @return
      *     The mdate
      */
-    public Object getMdate() {
+    public String getMdate() {
         return mdate;
     }
 
@@ -416,7 +404,7 @@ public class ComplaintModel implements Parcelable
      * @param mdate
      *     The mdate
      */
-    public void setMdate(Object mdate) {
+    public void setMdate(String mdate) {
         this.mdate = mdate;
     }
 
@@ -465,32 +453,6 @@ public class ComplaintModel implements Parcelable
         this.cityName = cityName;
     }
 
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(pkid);
-        dest.writeValue(UserFkid);
-        dest.writeValue(CategoryFkid);
-        dest.writeValue(ComplaintName);
-        dest.writeValue(ComplaintDescription);
-        dest.writeValue(LastModifiedDate);
-        dest.writeValue(AddedDate);
-        dest.writeValue(Active);
-        dest.writeValue(Longitutde);
-        dest.writeValue(Latitude);
-        dest.writeValue(CityFkid);
-        dest.writeValue(ShowIdentity);
-        dest.writeValue(ImagePath);
-        dest.writeValue(Lid);
-        dest.writeValue(mid);
-        dest.writeValue(mdate);
-        dest.writeValue(cityName);
-        dest.writeValue(Likestatus);
-        dest.writeList(LikeList);
-    }
-
-    public int describeContents() {
-        return  0;
-    }
-
     public void setProgress(boolean progress) {
         this.progress = progress;
     }
@@ -498,4 +460,79 @@ public class ComplaintModel implements Parcelable
     public boolean isProgress() {
         return progress;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.pkid);
+        dest.writeString(this.UserFkid);
+        dest.writeInt(this.CategoryFkid);
+        dest.writeString(this.ComplaintName);
+        dest.writeString(this.ComplaintDescription);
+        dest.writeString(this.LastModifiedDate);
+        dest.writeString(this.AddedDate);
+        dest.writeInt(this.Active);
+        dest.writeString(this.Longitutde);
+        dest.writeString(this.Latitude);
+        dest.writeInt(this.CityFkid);
+        dest.writeString(this.ShowIdentity);
+        dest.writeString(this.ImagePath);
+        dest.writeString(this.UserFullename);
+        dest.writeString(this.UserProfilepic);
+        dest.writeString(this.Lid);
+        dest.writeString(this.mid);
+        dest.writeString(this.mdate);
+        dest.writeInt(this.Likestatus);
+        dest.writeTypedList(this.LikeList);
+        dest.writeByte(this.progress ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isClickable ? (byte) 1 : (byte) 0);
+        dest.writeString(this.cityName);
+        dest.writeByte(this.isVoted ? (byte) 1 : (byte) 0);
+    }
+
+    public ComplaintModel() {
+    }
+
+    protected ComplaintModel(Parcel in) {
+        this.pkid = in.readInt();
+        this.UserFkid = in.readParcelable(String.class.getClassLoader());
+        this.CategoryFkid = in.readInt();
+        this.ComplaintName = in.readString();
+        this.ComplaintDescription = in.readString();
+        this.LastModifiedDate = in.readString();
+        this.AddedDate = in.readString();
+        this.Active = in.readInt();
+        this.Longitutde = in.readString();
+        this.Latitude = in.readString();
+        this.CityFkid = in.readInt();
+        this.ShowIdentity = in.readParcelable(String.class.getClassLoader());
+        this.ImagePath = in.readString();
+        this.UserFullename = in.readString();
+        this.UserProfilepic = in.readString();
+        this.Lid = in.readParcelable(String.class.getClassLoader());
+        this.mid = in.readParcelable(String.class.getClassLoader());
+        this.mdate = in.readParcelable(String.class.getClassLoader());
+        this.Likestatus = in.readInt();
+        this.LikeList = in.createTypedArrayList(LikeModel.CREATOR);
+        this.progress = in.readByte() != 0;
+        this.isClickable = in.readByte() != 0;
+        this.cityName = in.readString();
+        this.isVoted = in.readByte() != 0;
+    }
+
+    public static final Creator<ComplaintModel> CREATOR = new Creator<ComplaintModel>() {
+        @Override
+        public ComplaintModel createFromParcel(Parcel source) {
+            return new ComplaintModel(source);
+        }
+
+        @Override
+        public ComplaintModel[] newArray(int size) {
+            return new ComplaintModel[size];
+        }
+    };
 }

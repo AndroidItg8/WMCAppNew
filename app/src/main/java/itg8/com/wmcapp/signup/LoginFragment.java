@@ -12,6 +12,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +21,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
-import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -45,9 +46,9 @@ import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.Prefs;
+import itg8.com.wmcapp.forget.ForgetFragment;
 import itg8.com.wmcapp.home.HomeActivity;
 import itg8.com.wmcapp.profile.ProfileActivity;
-import itg8.com.wmcapp.registration.RegistrationFragment;
 import itg8.com.wmcapp.signup.mvp.LoginMvp;
 import itg8.com.wmcapp.signup.mvp.LoginPresenterImp;
 import itg8.com.wmcapp.widget.CustomFontTextView;
@@ -70,6 +71,9 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
 
 
     Unbinder unbinder;
+
+
+    OnAttachActivityListener listener;
     @BindView(R.id.lbl_login)
     CustomFontTextView lblLogin;
     @BindView(R.id.input_mobile)
@@ -82,8 +86,8 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
     TextInputLayout inputLayoutPassword;
     @BindView(R.id.btn_login)
     Button btnLogin;
-    @BindView(R.id.lbl_foget)
-    CustomFontTextView lblFoget;
+    @BindView(R.id.lbl_forget)
+    CustomFontTextView lblForget;
     @BindView(R.id.rl_login)
     RelativeLayout rlLogin;
     @BindView(R.id.card)
@@ -91,7 +95,7 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
     @BindView(R.id.fab_login)
     FloatingActionButton fabLogin;
     @BindView(R.id.progressView)
-    CircularProgressView progressView;
+    ProgressBar progressView;
     @BindView(R.id.frame)
     FrameLayout frame;
     @BindView(R.id.btn_facebook)
@@ -102,7 +106,6 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
     Button btnG;
     @BindView(R.id.ll_snack)
     LinearLayout llSnack;
-    OnAttachActivityListener listener;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -113,6 +116,7 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
     private Context mContext;
     private String from;
     private FragmentTransaction ft;
+    private boolean isMobile=false;
 
 
     public LoginFragment() {
@@ -152,12 +156,19 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         unbinder = ButterKnife.bind(this, view);
+        inputMobile.setText("9823456575");
+        inputPassword.setText("123456");
         presenter = new LoginPresenterImp(this);
         fabLogin.setOnClickListener(this);
         btnFacebook.setOnClickListener(this);
         btnGoogle.setOnClickListener(this);
+        lblForget.setOnClickListener(this);
         btnG.setOnClickListener(this);
         loginGoogleInit();
+        if(TextUtils.isDigitsOnly(inputMobile.getText()))
+        {
+            isMobile= true;
+        }
 
         return view;
     }
@@ -274,9 +285,9 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
 //        ft.addToBackStack(fragment.getClass().getSimpleName());
 //        ft.commit();
 
-        Intent intent =new Intent(getActivity(), ProfileActivity.class);
-         intent.putExtra(CommonMethod.FROM_FIRST_TIME_LOGIN,true);
-                startActivity(intent);
+        Intent intent = new Intent(getActivity(), ProfileActivity.class);
+        intent.putExtra(CommonMethod.FROM_FIRST_TIME_LOGIN, true);
+        startActivity(intent);
         listener.onAttachActivity();
     }
 
@@ -314,7 +325,7 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
     }
 
     private void onSnackbarOkClicked(View view) {
-        presenter.onLoginClicked(view);
+        presenter.onLoginClicked(view, isMobile);
     }
 
     public void hideSnackbar() {
@@ -348,12 +359,20 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fab_login:
-                presenter.onLoginClicked(view);
+                presenter.onLoginClicked(view, isMobile);
                 break;
             case R.id.btn_google:
                 break;
             case R.id.btn_g:
                 signInGoogle();
+                break;
+            case R.id.lbl_forget:
+                ForgetFragment fragment = ForgetFragment.newInstance("","");
+                ft = getFragmentManager().beginTransaction();
+                ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+                ft.replace(R.id.frame_container,fragment);
+                ft.addToBackStack(fragment.getClass().getSimpleName());
+                ft.commit();
                 break;
         }
     }
@@ -436,7 +455,6 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
         }
         presenter.onDestroy();
     }
-
 
 
     public interface OnAttachActivityListener {

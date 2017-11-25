@@ -1,25 +1,26 @@
 package itg8.com.wmcapp.forget;
 
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.forget.mvp.ForgetMVP;
 import itg8.com.wmcapp.forget.mvp.ForgetPresenterImp;
 
@@ -28,8 +29,7 @@ import itg8.com.wmcapp.forget.mvp.ForgetPresenterImp;
  * Use the {@link ForgetFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ForgetFragment extends Fragment  implements ForgetMVP.ForgetView, View.OnClickListener
-{
+public class ForgetFragment extends Fragment implements ForgetMVP.ForgetView, View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -38,17 +38,20 @@ public class ForgetFragment extends Fragment  implements ForgetMVP.ForgetView, V
     EditText inputEmail;
     @BindView(R.id.input_layout_name)
     TextInputLayout inputLayoutName;
-    @BindView(R.id.btn_submit)
-    Button btnSubmit;
+    @BindView(R.id.fab_go)
+    FloatingActionButton fabGo;
     @BindView(R.id.progressView)
-    CircularProgressView progressView;
+    ProgressBar progressView;
     Unbinder unbinder;
-
+    CommonMethod.onSetToolbarTitle listener;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private Snackbar snackbar;
     private ForgetMVP.ForgetPresenter presenter;
+    private boolean isDigit = false;
+    private Context mContext;
+
 
 
     public ForgetFragment() {
@@ -88,7 +91,9 @@ public class ForgetFragment extends Fragment  implements ForgetMVP.ForgetView, V
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_forget, container, false);
         unbinder = ButterKnife.bind(this, view);
-         btnSubmit.setOnClickListener(this);
+        fabGo.setOnClickListener(this);
+        listener.onSetTitle(getString(R.string.forget_pswd));
+
         presenter = new ForgetPresenterImp(this);
         return view;
     }
@@ -107,26 +112,25 @@ public class ForgetFragment extends Fragment  implements ForgetMVP.ForgetView, V
     @Override
     public void onSuccess(String message) {
         showToast(message);
-
         getActivity().finish();
 
     }
 
     @Override
     public void onFail(String message) {
-        showToast(message);
-
-
+        showSnackbar(false, CommonMethod.FROM_ERROR, message);
     }
 
     @Override
     public void onError(Object t) {
-        showToast(t.toString());
+        showSnackbar(false, CommonMethod.FROM_ERROR, t.toString());
+
 
     }
 
     private void showToast(String s) {
-        Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+        showSnackbar(false, CommonMethod.FROM_ERROR, s);
 
 
     }
@@ -152,36 +156,31 @@ public class ForgetFragment extends Fragment  implements ForgetMVP.ForgetView, V
 
     @Override
     public void onNoInternetConnect(boolean b) {
-        showSnackbar(b);
+        showSnackbar(b, CommonMethod.FROM_INTERNET, "No Internet Connection");
 
     }
-
 
 
     @Override
     public void onClick(View v) {
-        if(v.getId()== R.id.btn_submit)
-        {
-            presenter.onSubmitButtonClicked(v);
+        if (v.getId() == R.id.fab_go) {
+            presenter.onSubmitButtonClicked(v, isDigit);
         }
     }
 
-    private void showSnackbar( boolean isConnected) {
+    private void showSnackbar(boolean isConnected, int from, String s) {
 
-        int color;
-        String message;
-        if (!isConnected) {
-
-            message = "Connected to Internet";
-            color = Color.WHITE;
-            hideSnackbar();
-
+        int color = 0;
+        if (from == CommonMethod.FROM_INTERNET) {
+            if (isConnected) {
+                color = Color.RED;
+                hideSnackbar();
+            }
         } else {
-            message = " Not connected to internet...Please try again";
-            color = Color.RED;
+            color = Color.WHITE;
         }
         snackbar = Snackbar
-                .make(getActivity().findViewById(R.id.fab), message, Snackbar.LENGTH_INDEFINITE);
+                .make(getActivity().findViewById(R.id.fab), s, Snackbar.LENGTH_INDEFINITE);
 
         View sbView = snackbar.getView();
         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
@@ -201,14 +200,29 @@ public class ForgetFragment extends Fragment  implements ForgetMVP.ForgetView, V
     }
 
     private void onSnackbarOkClicked(View view) {
-        presenter.onSubmitButtonClicked(view);
+        presenter.onSubmitButtonClicked(view, isDigit);
     }
 
-    public void hideSnackbar(){
-        if(snackbar!=null && snackbar.isShown()){
+    public void hideSnackbar() {
+        if (snackbar != null && snackbar.isShown()) {
             snackbar.dismiss();
         }
+
+
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+        listener = (CommonMethod.onSetToolbarTitle) mContext;
+    }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (mContext != null) {
+            mContext = null;
+        }
+    }
 }

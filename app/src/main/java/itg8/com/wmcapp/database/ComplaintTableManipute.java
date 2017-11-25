@@ -88,7 +88,15 @@ public class ComplaintTableManipute implements Crud.ComplaintCrud, Crud {
         return 1;
     }
 
-
+    @Override
+    public List getAll() {
+        try {
+            return helper.getmDAOComplaint().queryForAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
 }

@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.io.File;
@@ -30,7 +31,6 @@ import itg8.com.wmcapp.common.SentBroadCastReceiver;
 import itg8.com.wmcapp.complaint.model.ComplaintModel;
 import itg8.com.wmcapp.complaint.model.TempComplaintModel;
 import itg8.com.wmcapp.database.ComplaintTableManipute;
-import itg8.com.wmcapp.widget.CustomFontTextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,9 +44,10 @@ public class OfflineComplaint extends Fragment implements ComplaintProfilOffline
     private static final String ARG_PARAM2 = "param2";
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.lbl_no_item)
-    CustomFontTextView lblNoItem;
+
     Unbinder unbinder;
+    @BindView(R.id.rl_no_item)
+    RelativeLayout rlNoItem;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -93,32 +94,33 @@ public class OfflineComplaint extends Fragment implements ComplaintProfilOffline
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_offline_complaint, container, false);
         unbinder = ButterKnife.bind(this, view);
-         init();
+        init();
         return view;
     }
 
     private void init() {
         ComplaintTableManipute complaintTableManipute = new ComplaintTableManipute(mContext);
         List<TempComplaintModel> listTempComplaintModel = complaintTableManipute.getAllComplaint();
-        if(listTempComplaintModel != null && listTempComplaintModel.size()>0 ) {
-            CommonMethod.showHideItem(recyclerView, lblNoItem);
+        if (listTempComplaintModel != null && listTempComplaintModel.size() > 0) {
+            CommonMethod.showHideItem(recyclerView, rlNoItem);
             setRecyclerView(listTempComplaintModel);
-        }
-        else
-        {
-            CommonMethod.showHideItem(recyclerView, lblNoItem);
+        } else {
+            CommonMethod.showHideItem(rlNoItem,recyclerView );
         }
 
     }
+
     private void setRecyclerView(List<TempComplaintModel> complaintMergeList) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new ComplaintProfilOfflineeAdapter(getActivity(), complaintMergeList, this));
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
+
     @Override
     public void onSyncItemClicked(int position, TempComplaintModel model) {
 
@@ -152,7 +154,6 @@ public class OfflineComplaint extends Fragment implements ComplaintProfilOffline
         Uri bmpUri = null;
         File file = new File(path);
         bmpUri = Uri.fromFile(file);
-
 
 
         return bmpUri;

@@ -10,7 +10,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="10dp">
 
             <android.support.v7.widget.CardView
                 android:id="@+id/card"
@@ -41,6 +41,50 @@
                         android:textColor="@color/colorBlack"
                         android:text="@string/person_name" />
 
+                    <FrameLayout
+                        android:id="@+id/frmPreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/imgAdd"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:contentDescription="@string/imgadd"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/ic_add_a_photo_black_24dp" />
+
+                        <ImageView
+                            android:id="@+id/imgPreview"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_status"/>
+
+
+                        <ProgressBar
+                            android:id="@+id/progressBar"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:max="100"
+                            android:indeterminate="false"
+                            android:layout_gravity="center"
+                            android:progress="0"
+                            android:progressDrawable="@drawable/circular" />
+
+                        <ImageView
+                            android:id="@+id/imgMoreMenu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            app:srcCompat="@drawable/ic_more_vert_black_24dp" />
+                    </FrameLayout>
+
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/input_layout_name"
@@ -69,8 +113,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:visibility="visible"
-                        android:focusable="false"
-                       >
+                        android:focusable="false">
 
                         <EditText
                             android:id="@+id/input_mobile"
@@ -82,7 +125,6 @@
                             android:inputType="number"
                             android:lines="1"
                             android:focusable="false"
-
                             android:visibility="visible"
                             android:maxLines="1"
                             android:textColor="@color/colorBlack"
@@ -115,8 +157,7 @@
                         android:id="@+id/input_layout_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="visible"
-        >
+                        android:visibility="visible">
 
                         <EditText
                             android:id="@+id/input_address"
@@ -141,8 +182,7 @@
                         android:id="@+id/input_layout_city"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="visible"
-                   >
+                        android:visibility="visible">
 
                         <EditText
                             android:id="@+id/input_city"
@@ -166,31 +206,33 @@
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
-        <com.github.rahatarmanahmed.cpv.CircularProgressView
-            android:id="@+id/progressView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:cpv_color="@color/colorPrimary"
-            app:cpv_thickness="2dp"
-            android:visibility="gone"
+        <FrameLayout
+            android:id="@+id/frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/card"
-            android:layout_gravity="center"
-            android:layout_centerHorizontal="true"
-            app:cpv_indeterminate="true"
-            app:cpv_animAutostart="true"/>
+            android:layout_centerHorizontal="true">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_update"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_margin="16dp"
+                android:visibility="visible"
+                app:fabSize="normal"
+                android:layout_gravity="center"
+                app:backgroundTint="@color/colorPrimary"
+                app:srcCompat="@drawable/ic_arrow_forward_black_24dp" />
 
 
-            <Button
-                android:id="@+id/btn_ok"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:text="@string/update"
-                android:textColor="@color/colorWhite"
-                android:textSize="15sp"
-                android:layout_marginBottom="20dp"
-                android:layout_below="@+id/progressView"
-                android:visibility="visible" />
+            <ProgressBar
+                android:id="@+id/progressView"
+                android:layout_width="76dp"
+                android:layout_height="76dp"
+                android:layout_margin="16dp"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+        </FrameLayout>
         </RelativeLayout>
 
 

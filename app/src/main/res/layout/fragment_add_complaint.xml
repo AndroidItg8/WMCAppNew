@@ -12,6 +12,7 @@
     tools:context="itg8.com.wmcapp.complaint.AddComplaintFragment">
 
 
+
     <FrameLayout
         android:id="@+id/frmPreview"
         android:layout_width="0dp"
@@ -56,49 +57,103 @@
             android:layout_gravity="end"
             app:srcCompat="@drawable/ic_more_vert_black_24dp" />
     </FrameLayout>
-
-    <EditText
+    <android.support.design.widget.TextInputLayout
         android:id="@+id/edtAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/gb_edittext"
-        android:ems="10"
-        android:gravity="top|start"
-        android:hint="@string/other_address"
-        android:inputType="textMultiLine"
-        android:lines="3"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rgLocation" />
+        app:layout_constraintTop_toBottomOf="@+id/rgLocation">
 
-    <EditText
+        <EditText
+            android:id="@+id/edt_add_complaint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="top|left"
+            android:hint="Description"
+            android:inputType="textMultiLine"
+            android:lines="5"
+            android:singleLine="true"
+            android:textColor="@color/colorBlack"
+            android:textColorHint="@color/colorBlack"
+            android:textSize="14sp" />
+
+    </android.support.design.widget.TextInputLayout>
+    <!--<EditText-->
+        <!--android:id="@+id/edtAddress"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="24dp"-->
+        <!--android:background="@drawable/gb_edittext"-->
+        <!--android:ems="10"-->
+        <!--android:gravity="top|start"-->
+        <!--android:hint="@string/other_address"-->
+        <!--android:inputType="textMultiLine"-->
+        <!--android:lines="3"-->
+        <!--android:paddingLeft="10dp"-->
+        <!--android:paddingRight="10dp"-->
+        <!--android:paddingTop="10dp"-->
+        <!--android:textSize="14sp"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/rgLocation" />-->
+
+    <!--<EditText-->
+        <!--android:id="@+id/edtDescription2"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginEnd="4dp"-->
+        <!--android:layout_marginStart="4dp"-->
+        <!--android:layout_marginTop="30dp"-->
+        <!--android:background="@drawable/gb_edittext"-->
+        <!--android:ems="10"-->
+        <!--android:gravity="top|start"-->
+        <!--android:hint="@string/enter_description"-->
+        <!--android:inputType="textMultiLine"-->
+        <!--android:lines="3"-->
+        <!--android:paddingLeft="10dp"-->
+        <!--android:paddingRight="10dp"-->
+        <!--android:paddingTop="10dp"-->
+        <!--android:visibility="gone"-->
+        <!--android:textSize="14sp"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="0.0"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/frmPreview" />-->
+
+    <android.support.design.widget.TextInputLayout
         android:id="@+id/edtDescription2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/gb_edittext"
-        android:ems="10"
-        android:gravity="top|start"
-        android:hint="@string/enter_description"
-        android:inputType="textMultiLine"
-        android:lines="3"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frmPreview" />
+        app:layout_constraintTop_toBottomOf="@+id/frmPreview">
+
+        <EditText
+            android:id="@+id/edt_desc_complaint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="top|left"
+            android:hint="Description"
+            android:inputType="textMultiLine"
+            android:lines="5"
+            android:singleLine="true"
+            android:textColor="@color/colorBlack"
+            android:textColorHint="@color/colorBlack"
+            android:textSize="14sp" />
+
+    </android.support.design.widget.TextInputLayout>
 
     <RadioGroup
         android:id="@+id/rgIdentity"
@@ -156,19 +211,44 @@
             android:layout_weight="1"
             android:text="@string/other_location" />
     </RadioGroup>
+    <!--<Button-->
+        <!--android:id="@+id/btn_submit"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/rgIdentity"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--android:background="@color/colorPrimary"-->
+        <!--android:textColor="@color/colorWhite"-->
+        <!--android:text="SUBMIT" />-->
 
-    <Button
-        android:id="@+id/btn_submit"
+    <FrameLayout
+        android:id="@+id/frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/rgIdentity"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/colorWhite"
-        android:text="SUBMIT"
-        />
+        android:layout_centerHorizontal="true">
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_submit"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_margin="16dp"
+            android:visibility="visible"
+            app:fabSize="normal"
+            android:layout_gravity="center"
+            app:backgroundTint="@color/colorPrimary"
+            app:srcCompat="@drawable/ic_arrow_forward_black_24dp" />
+        <ProgressBar
+            android:id="@+id/progressView"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            android:layout_margin="16dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </FrameLayout>
 
 
 

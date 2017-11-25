@@ -71,7 +71,7 @@ public class LoginModuleImp implements LoginMvp.LoginModule {
                                        listener.onSuccess();
                                    }
                                } else {
-                                   listener.onFirstTimeLogin("Success");
+                                   listener.onSuccess();
                                }
                            }else
                            {

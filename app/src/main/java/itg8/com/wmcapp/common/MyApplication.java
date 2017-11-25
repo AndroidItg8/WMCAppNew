@@ -32,10 +32,14 @@ import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.complaint.model.TempComplaintModel;
 import itg8.com.wmcapp.database.CityTableManipulate;
 import itg8.com.wmcapp.database.ComplaintTableManipute;
+import itg8.com.wmcapp.profile.ProfileModel;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by swapnilmeshram on 31/10/17.
@@ -51,6 +55,7 @@ public class MyApplication extends Application {
     private CityTableManipulate mDAOCity = null;
     private ComplaintTableManipute complaintTableManipute;
     private Context mContext;
+    private ProfileModel profileModel;
 
 
     public static synchronized MyApplication getInstance() {
@@ -266,5 +271,54 @@ public class MyApplication extends Application {
     private RequestBody createPartFromInt(int val) {
         return RequestBody.create(MediaType.parse("text/plain"), String.valueOf(val));
     }
+
+    public void setProfileModel(ProfileModel profileModel) {
+        this.profileModel = profileModel;
+    }
+     public void getProfile(final CommonMethod.ProfileSetListener listener)
+     {
+         if(profileModel!= null)
+         {
+             listener.onSetProfile(profileModel);
+         }else {
+             Call<List<ProfileModel>> cal = getRetroController().getProfile(getString(R.string.url_profile));
+             cal.enqueue(new Callback<List<ProfileModel>>() {
+                 @Override
+                 public void onResponse(Call<List<ProfileModel>> call, Response<List<ProfileModel>> response) {
+                     if(response.isSuccessful())
+                     {
+                         if(response.body()!= null && response.body().size()>0)
+                         {
+                             Logs.d("responseBody"+new Gson().toJson(response.body()));
+                             listener.onSetProfile(response.body().get(0));
+                             setProfileModel(response.body().get(0));
+                         }else
+                         {
+                             listener.onFailed("Download Failed");
+                         }
+                     }else
+                     {
+                         listener.onFailed("Download Failed");
+                     }
+
+                 }
+
+                 @Override
+                 public void onFailure(Call<List<ProfileModel>> call, Throwable t) {
+                     if(t instanceof NoConnectivityException)
+                     {
+                       //  listener.onNoInternetConnect(true);
+                     }else
+                     {
+                         listener.onFailed(t.getMessage());
+                     }
+
+                 }
+             });
+         }
+
+
+
+     }
 
 }

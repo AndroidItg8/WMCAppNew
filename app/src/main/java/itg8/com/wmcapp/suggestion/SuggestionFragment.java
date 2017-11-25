@@ -6,21 +6,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -42,6 +43,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.CommonCallback;
+import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.MyApplication;
 import itg8.com.wmcapp.common.ProgressRequestBody;
@@ -62,7 +64,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  * Use the {@link SuggestionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SuggestionFragment extends Fragment implements View.OnClickListener, EasyPermissions.PermissionCallbacks, ProgressRequestBody.UploadCallbacks,  CommonCallback.OnDialogClickListner {
+public class SuggestionFragment extends Fragment implements View.OnClickListener, EasyPermissions.PermissionCallbacks, ProgressRequestBody.UploadCallbacks, CommonCallback.OnDialogClickListner {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -76,15 +78,24 @@ public class SuggestionFragment extends Fragment implements View.OnClickListener
     ImageView imgMoreMenu;
     @BindView(R.id.frmPreview)
     FrameLayout frmPreview;
+
+    Unbinder unbinder;
     @BindView(R.id.txt_title)
     EditText txtTitle;
-    @BindView(R.id.txt_desc)
-    EditText txtDesc;
+    @BindView(R.id.input_layout_title)
+    TextInputLayout inputLayoutTitle;
+    @BindView(R.id.txt_rating_desc)
+    EditText txtRatingDesc;
+    @BindView(R.id.input_layout_des)
+    TextInputLayout inputLayoutDes;
+    @BindView(R.id.card)
+    CardView card;
+    @BindView(R.id.fab_login)
+    FloatingActionButton fabLogin;
     @BindView(R.id.progressView)
-    CircularProgressView progressView;
-    @BindView(R.id.btn_rating_submit)
-    Button btnRatingSubmit;
-    Unbinder unbinder;
+    ProgressBar progressView;
+    @BindView(R.id.frame)
+    FrameLayout frame;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -93,6 +104,7 @@ public class SuggestionFragment extends Fragment implements View.OnClickListener
     private String description;
     private File selectedFile;
     private CommonCallback.OnImagePickListener listener;
+    CommonMethod.OnBackPressListener mBackPressListener;
     private boolean canAccessCamera;
 
 
@@ -134,7 +146,7 @@ public class SuggestionFragment extends Fragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.fragment_suggestion, container, false);
         unbinder = ButterKnife.bind(this, view);
         imgAdd.setOnClickListener(this);
-        btnRatingSubmit.setOnClickListener(this);
+        fabLogin.setOnClickListener(this);
         imgMoreMenu.setOnClickListener(this);
         checkStoragePerm();
         return view;
@@ -142,39 +154,44 @@ public class SuggestionFragment extends Fragment implements View.OnClickListener
 
     private void uploadToServer() {
         title = txtTitle.getText().toString();
-        description = txtDesc.getText().toString();
+        description = txtRatingDesc.getText().toString();
         if (Validate()) {
+            showProgress();
             provideToServer(title, description);
         }
     }
 
+    private void showProgress() {
+        progressView.setVisibility(View.VISIBLE);
+    }
+
     private boolean Validate() {
-       title = txtTitle.getText().toString();
-       description = txtDesc.getText().toString();
+        title = txtTitle.getText().toString();
+        description = txtRatingDesc.getText().toString();
         boolean isValidate = true;
 
 
-            if (TextUtils.isEmpty(txtDesc.getText().toString())) {
-                txtDesc.setError("Please provide some description");
-                txtDesc.requestFocus();
-                isValidate= false;
-            }
-            if (TextUtils.isEmpty(txtTitle.getText().toString())) {
-                txtTitle.setError("Please provide address");
-                txtTitle.requestFocus();
-                isValidate= false;
-            }
-            if (selectedFile == null) {
-                Toast.makeText(getActivity(), "Please select image", Toast.LENGTH_SHORT).show();
-                isValidate= false;
-            }
+        if (TextUtils.isEmpty(txtRatingDesc.getText().toString())) {
+            txtRatingDesc.setError("Please provide some description");
+            txtRatingDesc.requestFocus();
+            isValidate = false;
+        }
+        if (TextUtils.isEmpty(txtTitle.getText().toString())) {
+            txtTitle.setError("Please provide address");
+            txtTitle.requestFocus();
+            isValidate = false;
+        }
+        if (selectedFile == null) {
+            Toast.makeText(getActivity(), "Please select image", Toast.LENGTH_SHORT).show();
+            isValidate = false;
+        }
 
 
         return isValidate;
     }
 
 
-    private void provideToServer( String title,  String description) {
+    private void provideToServer(final String title, String description) {
         ProgressRequestBody prb = new ProgressRequestBody(selectedFile, this);
         MultipartBody.Part part = MultipartBody.Part.createFormData("file", selectedFile.getName(), prb);
 
@@ -198,6 +215,14 @@ public class SuggestionFragment extends Fragment implements View.OnClickListener
                     @Override
                     public void onNext(RegistrationModel o) {
                         hideProgress();
+                        CommonMethod.clearText(txtTitle);
+                        CommonMethod.clearText(txtRatingDesc);
+                        mBackPressListener.onBackPress();
+
+
+
+
+
                     }
 
                     @Override
@@ -265,7 +290,7 @@ public class SuggestionFragment extends Fragment implements View.OnClickListener
             popup.show();
         } else if (v.getId() == R.id.imgAdd) {
             showDialog();
-        } else if (v.getId() == R.id.btn_rating_submit) {
+        } else if (v.getId() == R.id.fab_login) {
             uploadToServer();
         }
     }
@@ -286,6 +311,7 @@ public class SuggestionFragment extends Fragment implements View.OnClickListener
         clearImage();
         imgAdd.callOnClick();
     }
+
     private void showDialog() {
         if (listener != null)
             listener.onImagePickClick();
@@ -365,6 +391,7 @@ public class SuggestionFragment extends Fragment implements View.OnClickListener
         if (context instanceof CommonCallback.OnImagePickListener) {
             listener = (CommonCallback.OnImagePickListener) context;
         }
+        mBackPressListener = (CommonMethod.OnBackPressListener) context;
     }
 
     @Override
@@ -393,7 +420,7 @@ public class SuggestionFragment extends Fragment implements View.OnClickListener
                 }
             }
         });
-}
+    }
 
     private void onPhotosReturned(List<File> imageFiles) {
         if (imageFiles != null && imageFiles.size() > 0) {
@@ -412,4 +439,4 @@ public class SuggestionFragment extends Fragment implements View.OnClickListener
         }
 
     }
-    }
+}

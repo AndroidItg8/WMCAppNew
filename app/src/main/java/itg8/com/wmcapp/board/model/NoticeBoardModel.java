@@ -42,6 +42,16 @@ public class NoticeBoardModel implements Parcelable
     @SerializedName("mdate")
     @Expose
     private Object mdate;
+
+    public boolean isItemDelete() {
+        return isItemDelete;
+    }
+
+    public void setItemDelete(boolean itemDelete) {
+        isItemDelete = itemDelete;
+    }
+
+    private boolean isItemDelete;
     public final static Parcelable.Creator<NoticeBoardModel> CREATOR = new Creator<NoticeBoardModel>() {
 
 
@@ -266,5 +276,6 @@ public class NoticeBoardModel implements Parcelable
     public int describeContents() {
         return  0;
     }
+
 
 }

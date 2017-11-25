@@ -3,11 +3,14 @@ package itg8.com.wmcapp.profile.mvp;
 
 import android.view.View;
 
+import java.io.File;
 import java.util.List;
 
 import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.common.RetroController;
 import itg8.com.wmcapp.profile.ProfileModel;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 /**
  * Created by Android itg 8 on 10/14/2017.
@@ -26,19 +29,13 @@ public interface ProfileMVp {
         void hideProgress();
         void onNoInternetConnect(boolean b);
         void onInternetConnect(boolean b);
+       void onProgressUpdate(int percentage);
+        void onFinished();
 
-        String getCity();
-        String getEmail();
-        String getAddress();
 
-        void onAddressInvalid(String address);
-        void onEmailInvalid(String address);
-        void onCityInvalid(String address);
         void onSuccessSave(String status);
-
-        String getName();
-
-        String getMobile();
+        ProfileModel getProfileModel();
+        File getImageFile();
 
     }
 
@@ -56,10 +53,11 @@ public interface ProfileMVp {
     {
         void onDestroy();
         void onFail(String message );
-        void onGetProfileListFromServer(RetroController controller, String url, ProfilePresenterImp listener);
+        void onGetProfileListFromServer(RetroController controller, String url, ProfileListener listener);
 
-        void onSendToServer(RetroController retroController, String url, String name, String mobile, String address, String email, String city, ProfileListener listener);
         void onGetCityListFromServer(RetroController retroController, String url, ProfileListener listener);
+
+        void onSendToServer(RetroController retroController, String url, RequestBody name, RequestBody email, RequestBody mobile, RequestBody profileId, RequestBody city, RequestBody address, MultipartBody.Part file, RequestBody userName, RequestBody appUser , ProfileListener listener);
     }
 
     public interface ProfileListener{

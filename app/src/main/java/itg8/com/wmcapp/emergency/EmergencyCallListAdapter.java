@@ -15,6 +15,7 @@ import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.BaseViewHolder;
 import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.OnRecyclerviewClickListener;
+import itg8.com.wmcapp.emergency.model.Contact;
 import itg8.com.wmcapp.emergency.model.ContactModel;
 import itg8.com.wmcapp.widget.CustomFontTextView;
 
@@ -24,11 +25,11 @@ import itg8.com.wmcapp.widget.CustomFontTextView;
 
 public class EmergencyCallListAdapter extends RecyclerView.Adapter<EmergencyCallListAdapter.ViewHolder> {
 
+    private final List<Contact> list;
     private Context mContext;
-    private List<ContactModel> list;
-    OnRecyclerviewClickListener<ContactModel> listener;
+    CallItemClickedListner listener;
 
-    public EmergencyCallListAdapter(Context mContext, List<ContactModel> list, OnRecyclerviewClickListener<ContactModel> listener) {
+    public EmergencyCallListAdapter(Context mContext, List<Contact> list, CallItemClickedListner listener) {
         this.mContext = mContext;
         this.list = list;
         this.listener = listener;
@@ -42,18 +43,17 @@ public class EmergencyCallListAdapter extends RecyclerView.Adapter<EmergencyCall
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-         holder.contactModel = list.get(position);
-//         holder.lblName.setText(CommonMethod.checkEmpty(list.get(position).getName));
-
-
+         holder.lblName.setText(CommonMethod.checkEmpty(list.get(position).getDeptName()));
+         holder.lblAddress.setText(CommonMethod.checkEmpty(list.get(position).getAddress()));
+         holder.lblContact.setText(CommonMethod.checkEmpty(list.get(position).getMobileNo()));
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return list.size();
     }
 
-    public class ViewHolder extends BaseViewHolder<ContactModel> {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.lbl_name)
         CustomFontTextView lblName;
         @BindView(R.id.lbl_address)
@@ -62,10 +62,19 @@ public class EmergencyCallListAdapter extends RecyclerView.Adapter<EmergencyCall
         CustomFontTextView lblContact;
         @BindView(R.id.img)
         ImageView img;
-        ContactModel contactModel;
         public ViewHolder(View itemView) {
-            super(itemView, listener);
+            super(itemView);
             ButterKnife.bind(this, itemView);
+             img.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View view) {
+                     listener.onCallItem(getAdapterPosition(),list.get(getAdapterPosition()));
+                 }
+             });
         }
+    }
+
+    public interface CallItemClickedListner{
+        void onCallItem(int position,Contact contact);
     }
 }

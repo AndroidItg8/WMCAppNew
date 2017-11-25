@@ -12,6 +12,8 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.telephony.SmsManager;
@@ -21,7 +23,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -97,10 +98,24 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     private static final String DESCRIPTION = "Description";
     private static final String ADDRESS = "ADDRESS";
     private static final String IDENTITY = "identity";
+    @BindView(R.id.imgAdd)
+    ImageView imgAdd;
+    @BindView(R.id.imgPreview)
+    ImageView imgPreview;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
+    @BindView(R.id.imgMoreMenu)
+    ImageView imgMoreMenu;
+    @BindView(R.id.frmPreview)
+    FrameLayout frmPreview;
+    @BindView(R.id.edt_add_complaint)
+    EditText edtAddComplaint;
     @BindView(R.id.edtAddress)
-    EditText edtAddress;
+    TextInputLayout edtAddress;
+    @BindView(R.id.edt_desc_complaint)
+    EditText edtDescComplaint;
     @BindView(R.id.edtDescription2)
-    EditText edtDescription2;
+    TextInputLayout edtDescription2;
     @BindView(R.id.rdoShowIdentity)
     RadioButton rdoShowIdentity;
     @BindView(R.id.rdoHideIdentity)
@@ -108,24 +123,46 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     @BindView(R.id.rgIdentity)
     RadioGroup rgIdentity;
     @BindView(R.id.radioButton)
-    RadioButton rdoCurrentAddress;
+    RadioButton radioButton;
     @BindView(R.id.radioButton2)
-    RadioButton rdoOtherAddress;
+    RadioButton radioButton2;
     @BindView(R.id.rgLocation)
     RadioGroup rgLocation;
-    Unbinder unbinder;
-    @BindView(R.id.imgAdd)
-    ImageView imgAdd;
-    @BindView(R.id.imgMoreMenu)
-    ImageView imgMoreMenu;
-    @BindView(R.id.imgPreview)
-    ImageView imgPreview;
-    @BindView(R.id.frmPreview)
-    FrameLayout frmPreview;
-    @BindView(R.id.progressBar)
-    ProgressBar progressBar;
     @BindView(R.id.btn_submit)
-    Button btnSubmit;
+    FloatingActionButton btnSubmit;
+    @BindView(R.id.progressView)
+    ProgressBar progressView;
+    @BindView(R.id.frame)
+    FrameLayout frame;
+//    @BindView(R.id.edtAddress)
+//    EditText edtAddress;
+//    @BindView(R.id.edtDescription2)
+//    EditText edtDescription2;
+//    @BindView(R.id.rdoShowIdentity)
+//    RadioButton rdoShowIdentity;
+//    @BindView(R.id.rdoHideIdentity)
+//    RadioButton rdoHideIdentity;
+//    @BindView(R.id.rgIdentity)
+//    RadioGroup rgIdentity;
+//    @BindView(R.id.radioButton)
+//    RadioButton rdoCurrentAddress;
+//    @BindView(R.id.radioButton2)
+//    RadioButton rdoOtherAddress;
+//    @BindView(R.id.rgLocation)
+//    RadioGroup rgLocation;
+//    Unbinder unbinder;
+//    @BindView(R.id.imgAdd)
+//    ImageView imgAdd;
+//    @BindView(R.id.imgMoreMenu)
+//    ImageView imgMoreMenu;
+//    @BindView(R.id.imgPreview)
+//    ImageView imgPreview;
+//    @BindView(R.id.frmPreview)
+//    FrameLayout frmPreview;
+//    @BindView(R.id.progressBar)
+//    ProgressBar progressBar;
+//    @BindView(R.id.btn_submit)
+//    FloatingActionButton btnSubmit;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -152,6 +189,11 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     double longitude;
     private String fileName;
     private AlertDialog alertDialog;
+
+    public CommonMethod.OnMoveComplaintListener mComplaintlistener;
+
+    private boolean isDestroyed = false;
+    private Unbinder unbinder;
 
     public AddComplaintFragment() {
         // Required empty public constructor
@@ -197,10 +239,10 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
         }
         if (rdoShowIdentity == null)
             return;
-            if (rdoShowIdentity.isChecked())
-                identity = "YES";
-            else
-                identity = "NO";
+        if (rdoShowIdentity.isChecked())
+            identity = "YES";
+        else
+            identity = "NO";
         outState.putString(IDENTITY, identity);
     }
 
@@ -211,9 +253,9 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
             if (savedInstanceState.getString(FILE_PATH, null) != null)
                 selectedFile = new File(savedInstanceState.getString(FILE_PATH, ""));
             if (savedInstanceState.getString(DESCRIPTION, null) != null)
-                edtDescription2.setText(savedInstanceState.getString(DESCRIPTION, ""));
+                edtDescComplaint.setText(savedInstanceState.getString(DESCRIPTION, ""));
             if (savedInstanceState.getString(ADDRESS, null) != null)
-                edtAddress.setText(savedInstanceState.getString(ADDRESS, ""));
+                edtAddComplaint.setText(savedInstanceState.getString(ADDRESS, ""));
             if (savedInstanceState.getString(IDENTITY, null) != null) {
                 String identity = savedInstanceState.getString(IDENTITY, null);
                 if (identity.equalsIgnoreCase("YES")) {
@@ -233,6 +275,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
         View view = inflater.inflate(R.layout.fragment_add_complaint, container, false);
         unbinder = ButterKnife.bind(this, view);
         checkStoragePerm();
+        isDestroyed = true;
 
         EasyImage.configuration(getActivity())
                 .setImagesFolderName(getString(R.string.app_name))
@@ -251,19 +294,18 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
         getActivity().startService(intent);
 
 
-        rdoCurrentAddress.setOnCheckedChangeListener(this);
+        radioButton.setOnCheckedChangeListener(this);
         return view;
     }
+
 
     @Override
     public void onResume() {
         super.onResume();
         mResultReceiver.setResultListener(this);
-
         IntentFilter filter = new IntentFilter(CommonMethod.SENT);
         receiver = new SentBroadCastReceiver();
         getActivity().registerReceiver(receiver, filter);
-
         receiveBroadcast = new ReceiveBroadcastReceiver();
         getActivity().registerReceiver(receiveBroadcast, filter);
 
@@ -286,12 +328,13 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
         if (context instanceof CommonCallback.OnImagePickListener) {
             listener = (CommonCallback.OnImagePickListener) context;
         }
+        mComplaintlistener = (CommonMethod.OnMoveComplaintListener) context;
+
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         EasyImage.handleActivityResult(requestCode, resultCode, data, getActivity(), new DefaultCallback() {
             @Override
             public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
@@ -336,7 +379,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
 
 
     public void onClick(View v) {
-        if (v.getId() == R.id.imgMoreMenu) {
+        if (v == imgMoreMenu) {
             final PopupMenu popup = new PopupMenu(getActivity(), v);
             popup.getMenuInflater().inflate(R.menu.popmenu, popup.getMenu());
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -367,12 +410,12 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
         String identity;
         double latitude;
         double longitude;
-        if (TextUtils.isEmpty(edtDescription2.getText().toString())) {
+        if (TextUtils.isEmpty(edtDescComplaint.getText().toString())) {
             edtDescription2.setError("Please provide some description");
             edtDescription2.requestFocus();
             return;
         }
-        if (TextUtils.isEmpty(edtAddress.getText().toString())) {
+        if (TextUtils.isEmpty(edtAddComplaint.getText().toString())) {
             edtAddress.setError("Please provide address");
             edtAddress.requestFocus();
             return;
@@ -381,8 +424,8 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
             Toast.makeText(getActivity(), "Please select image", Toast.LENGTH_SHORT).show();
             return;
         }
-        address = edtAddress.getText().toString();
-        description = edtDescription2.getText().toString();
+        address = edtAddComplaint.getText().toString();
+        description = edtDescComplaint.getText().toString();
         if (rdoShowIdentity.isChecked()) {
             identity = "YES";
         } else {
@@ -428,6 +471,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
                     @Override
                     public void onNext(RegistrationModel o) {
                         hideProgress();
+                        mComplaintlistener.moveComplaint();
                     }
 
                     @Override
@@ -435,8 +479,6 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
                         e.printStackTrace();
 
                         setDataToModel(latitude, longitude, address, description, cityId, identity, selectedFile);
-
-
                     }
 
                     @Override
@@ -458,39 +500,36 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
         model.setComplaintName("Cleaning");
         model.setLastModifiedDate(CommonMethod.formatter.format(Calendar.getInstance().getTime()));
 
-        Logs.d("file:"+file);
+        Logs.d("file:" + file);
         List<File> files = new ArrayList<>();
         files.add(file);
         EasyImageFiles.copyFilesInSeparateThread(getActivity(), files, new CommonMethod.OnImageFileListner() {
             @Override
             public void onGetImageFileSucces(String file) {
-            Logs.d("FileName:"+file);
-            model.setFilePath(file);
+                Logs.d("FileName:" + file);
+                model.setFilePath(file);
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
 
                         openDialogue(model);
                     }
 
-            });
+                });
             }
 
             @Override
             public void onGetImageFileFailed(String s) {
-                Logs.d("OnFailed:"+s);
+                Logs.d("OnFailed:" + s);
                 model.setFilePath(null);
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         openDialogue(model);
 
 
+                    }
+                });
             }
         });
-            }
-        });
-
-
-
 
 
     }
@@ -559,15 +598,16 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
 
     private String generateSMSText(TempComplaintModel model) {
         String builder;
-        builder = "Dear Sir, "+model.getComplaintName() + "\n  We  have this problem "
-                + model.getDescription()+"\n In this location"+ model.getAdd();
+        builder = "Dear Sir, " + model.getComplaintName() + "\n  We  have this problem "
+                + model.getDescription() + "\n In this location" + model.getAdd();
         return builder;
 
     }
 
 
     private void hideProgress() {
-        progressBar.setVisibility(View.GONE);
+        if (!isDestroyed)
+            progressBar.setVisibility(View.GONE);
     }
 
     private ObservableSource<RegistrationModel> createRegModelFromResponse(ResponseBody body) {
@@ -672,7 +712,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        isDestroyed = true;
     }
 
     @Override
@@ -688,7 +728,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     @Override
     public void onResultAddress(String result, LatLng mLocation, final String city) {
         this.lastAddressResult = result;
-        edtAddress.setText(result);
+        edtAddComplaint.setText(result);
         this.latlang = mLocation;
         if (city != null) {
             if (mDAOCity != null) {
@@ -731,10 +771,10 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
         if (checked) {
             if (lastAddressResult != null) {
-                edtAddress.setText(lastAddressResult);
+                edtAddComplaint.setText(lastAddressResult);
             }
         } else {
-            edtAddress.setText(null);
+            edtAddComplaint.setText(null);
         }
     }
 

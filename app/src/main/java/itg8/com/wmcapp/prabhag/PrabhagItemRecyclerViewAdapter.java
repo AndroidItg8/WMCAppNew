@@ -12,9 +12,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import itg8.com.wmcapp.R;
-import itg8.com.wmcapp.common.BaseViewHolder;
-import itg8.com.wmcapp.common.OnRecyclerviewClickListener;
+import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.prabhag.model.PrabhagModel;
+import itg8.com.wmcapp.prabhag.model.WardList;
 
 /**
  * TODO: Replace the implementation with code for your data type.
@@ -24,15 +24,18 @@ public class PrabhagItemRecyclerViewAdapter extends RecyclerView.Adapter<Prabhag
 
     private final List<PrabhagModel> list;
     private final Context context;
-    public OnRecyclerviewClickListener<PrabhagModel> listener;
+    private List<WardList> wradList;
+    public ItemClickedListener listener;
+    private int isFrom;
 
 
-
-    public PrabhagItemRecyclerViewAdapter(Context context, List<PrabhagModel> list, OnRecyclerviewClickListener<PrabhagModel>listener) {
+    public PrabhagItemRecyclerViewAdapter(Context context, List<PrabhagModel> list, List<WardList> wradList, ItemClickedListener listener, int isFrom) {
 
         this.context = context;
         this.list = list;
+        this.wradList = wradList;
         this.listener = listener;
+        this.isFrom = isFrom;
     }
 
 
@@ -45,34 +48,51 @@ public class PrabhagItemRecyclerViewAdapter extends RecyclerView.Adapter<Prabhag
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        if (list.get(position).isPragbhagSelected()) {
-            holder.content.setText(list.get(position).getWardList().get(position).getWardName());
-            holder.id.setText(list.get(position).getWardList().get(position).getAddress());
+        if (isFrom== CommonMethod.WARD) {
 
+            holder.content.setText(wradList.get(position).getWardName());
+//            holder.id.setText(wradList.get(position).getPkid());
         } else {
             holder.content.setText(list.get(position).getPrabhagName());
+          //  holder.id.setText(list.get(position).getPkid());
         }
+
 
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        if(isFrom == CommonMethod.WARD)
+          return wradList.size();
+        else
+            return list.size();
     }
 
-    public class ViewHolder extends BaseViewHolder<PrabhagModel> {
+    public interface ItemClickedListener {
+        void onItemPrabhagClicked(int position, PrabhagModel model);
+
+        void onItemWardClicked(int position, WardList model);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.id)
         TextView id;
         @BindView(R.id.content)
         TextView content;
+
         public ViewHolder(View view) {
-            super(view, listener);
+            super(view);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listener.onClick(getAdapterPosition(),list.get(getAdapterPosition()));
+                    if (isFrom == CommonMethod.WARD)
+                        listener.onItemWardClicked(getAdapterPosition(), wradList.get(getAdapterPosition()));
+
+                    else
+                        listener.onItemPrabhagClicked(getAdapterPosition(), list.get(getAdapterPosition()));
+
                 }
             });
 

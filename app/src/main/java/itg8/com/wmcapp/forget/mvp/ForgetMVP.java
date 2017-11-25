@@ -32,7 +32,7 @@ public interface ForgetMVP {
     public interface ForgetPresenter
     {
         void onDestroy();
-        void onSubmitButtonClicked(View view);
+        void onSubmitButtonClicked(View view, boolean isDigit);
         void onNoInternetConnect(boolean b);
 
 

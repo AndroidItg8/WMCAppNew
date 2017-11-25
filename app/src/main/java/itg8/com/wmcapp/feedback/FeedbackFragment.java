@@ -2,15 +2,17 @@ package itg8.com.wmcapp.feedback;
 
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
-import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,21 +29,26 @@ public class FeedbackFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    @BindView(R.id.img)
-    ImageView img;
+
+    Unbinder unbinder;
     @BindView(R.id.ratin_dailoue)
     RatingBar ratinDailoue;
     @BindView(R.id.txt_title)
     EditText txtTitle;
+    @BindView(R.id.input_layout_title)
+    TextInputLayout inputLayoutTitle;
     @BindView(R.id.txt_rating_desc)
     EditText txtRatingDesc;
-    @BindView(R.id.txt_rating_name)
-    TextView txtRatingName;
+    @BindView(R.id.input_layout_des)
+    TextInputLayout inputLayoutDes;
+    @BindView(R.id.card)
+    CardView card;
+    @BindView(R.id.fab_login)
+    FloatingActionButton fabLogin;
     @BindView(R.id.progressView)
-    com.github.rahatarmanahmed.cpv.CircularProgressView progressView;
-    @BindView(R.id.btn_rating_submit)
-    Button btnRatingSubmit;
-    Unbinder unbinder;
+    ProgressBar progressView;
+    @BindView(R.id.frame)
+    FrameLayout frame;
 
     // TODO: Rename and change types of parameters
     private String mParam1;

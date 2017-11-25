@@ -41,43 +41,33 @@ public interface RetroController {
                                            @Field("username") String emailId,
                                            @Field("password") String pswd);
 
-//   Email:vijay@gmail.com
-//   Password:123456
-//   ConfirmPassword:123456
-//   UserRoles:AppUser
-
-//    Password:123456
-//    ConfirmPassword:123456
-//    FullName:Aman Ambarte
-//    MobileNumber:786786786786
-//    UserRoles:AppUser
-
     //    FullName:Aman Ambarte
-////AddressLine1:drfgser
-////AddressLine2:gsdfgsdfg
+//    AddressLine1:sefwe
+//    AddressLine2:sefwe
 //    ContactNumber:786786786786
-//    EmailId:itech3@gmail.com
-//    LastModifiedDate:2017-11-17 06:28:19.177
-//    Lid:
-////pkid:10
-//    User_fkid:fca66149-b6f7-4498-adfa-7e54b2621179
-//    UserName:itech3@gmail.com
+//    EmailId:Aman@gmail.com
+//    Lid:0
+//    UserName:Aman@gmail.com
+//    RegisteredDate:2017-11-17 06:28:19.177
 //    RoleName:AppUser
-    @FormUrlEncoded
+//    pkid:19
+//    LastModifiedDate:
+    @Multipart
     @POST()
-    @Headers("Content-Type:application/x-www-form-urlencoded")
     Call<RegistrationModel> sendRegistrationInfoToserver(@Url String url,
-                                                         @Field("FullName") String name,
-                                                         @Field("AddressLine1") String address,
-                                                         @Field("AddressLine2") String city,
-                                                         @Field("ContactNumber") String mobile,
-                                                         @Field("EmailId") String emailId,
-                                                         @Field("LastModifiedDate") String dateLast,
-                                                         @Field("Lid") String lid,
-                                                         @Field("pkid") String pid,
-                                                         @Field("User_fkid") String fid,
-                                                         @Field("UserName") String userName,
-                                                         @Field("RoleName") String appUser
+                                                         @Part("FullName") RequestBody name,
+                                                         @Part("AddressLine1") RequestBody address,
+                                                         @Part("AddressLine2") RequestBody city,
+                                                         @Part("ContactNumber") RequestBody mobile,
+                                                         @Part("EmailId") RequestBody emailId,
+//                                                         @Part("Lid") RequestBody lid,
+//                                                         @Part("UserName") RequestBody userName,
+//                                                         @Part("RegisteredDate") RequestBody regisDate,
+//                                                         @Part("RoleName") RequestBody appUser,
+                                                         @Part("pkid") RequestBody pid,
+                                                         @Part MultipartBody.Part file
+
+
     );
 
 
@@ -142,7 +132,7 @@ public interface RetroController {
     @FormUrlEncoded
     @POST()
     @Headers("Content-Type:application/x-www-form-urlencoded")
-    Call<LikeModel> sendLike(@Url String url, @Field("Master_fkid") int complaint, @Field("SubMaster_fkid") int subMaster_fkid, @Field("Likes") int i);
+    Call<RegistrationModel> sendLike(@Url String url, @Field("Master_fkid") int complaint, @Field("SubMaster_fkid") int subMaster_fkid, @Field("Likes") int i);
 
     @GET()
     Call<List<TourismFilterModel>> loadCategoryTourism(@Url String loadUrl);
@@ -177,4 +167,6 @@ public interface RetroController {
 
     @GET()
     Call<List<PrabhagModel>> getPragbhagList(@Url String loadUrl);
+
+    Call<ResponseBody> deleteNBFromServer(@Url String url, int pkid);
 }

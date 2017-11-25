@@ -1,8 +1,6 @@
 package itg8.com.wmcapp.board;
 
 import android.content.Context;
-import android.net.Uri;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -10,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
@@ -25,7 +23,6 @@ import butterknife.ButterKnife;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.board.model.NoticeBoardModel;
 import itg8.com.wmcapp.common.CommonMethod;
-import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.ProgressHolder;
 import itg8.com.wmcapp.widget.CustomFontTextView;
 
@@ -38,19 +35,29 @@ class NoticeBoardAdater extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int NORMAL_VIEW = 2;
 
 
+
     private Context context;
     private NoticeBoardListner listner;
     List<NoticeBoardModel> models;
     private int itemRemoved;
-    private boolean footerAdded=false;
+    private boolean footerAdded = false;
 
-    public NoticeBoardAdater(Context context,NoticeBoardListner listner) {
+    public NoticeBoardAdater(Context context, NoticeBoardListner listner) {
         this.context = context;
         this.listner = listner;
         models = new ArrayList<>();
     }
-    public interface NoticeBoardListner{
+
+    public void removeItem(int position) {
+    models.remove(position);
+    notifyItemRemoved(position);
+    notifyItemRangeChanged(position,models.size());
+    }
+
+    public interface NoticeBoardListner {
         void onNBItemClicked(int position, NoticeBoardModel model);
+
+        void onNBItemDeleteClicked(int position, NoticeBoardModel model);
     }
 
     @Override
@@ -130,11 +137,11 @@ class NoticeBoardAdater extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void addFooter() {
-            models.add(null);
+        models.add(null);
     }
 
     public void removeFooter() {
-            models.remove(models.size()-1);
+        models.remove(models.size() - 1);
     }
 
     public int getModelSize() {
@@ -158,15 +165,30 @@ class NoticeBoardAdater extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         @BindView(R.id.lbl_date)
         CustomFontTextView lblDate;
 
+        @BindView(R.id.img_delete)
+        ImageView imgDelete;
+
+        @BindView(R.id.progressBar)
+        ProgressBar progressBar;
+
+
         public NoticeBoardViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-             itemView.setOnClickListener(new View.OnClickListener() {
-                 @Override
-                 public void onClick(View view) {
-                     listner.onNBItemClicked(getAdapterPosition(), models.get(getAdapterPosition()));
-                 }
-             });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listner.onNBItemClicked(getAdapterPosition(), models.get(getAdapterPosition()));
+                }
+            });
+            imgDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    listner.onNBItemDeleteClicked(getAdapterPosition(), models.get(getAdapterPosition()));
+                }
+            });
+
         }
     }
 

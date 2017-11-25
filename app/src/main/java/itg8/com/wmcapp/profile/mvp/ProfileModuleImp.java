@@ -10,6 +10,8 @@ import itg8.com.wmcapp.common.NoConnectivityException;
 import itg8.com.wmcapp.common.RetroController;
 import itg8.com.wmcapp.profile.ProfileModel;
 import itg8.com.wmcapp.registration.RegistrationModel;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,7 +39,7 @@ public class ProfileModuleImp implements ProfileMVp.ProfileModule {
     }
 
     @Override
-    public void onGetProfileListFromServer(RetroController controller, String url, final ProfilePresenterImp listener) {
+    public void onGetProfileListFromServer(RetroController controller, String url, final ProfileMVp.ProfileListener listener) {
         cal = controller.getProfile(url);
         cal.enqueue(new Callback<List<ProfileModel>>() {
             @Override
@@ -73,39 +75,7 @@ public class ProfileModuleImp implements ProfileMVp.ProfileModule {
         });
     }
 
-    @Override
-    public void onSendToServer(RetroController retroController, String url, String name, String mobile, String address, String email, String city, final ProfileMVp.ProfileListener listener) {
-       Call<RegistrationModel> call = retroController.sendRegistrationInfoToserver(url, name,address,  city, mobile,email, "","","","",email,"AppUser");
-       call.enqueue(new Callback<RegistrationModel>() {
-           @Override
-           public void onResponse(Call<RegistrationModel> call, Response<RegistrationModel> response) {
-               if (response.isSuccessful()) {
-                   if (response.body().isFlag()) {
-                       listener.onSaveSuccess(response.body().getStatus());
-                   } else {
-                       listener.onFail(response.body().getStatus());
 
-                   }
-               } else {
-                   listener.onFail(response.body().getStatus());
-               }
-           }
-
-           @Override
-           public void onFailure(Call<RegistrationModel> call, Throwable t) {
-               t.printStackTrace();
-
-               if(t instanceof NoConnectivityException)
-                   listener.onNoInternetConnect(true);
-               else
-                    listener.onFail(t.getMessage());
-
-
-           }
-       });
-
-
-    }
 
     @Override
     public void onGetCityListFromServer(RetroController retroController, String url, final ProfileMVp.ProfileListener listener) {
@@ -138,6 +108,40 @@ public class ProfileModuleImp implements ProfileMVp.ProfileModule {
                 }
             }
         });
+
+
+    }
+
+    @Override
+    public void onSendToServer(RetroController retroController, String url, RequestBody name, RequestBody email, RequestBody mobile, RequestBody profileId, RequestBody city, RequestBody address, MultipartBody.Part file, RequestBody userName, RequestBody appUser, final ProfileMVp.ProfileListener listener) {
+        Call<RegistrationModel> call = retroController.sendRegistrationInfoToserver(url,name,address,city,mobile,email,profileId,file);
+         call.enqueue(new Callback<RegistrationModel>() {
+             @Override
+             public void onResponse(Call<RegistrationModel> call, Response<RegistrationModel> response) {
+                 if (response.isSuccessful()) {
+                     if (response.body().isFlag()) {
+                         listener.onSaveSuccess(response.body().getStatus());
+                     } else {
+                         listener.onFail(response.body().getStatus());
+
+                     }
+                 } else {
+                     listener.onFail(response.body().getStatus());
+                 }
+             }
+
+             @Override
+             public void onFailure(Call<RegistrationModel> call, Throwable t) {
+                 t.printStackTrace();
+
+                 if(t instanceof NoConnectivityException)
+                     listener.onNoInternetConnect(true);
+                 else
+                     listener.onFail(t.getMessage());
+
+
+             }
+         });
 
 
     }

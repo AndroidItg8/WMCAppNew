@@ -19,6 +19,7 @@ import itg8.com.wmcapp.common.MyApplication;
 import itg8.com.wmcapp.common.NoConnectivityException;
 import itg8.com.wmcapp.complaint.model.ComplaintModel;
 import itg8.com.wmcapp.complaint.model.LikeModel;
+import itg8.com.wmcapp.registration.RegistrationModel;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -96,10 +97,10 @@ class ComplaintModuleImp implements ComplaintMVP.ComplaintModule {
 
     @Override
     public void onSendLikesToServer(String url, int SubMaster_fkid, final ComplaintModel model, final int position, final ComplaintMVP.ComplaintListener listener) {
-        Call<LikeModel> callLike = MyApplication.getInstance().getRetroController().sendLike(url, CommonMethod.COMPLAINT,SubMaster_fkid,1);
-        callLike.enqueue(new Callback<LikeModel>() {
+        Call<RegistrationModel> callLike = MyApplication.getInstance().getRetroController().sendLike(url, CommonMethod.COMPLAINT,SubMaster_fkid,1);
+        callLike.enqueue(new Callback<RegistrationModel>() {
             @Override
-            public void onResponse(Call<LikeModel> call, Response<LikeModel> response) {
+            public void onResponse(Call<RegistrationModel> call, Response<RegistrationModel> response) {
                 if(response.isSuccessful())
                 {
                     if(response.body().isFlag())
@@ -116,7 +117,7 @@ class ComplaintModuleImp implements ComplaintMVP.ComplaintModule {
             }
 
             @Override
-            public void onFailure(Call<LikeModel> call, Throwable t) {
+            public void onFailure(Call<RegistrationModel> call, Throwable t) {
                 if (t instanceof NoConnectivityException) {
                     // We had non-2XX http error
                     Logs.d("IN HTTPEXCEPTION: "+t.getMessage());

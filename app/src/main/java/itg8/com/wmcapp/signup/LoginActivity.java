@@ -1,40 +1,38 @@
 package itg8.com.wmcapp.signup;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.BaseActivity;
+import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.registration.RegistrationFragment;
+import itg8.com.wmcapp.signup.adapter.LoginViewPagerAdapter;
 
-public class LoginActivity extends BaseActivity implements LoginFragment.OnAttachActivityListener {
 
+public class LoginActivity extends BaseActivity implements LoginFragment.OnAttachActivityListener,   RegistrationFragment.OnAttachRegistrationListener ,
+        CommonMethod.onSetToolbarTitle {
+
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.tab_Layout)
+    TabLayout tabLayout;
+    @BindView(R.id.viewPager)
+    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        Fragment fragment = SignUpFragment.newInstance("", "");
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-        ft.replace(R.id.frame_container,fragment);
-        ft.commit();
+        getSupportActionBar().setHomeButtonEnabled(true);
+        init();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     @Override
@@ -42,5 +40,28 @@ public class LoginActivity extends BaseActivity implements LoginFragment.OnAttac
         finish();
     }
 
+    private void init() {
+        setupViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);
+    }
 
+    private void setupViewPager(ViewPager viewPager) {
+        LoginViewPagerAdapter adapter = new LoginViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new LoginFragment(), "Login");
+        adapter.addFragment(new RegistrationFragment(), "Registration");
+        viewPager.setAdapter(adapter);
+    }
+
+
+    @Override
+    public void onAttachFragmnet() {
+//      onBackPressed();
+        init();
+
+    }
+
+    @Override
+    public void onSetTitle(String name) {
+        toolbar.setTitle(name);
+    }
 }

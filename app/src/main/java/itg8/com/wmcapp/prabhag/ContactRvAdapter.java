@@ -13,6 +13,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.emergency.model.Contact;
+import itg8.com.wmcapp.prabhag.model.MemberList;
 import itg8.com.wmcapp.prabhag.model.PrabhagModel;
 
 /**
@@ -22,17 +24,18 @@ import itg8.com.wmcapp.prabhag.model.PrabhagModel;
 class ContactRvAdapter extends RecyclerView.Adapter<ContactRvAdapter.ViewHolder> {
 
 
-    interface OnContactClickListener {
-        void onMessageClicked(PrabhagModel model);
+    private final List<MemberList> contactList;
 
-        void onCallClicked(PrabhagModel model);
+    interface OnContactClickListener {
+        void onMessageClicked(MemberList model);
+
+        void onCallClicked(MemberList model);
     }
 
 
-    private List<PrabhagModel> contactList;
     OnContactClickListener listener;
 
-    public ContactRvAdapter(List<PrabhagModel> contactList, OnContactClickListener listener) {
+    public ContactRvAdapter(List<MemberList> contactList, OnContactClickListener listener) {
         this.contactList = contactList;
         this.listener=listener;
     }
@@ -44,12 +47,13 @@ class ContactRvAdapter extends RecyclerView.Adapter<ContactRvAdapter.ViewHolder>
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.mobile1.setText(contactList.get(position).getMobileNo());
 
     }
 
     @Override
     public int getItemCount() {
-        return 2;
+        return contactList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

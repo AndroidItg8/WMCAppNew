@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -15,7 +14,6 @@ import java.util.Locale;
 
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.home.HomeActivity;
-import itg8.com.wmcapp.prabhag.PrabhagFragment;
 
 /**
  * Created by Android itg 8 on 11/2/2017.
@@ -36,6 +34,15 @@ public class BaseActivity  extends AppCompatActivity{
         ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
         ft.replace(R.id.frame_container,fragment);
         ft.addToBackStack(fragment.getClass().getSimpleName());
+        ft.commit();
+    }
+
+
+    public void callFragmentWithoutStack(Fragment fragment) {
+        ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+        ft.replace(R.id.frame_container,fragment);
+
         ft.commit();
     }
 

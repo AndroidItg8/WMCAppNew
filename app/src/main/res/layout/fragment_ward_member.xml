@@ -65,6 +65,7 @@ android:visibility="gone"
                 android:text="Ramarao Waghmare"
                 android:textColor="@color/colorBlack"
                 android:textSize="18sp"
+                android:id="@+id/lbl_name"
                 android:textStyle="bold" />
 
             <TextView
@@ -72,6 +73,7 @@ android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text="Address 1, Address 2, Address 3"
+                android:id="@+id/lbl_address"
                  />
 
             <TextView
@@ -79,6 +81,7 @@ android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+
                 android:text="Member since 2014" />
 
 

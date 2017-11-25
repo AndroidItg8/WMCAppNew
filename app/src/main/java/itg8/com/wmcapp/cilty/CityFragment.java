@@ -36,7 +36,7 @@ import itg8.com.wmcapp.widget.CustomFontTextView;
  * Use the {@link CityFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CityFragment extends Fragment implements CityAdapter.CityItemClickedListener {
+public class CityFragment extends Fragment implements CityAdapter.CityItemClickedListener, View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -72,7 +72,7 @@ public class CityFragment extends Fragment implements CityAdapter.CityItemClicke
      * this fragment using the provided parameters.
      *
      * @param cityModelList Parameter 1.
-     * @param param2 Parameter 2.
+     * @param param2        Parameter 2.
      * @return A new instance of fragment CityFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -100,28 +100,33 @@ public class CityFragment extends Fragment implements CityAdapter.CityItemClicke
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_city, container, false);
         unbinder = ButterKnife.bind(this, view);
-         init();
+        init();
         return view;
     }
 
     private void init() {
+        btnDismiss.setOnClickListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
- cityAdapter = new CityAdapter(getActivity(), list, this);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
+        cityAdapter = new CityAdapter(getActivity(), list, this);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(cityAdapter);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(CityModel  model) {
+    public void onButtonPressed(CityModel model) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(model);
+            mListener.onFragmentInteraction();
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-         mListener = (OnFragmentInteractionListener) context;
+        try {
+            mListener = (OnFragmentInteractionListener) context;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -141,9 +146,14 @@ public class CityFragment extends Fragment implements CityAdapter.CityItemClicke
     public void onCityItemClicked(int position, CityModel cityModel) {
         cityModel.setSelected(true);
         Prefs.putInt(CommonMethod.SELECTED_CITY, cityModel.getID());
+        lblSelectCity.setText("Your Selected City:"+CommonMethod.checkEmpty(cityModel.getName()));
         cityAdapter.notifyDataSetChanged();
-        mListener.onFragmentInteraction(cityModel);
 
+    }
+
+    @Override
+    public void onClick(View view) {
+            mListener.onFragmentInteraction();
     }
 
     /**
@@ -158,6 +168,7 @@ public class CityFragment extends Fragment implements CityAdapter.CityItemClicke
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(CityModel cityModel);
+        void onFragmentInteraction();
     }
+
 }

@@ -34,7 +34,6 @@
             android:textStyle="bold"
             app:font_value="ROBOTO_MEDIUM" />
 
-
         <itg8.com.wmcapp.widget.CustomFontTextView
             android:id="@+id/lbl_place_description"
             android:layout_width="match_parent"
@@ -118,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:drawablePadding="10dp"
+                android:drawablePadding="8dp"
                 android:drawableStart="@drawable/ic_directions_black_24dp"
                 android:padding="10dp"
                 android:text="Direction"
@@ -132,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:drawablePadding="10dp"
+                android:drawablePadding="8dp"
                 android:drawableStart="@drawable/ic_share_black_24dp"
                 android:padding="10dp"
                 android:text="Share"
@@ -146,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:drawablePadding="10dp"
+                android:drawablePadding="8dp"
                 android:drawableStart="@drawable/ic_favorite_border_black_24dp"
                 android:padding="10dp"
                 android:text="Like"
@@ -162,6 +161,7 @@
             android:layout_height="300dp"
             android:layout_below="@+id/ll_navi"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             tools:context="itg8.com.wmcapp.MapsActivity" />
 
 

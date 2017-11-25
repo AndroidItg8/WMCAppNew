@@ -4,6 +4,7 @@ package itg8.com.wmcapp.torisum;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -35,6 +37,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.CommonMethod;
+import itg8.com.wmcapp.complaint.model.ComplaintModel;
+import itg8.com.wmcapp.complaint.model.TempComplaintModel;
 import itg8.com.wmcapp.torisum.model.Fileupload;
 import itg8.com.wmcapp.torisum.model.TorisumModel;
 import itg8.com.wmcapp.widget.AutoScrollViewPager;
@@ -240,11 +244,28 @@ public class TorisumDetailsFragment extends Fragment implements OnMapReadyCallba
             case R.id.lbl_share:
                 if(lastLatLng!= null)
                     //TODO Do It Properly  Share Itemn Tuorism
-//                    CommonMethod.shareItem(getActivity(), generateTextToshare(),torisumModel.getName(), String.valueOf(torisumModel.getFileupload().get(0)));
+                    CommonMethod.shareItem(getActivity(), generateTextToshare(),torisumModel.getName(), getLocalBitmapUri(torisumModel.getFileupload().get(0)));
                 break;
             case R.id.lbl_like:
                 break;
         }
+    }
+    public Uri getLocalBitmapUri(Object model) {
+        // Extract Bitmap from ImageView drawable
+        String path = "";
+        if (model instanceof TempComplaintModel) {
+            TempComplaintModel complaintModel = (TempComplaintModel) model;
+            path = complaintModel.getFilePath();
+        } else if (model instanceof ComplaintModel) {
+            ComplaintModel complaintModels = (ComplaintModel) model;
+            path = complaintModels.getImagePath();
+
+        }
+
+        Uri bmpUri = null;
+        File file = new File(path);
+        bmpUri = Uri.fromFile(file);
+        return bmpUri;
     }
 
     private String generateDirection() {

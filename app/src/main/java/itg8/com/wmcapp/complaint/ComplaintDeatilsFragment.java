@@ -4,6 +4,9 @@ package itg8.com.wmcapp.complaint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +37,22 @@ public class ComplaintDeatilsFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    @BindView(R.id.img_garbage)
+    ImageView imgGarbage;
+    @BindView(R.id.txt_noImg)
+    CustomFontTextView txtNoImg;
+    @BindView(R.id.rl_center)
+    RelativeLayout rlCenter;
+    @BindView(R.id.lbl_cityName)
+    CustomFontTextView lblCityName;
+    @BindView(R.id.lbl_problem_value)
+    CustomFontTextView lblProblemValue;
+    @BindView(R.id.lbl_address_value)
+    CustomFontTextView lblAddressValue;
+    @BindView(R.id.rl_bottom)
+    RelativeLayout rlBottom;
+    @BindView(R.id.view)
+    View view;
     @BindView(R.id.img)
     CircularImageView img;
     @BindView(R.id.lbl_name_value)
@@ -42,33 +61,18 @@ public class ComplaintDeatilsFragment extends Fragment {
     CustomFontTextView lblDaysValue;
     @BindView(R.id.rl_top)
     RelativeLayout rlTop;
-    @BindView(R.id.img_garbage)
-    ImageView imgGarbage;
-    @BindView(R.id.lbl_cityName)
-    CustomFontTextView lblCityName;
-    @BindView(R.id.rl_center)
-    RelativeLayout rlCenter;
-    @BindView(R.id.lbl_problem_value)
-    CustomFontTextView lblProblemValue;
-    @BindView(R.id.lbl_address_value)
-    CustomFontTextView lblAddressValue;
-    @BindView(R.id.lbl_vote_value)
-    CustomFontTextView lblVoteValue;
-    @BindView(R.id.rl_bottom)
-    RelativeLayout rlBottom;
-    @BindView(R.id.view)
-    View view;
     @BindView(R.id.lbl_vote)
     CustomFontTextView lblVote;
     @BindView(R.id.lbl_share)
     CustomFontTextView lblShare;
-    Unbinder unbinder;
-    @BindView(R.id.txt_noImg)
-    CustomFontTextView txtNoImg;
     @BindView(R.id.ll_bottom)
     LinearLayout llBottom;
     @BindView(R.id.view1)
     View view1;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+
+
 
 
     // TODO: Rename and change types of parameters
@@ -76,6 +80,9 @@ public class ComplaintDeatilsFragment extends Fragment {
     private String mParam2;
     private ComplaintModel model;
     private Context mContext;
+    private static final int VOTED = 1;
+    private static final int VOTE_UP = 0;
+    private Unbinder unbinder;
 
 
     public ComplaintDeatilsFragment() {
@@ -159,7 +166,27 @@ public class ComplaintDeatilsFragment extends Fragment {
         lblCityName.setText(CommonMethod.checkEmpty(model.getCityName()));
         lblAddressValue.setText(CommonMethod.checkEmpty(model.getComplaintName()));
         lblProblemValue.setText(CommonMethod.checkEmpty(model.getComplaintDescription()));
-        lblVoteValue.setText(CommonMethod.checkEmpty(String.valueOf(model.getLikeList().size())));
+        lblNameValue.setText(CommonMethod.checkEmpty(model.getUserFullename()));
+        CommonMethod.setUserPicaso(mContext, model.getUserProfilepic(),img);
+
+
+
+
+        if (model.getLikestatus() == VOTE_UP) {
+            lblVote.setText("VOTE UP"+" ("+ model.getLikeList().size() +")");
+            lblVote.setTextColor((lblVote.getContext().getResources().getColor(R.color.colorGray)));
+        } else {
+            lblVote.setText("VOTED ("+ model.getLikeList().size() +")");
+            lblVote.setTextColor((lblVote.getContext().getResources().getColor(R.color.colorPrimary)));
+        }
+
+        if (model.getLikeList() != null && model.getLikeList().size() > 0) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+
+            recyclerView.setAdapter(new LikeAdapter(mContext, model.getLikeList()));
+            RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL);
+            recyclerView.addItemDecoration(itemDecoration);
+        }
 
     }
 

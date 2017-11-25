@@ -4,6 +4,7 @@ package itg8.com.wmcapp.change_password;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,10 +51,10 @@ public class ChangePswdFragment extends Fragment implements ChangePasswordMVP.Ch
     EditText inputCirmPswd;
     @BindView(R.id.input_layout_cirm_pswd)
     TextInputLayout inputLayoutCirmPswd;
-    @BindView(R.id.btn_submit)
-    Button btnSubmit;
+    @BindView(R.id.fab_go)
+    FloatingActionButton fabGo;
     @BindView(R.id.progressView)
-    CircularProgressView progressView;
+    ProgressBar progressView;
     Unbinder unbinder;
 
     // TODO: Rename and change types of parameters
@@ -99,7 +101,7 @@ public class ChangePswdFragment extends Fragment implements ChangePasswordMVP.Ch
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_change_pswd, container, false);
         unbinder = ButterKnife.bind(this, view);
-        btnSubmit.setOnClickListener(this);
+        fabGo.setOnClickListener(this);
         presenter = new ChangePswdPresenterImp(this);
         return view;
     }
@@ -250,7 +252,7 @@ public class ChangePswdFragment extends Fragment implements ChangePasswordMVP.Ch
 
     @Override
     public void onClick(View v) {
-        if(v.getId()==R.id.btn_submit)
+        if(v.getId()==R.id.fab_go)
         {
             presenter. onSubmitButtonClicked(v, getString(R.string.url_change_password));
 

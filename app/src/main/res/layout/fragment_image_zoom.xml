@@ -4,11 +4,9 @@
     android:layout_height="match_parent"
     tools:context="itg8.com.wmcapp.torisum.ImageZoomFragment">
 
-  <ImageView
+  <itg8.com.wmcapp.torisum.TouchImageView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:scaleType="matrix"
-      android:layout_gravity="center"
 
       android:id="@+id/img"/>
 

@@ -21,7 +21,7 @@ import itg8.com.wmcapp.registration.RegistrationFragment;
  * Use the {@link SignUpFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SignUpFragment extends Fragment implements  RegistrationFragment.OnAttachRegistrationListener{
+public class SignUpFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -74,23 +74,10 @@ public class SignUpFragment extends Fragment implements  RegistrationFragment.On
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
         unbinder = ButterKnife.bind(this, view);
-         init();
         return view;
     }
 
-    private void init() {
 
-        setupViewPager(viewPager);
-        tabLayout.setupWithViewPager(viewPager);
-    }
-
-    private void setupViewPager(ViewPager viewPager) {
-        LoginViewPagerAdapter adapter = new LoginViewPagerAdapter(getChildFragmentManager());
-            adapter.addFragment(new LoginFragment(), "Login");
-            adapter.addFragment(new RegistrationFragment(), "Registration");
-                viewPager.setAdapter(adapter);
-
-    }
 
     @Override
     public void onDestroyView() {
@@ -98,24 +85,5 @@ public class SignUpFragment extends Fragment implements  RegistrationFragment.On
         unbinder.unbind();
     }
 
-    @Override
-    public void onAttachFragmnet() {
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition()-1);
 
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-    }
 }

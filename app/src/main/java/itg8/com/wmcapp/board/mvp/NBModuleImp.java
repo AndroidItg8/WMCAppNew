@@ -19,6 +19,7 @@ import itg8.com.wmcapp.board.model.NoticeBoardModel;
 import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.MyApplication;
 import okhttp3.ResponseBody;
+import retrofit2.Call;
 import retrofit2.HttpException;
 
 /**
@@ -84,5 +85,10 @@ public class NBModuleImp  implements itg8.com.wmcapp.board.mvp.NBMVP.NBModule {
 
                     }
                 });
+    }
+
+    @Override
+    public void onDeleteItemFromServer(String url, int pkid, NBMVP.NBListener listener) {
+        Call<ResponseBody> call = MyApplication.getInstance().getRetroController().deleteNBFromServer(url, pkid);
     }
 }

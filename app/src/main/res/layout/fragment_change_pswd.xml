@@ -1,118 +1,118 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="itg8.com.wmcapp.change_password.ChangePswdFragment">
-<LinearLayout
-    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    tools:context="itg8.com.wmcapp.change_password.ChangePswdFragment">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardPreventCornerOverlap="true"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="8dp"
+        android:id="@+id/card"
+        app:cardUseCompatPadding="true">
 
-    <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/bpkuti" />
-
-
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_old_pswd"
-            android:layout_width="match_parent"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:visibility="gone"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/input_oldPswd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:singleLine="true"
-                android:inputType="textPassword"
-                android:visibility="gone"
-                android:textColor="@color/colorBlack"
-                android:textSize="15sp"
-                android:hint="Enter Old Password" />
-
-        </android.support.design.widget.TextInputLayout>
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_new_pswd"
-            android:layout_width="match_parent"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/input_newPswd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:singleLine="true"
-                android:inputType="textPassword"
-                android:textColor="@color/colorBlack"
-                android:textSize="15sp"
-                android:textColorHint="@color/colorBlack"
-                android:hint="Enter New Password" />
-
-        </android.support.design.widget.TextInputLayout>
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_cirm_pswd"
-            android:layout_width="match_parent"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/input_cirmPswd"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:singleLine="true"
-                android:inputType="textPassword"
-                android:textColor="@color/colorBlack"
-                android:textSize="15sp"
-                android:textColorHint="@color/colorBlack"
-
-                android:hint="Enter New  Confirm Password" />
-
-        </android.support.design.widget.TextInputLayout>
-
-
-
-        <Button
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="@color/colorWhite"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:background="@color/colorPrimary"
-            android:id="@+id/btn_submit"
-            android:text="submit"/>
+            android:layout_margin="16dp"
+            android:orientation="vertical">
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_old_pswd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible">
 
-        <com.github.rahatarmanahmed.cpv.CircularProgressView
-            android:id="@+id/progressView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+                <EditText
+                    android:id="@+id/input_oldPswd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:hint="Enter 6 digit Old Password"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="15sp"
+                    android:visibility="visible" />
+
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_new_pswd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/input_newPswd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:hint="Enter 6 digit New Password"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="@color/colorBlack"
+                    android:textSize="15sp" />
+
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_cirm_pswd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/input_cirmPswd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:hint="Enter 6 digit Confirm Password"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="@color/colorBlack"
+                    android:textSize="15sp" />
+
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+        <FrameLayout
+        android:id="@+id/frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/card"
+        android:layout_centerHorizontal="true">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_go"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_margin="16dp"
+            android:visibility="visible"
+            app:fabSize="normal"
             android:layout_gravity="center"
-            android:visibility="gone"
-            app:cpv_color="@color/colorPrimary"
-            app:cpv_thickness="2dp"
-            app:cpv_indeterminate="true"
-            />
-</LinearLayout>
-    </ScrollView>
+            app:backgroundTint="@color/colorPrimary"
+            app:srcCompat="@drawable/ic_arrow_forward_black_24dp" />
+
+
+        <ProgressBar
+            android:id="@+id/progressView"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            android:layout_margin="16dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </FrameLayout>
+    </RelativeLayout>
+</ScrollView>
 
 
 

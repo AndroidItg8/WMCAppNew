@@ -27,10 +27,7 @@ public class ChagePasswordImp implements ChangePasswordMVP.ChangePswdModule {
                  call.cancel();
              }
          }
-
     }
-
-
 
     @Override
     public void onAuthenticationToChangePswd(RetroController controller, String url,  String oldpswd, String newpswd, String confirmpswd, final ChangePswdPresenterImp listener) {

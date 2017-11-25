@@ -57,6 +57,12 @@ public class ProfileModel implements Parcelable
     @SerializedName("mdate")
     @Expose
     private Object mdate;
+
+
+    @SerializedName("ProdilePic")
+    @Expose
+    private String picProfle;
+
     public final static Parcelable.Creator<ProfileModel> CREATOR = new Creator<ProfileModel>() {
 
 
@@ -76,6 +82,7 @@ public class ProfileModel implements Parcelable
             instance.EmailId = ((String) in.readValue((String.class.getClassLoader())));
             instance.RegisteredDate = ((String) in.readValue((String.class.getClassLoader())));
             instance.LastModifiedDate = ((String) in.readValue((String.class.getClassLoader())));
+            instance.picProfle = ((String) in.readValue((String.class.getClassLoader())));
             instance.cid = ((String) in.readValue((String.class.getClassLoader())));
             instance.Lid = ((Object) in.readValue((Object.class.getClassLoader())));
             instance.mid = ((Object) in.readValue((Object.class.getClassLoader())));
@@ -360,6 +367,16 @@ public class ProfileModel implements Parcelable
         this.mdate = mdate;
     }
 
+
+    public String getPicProfle() {
+        return picProfle;
+    }
+
+    public void setPicProfle(String picProfle) {
+        this.picProfle = picProfle;
+    }
+
+
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(pkid);
         dest.writeValue(UserFkid);
@@ -376,6 +393,7 @@ public class ProfileModel implements Parcelable
         dest.writeValue(Lid);
         dest.writeValue(mid);
         dest.writeValue(mdate);
+        dest.writeValue(picProfle);
     }
 
     public int describeContents() {

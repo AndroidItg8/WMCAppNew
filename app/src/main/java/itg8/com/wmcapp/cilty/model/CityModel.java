@@ -27,10 +27,12 @@ public class CityModel implements Parcelable
     @SerializedName("ID")
     @Expose
     private int ID;
+
     @DatabaseField(columnName = FIELD_NAME)
     @SerializedName("Name")
     @Expose
     private String Name;
+
     @DatabaseField(columnName = FIELD_STATE_ID)
 
     @SerializedName("StateID")

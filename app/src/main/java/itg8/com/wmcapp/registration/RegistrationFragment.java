@@ -4,23 +4,20 @@ package itg8.com.wmcapp.registration;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,7 +26,6 @@ import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.MyApplication;
 import itg8.com.wmcapp.common.NoConnectivityException;
 import itg8.com.wmcapp.common.RetroController;
-import itg8.com.wmcapp.signup.LoginFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,6 +56,12 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     EditText inputEmail;
     @BindView(R.id.input_layout_email)
     TextInputLayout inputLayoutEmail;
+
+
+    @BindView(R.id.input_city)
+    EditText inputCity;
+    @BindView(R.id.input_layout_city)
+    TextInputLayout inputLayoutCity;
     @BindView(R.id.input_password)
     EditText inputPassword;
     @BindView(R.id.input_layout_password)
@@ -70,16 +72,13 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     TextInputLayout inputLayoutCpassword;
     @BindView(R.id.rl_registration)
     LinearLayout rlRegistration;
-    @BindView(R.id.progressView)
-    CircularProgressView progressView;
-    @BindView(R.id.btn_signUp)
-    Button btnSignUp;
-    @BindView(R.id.input_address)
-    EditText inputAddress;
-    @BindView(R.id.input_layout_address)
-    TextInputLayout inputLayoutAddress;
     @BindView(R.id.card)
     CardView card;
+    @BindView(R.id.fab_signUp)
+    FloatingActionButton fabSignUp;
+    @BindView(R.id.progressView)
+    ProgressBar progressView;
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -134,7 +133,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
 
     private void init() {
-        btnSignUp.setOnClickListener(this);
+        fabSignUp.setOnClickListener(this);
     }
 
     @Override
@@ -153,7 +152,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-         listener = (OnAttachRegistrationListener) context;
+        listener = (OnAttachRegistrationListener) context;
 
     }
 
@@ -185,21 +184,25 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 //    MobileNumber:9823778532
 //    FullName:ayesha
 
-        call = api.registartion(url, email,password,password,"AppUser",mobile, name );
+        call = api.registartion(url, email, password, password, "AppUser", mobile, name);
         call.enqueue(new Callback<RegistrationModel>() {
             @Override
             public void onResponse(Call<RegistrationModel> call, Response<RegistrationModel> response) {
 
                 hideProgress();
-
                 if (response.isSuccessful()) {
                     if (response.body().isFlag()) {
-                        showSnackbar(false,FROM_ERROR,response.body().getStatus());
+                        showSnackbar(false, FROM_ERROR, response.body().getStatus());
+                        inputName.setText("");
+                        inputMobile.setText("");
+                        inputEmail.setText("");
+                        inputPassword.setText("");
+
                     } else {
-                        showSnackbar(false,FROM_ERROR,response.body().getStatus());
+                        showSnackbar(false, FROM_ERROR, response.body().getStatus());
                     }
                 } else {
-                    showSnackbar(false,FROM_ERROR,response.body().getStatus());
+                    showSnackbar(false, FROM_ERROR, response.body().getStatus());
                 }
             }
 
@@ -207,11 +210,11 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
             public void onFailure(Call<RegistrationModel> call, Throwable t) {
                 t.printStackTrace();
 
-                if(t instanceof NoConnectivityException)
-                    showSnackbar(true,FROM_INERNET,t.getMessage());
+                if (t instanceof NoConnectivityException)
+                    showSnackbar(true, FROM_INERNET, t.getMessage());
 
                 else
-                    showSnackbar(false,FROM_ERROR,t.getMessage());
+                    showSnackbar(false, FROM_ERROR, t.getMessage());
 
 
             }
@@ -220,10 +223,10 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
     }
 
-    private void showSnackbar(boolean isConnected, int from,String message) {
+    private void showSnackbar(boolean isConnected, int from, String message) {
 
         int color = 0;
-        if(from == FROM_INERNET) {
+        if (from == FROM_INERNET) {
             if (!isConnected) {
 
                 color = Color.WHITE;
@@ -232,12 +235,11 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
             } else {
                 color = Color.RED;
             }
-        }else
-        {
+        } else {
             color = Color.WHITE;
         }
         snackbar = Snackbar
-                .make(btnSignUp, message, Snackbar.LENGTH_INDEFINITE);
+                .make(fabSignUp, message, Snackbar.LENGTH_INDEFINITE);
 
         View sbView = snackbar.getView();
         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
@@ -263,7 +265,6 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 //        getChildFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
 
-
     }
 
     public void hideSnackbar() {
@@ -271,6 +272,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
             snackbar.dismiss();
         }
     }
+
     private boolean validate() {
         String email = inputEmail.getText().toString();
         String name = inputName.getText().toString();
@@ -290,30 +292,35 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
             inputLayoutMobile.setError(getString(R.string.empty));
             validate = false;
 
-        }else {
-            if (MobileNumber.length()!= 10) {
+        } else {
+            if (MobileNumber.length() != 10) {
                 inputLayoutMobile.setError(getString(R.string.invalid_number));
                 validate = false;
             }
         }
 
-//        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-//            inputLayoutEmail.setError(getString(R.string.invalid_email));
-//            validate = false;
-//        }
+        if (password.length() < 6) {
+            validate = false;
+            inputLayoutPassword.setError(getString(R.string.invalid_pass));
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            inputLayoutEmail.setError(getString(R.string.invalid_email));
+            validate = false;
+        }
 
         return validate;
     }
 
 
     private void showProgress() {
-            progressView.setVisibility(View.VISIBLE);
+        progressView.setVisibility(View.VISIBLE);
 
     }
 
 
     private void hideProgress() {
-            progressView.setVisibility(View.GONE);
+        progressView.setVisibility(View.GONE);
     }
 
     public interface OnAttachRegistrationListener {

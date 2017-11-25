@@ -85,6 +85,15 @@ public class NBPresenterImp extends BaseWeakPresenter<NBMVP.NBView> implements N
         };
     }
 
+    @Override
+    public void removeItemFromServer(String url, int pkid) {
+        if(hasView()){
+
+            module.onDeleteItemFromServer(url,pkid,this);
+        }
+
+    }
+
     private void getItems(int page, int limit) {
         if(hasView()){
             getView().onPaginationError(false);

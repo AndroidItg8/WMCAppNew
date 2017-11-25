@@ -1,13 +1,25 @@
 package itg8.com.wmcapp.complaint;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.common.MyApplication;
+import itg8.com.wmcapp.profile.LikeProfileAdapter;
+import itg8.com.wmcapp.profile.model.UserLikeModel;
+import retrofit2.Call;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,9 +32,14 @@ public class ComplaintVoteFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    Unbinder unbinder;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Context mContext;
 
 
     public ComplaintVoteFragment() {
@@ -60,8 +77,39 @@ public class ComplaintVoteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_complaint_vote, container, false);
+        View view = inflater.inflate(R.layout.fragment_complaint_vote, container, false);
+getLikeListFromServer();
+
+         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//         recyclerView.setAdapter(new LikeProfileAdapter(mContext, list ));
+
+        unbinder = ButterKnife.bind(this, view);
+
         return view;
     }
 
+    private void getLikeListFromServer() {
+//        Call<List<UserLikeModel>> call = MyApplication.getInstance().getRetroController();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if(mContext!= null)
+        {
+            mContext = null;
+        }
+    }
 }

@@ -9,10 +9,11 @@ import itg8.com.wmcapp.complaint.model.TempComplaintModel;
  * Created by swapnilmeshram on 08/11/17.
  */
 
-public interface Crud {
+public interface Crud<T> {
     public int create(Object item);
     public int delete(Object item);
     public  int deleteAll();
+    public List<T> getAll();
 
      public interface ComplaintCrud{
          TempComplaintModel getComplaint(String value, String key);

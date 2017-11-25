@@ -99,7 +99,7 @@
 
 
             <itg8.com.wmcapp.widget.CustomFontTextView
-                android:id="@+id/lbl_foget"
+                android:id="@+id/lbl_forget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -127,19 +127,22 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             android:layout_margin="16dp"
             android:visibility="visible"
             app:fabSize="normal"
+            android:layout_gravity="center"
+            app:backgroundTint="@color/colorPrimary"
             app:srcCompat="@drawable/ic_arrow_forward_black_24dp" />
 
 
-        <com.github.rahatarmanahmed.cpv.CircularProgressView
+        <ProgressBar
             android:id="@+id/progressView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
             android:layout_margin="16dp"
+            android:layout_gravity="center"
             android:visibility="gone" />
     </FrameLayout>
 
@@ -168,6 +171,7 @@
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_weight="1">
 
             <com.google.android.gms.common.SignInButton
@@ -175,7 +179,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="10dp"
                 android:text=""
                 android:visibility="invisible" />
 
@@ -184,9 +187,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="10dp"
                 android:background="@drawable/google_login"
-                android:padding="10dp"
                 android:text="Google"
                 android:textColor="@color/colorGoogle"
                 android:visibility="visible" />

@@ -1,5 +1,6 @@
 package itg8.com.wmcapp.forget.mvp;
 
+import android.text.TextUtils;
 import android.view.View;
 
 import itg8.com.wmcapp.R;
@@ -30,13 +31,29 @@ public class ForgetPresenterImp extends BaseWeakPresenter<ForgetMVP.ForgetView> 
     }
 
     @Override
-    public void onSubmitButtonClicked(View view) {
+    public void onSubmitButtonClicked(View view, boolean isDigit) {
         if(hasView()) {
             boolean isValid = true;
             String email = getView().getEmailId();
-            if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                isValid=false;
-                getView().onEmailInvalid(view.getContext().getString(R.string.invalid_email));
+
+            if(TextUtils.isEmpty(email))
+            {
+                isValid = false;
+                getView().onEmailInvalid(view.getContext().getString(R.string.empty));
+            }
+
+            if(TextUtils.isDigitsOnly(email))
+            {
+                if(email.length() != 10)
+                {
+                    isValid = false;
+                    getView().onEmailInvalid(view.getContext().getString(R.string.invalid_number));
+                }
+            }else {
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    isValid = false;
+                    getView().onEmailInvalid(view.getContext().getString(R.string.invalid_email));
+                }
             }
 
             if(isValid){
@@ -51,7 +68,11 @@ public class ForgetPresenterImp extends BaseWeakPresenter<ForgetMVP.ForgetView> 
 
     @Override
     public void onNoInternetConnect(boolean b) {
-
+        if(hasView())
+        {
+            getView().hideProgress();
+            getView().onNoInternetConnect(b);
+        }
     }
 
 
@@ -71,6 +92,7 @@ public class ForgetPresenterImp extends BaseWeakPresenter<ForgetMVP.ForgetView> 
     @Override
     public void onEmailInvalid(String err) {
         if(hasView()) {
+            getView().hideProgress();
             getView().onEmailInvalid(err);
         }
 
@@ -93,15 +115,20 @@ public class ForgetPresenterImp extends BaseWeakPresenter<ForgetMVP.ForgetView> 
 
     @Override
     public void onFail(String message) {
-        if(hasView())
+        if(hasView()) {
+            getView().hideProgress();
             getView().onFail(message);
+        }
 
     }
 
     @Override
     public void onError(Object t) {
         if(hasView())
+        {
+            getView().hideProgress();
             getView().onError(t);
+        }
 
     }
 }

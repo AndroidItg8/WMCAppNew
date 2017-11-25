@@ -38,6 +38,8 @@ public interface NBMVP {
         void onLoadMoreItems(String string);
 
         RecyclerView.OnScrollListener scrollListener(LinearLayoutManager layoutManager);
+
+        void removeItemFromServer(String string, int pkid);
     }
 
     public interface NBListener{
@@ -48,6 +50,8 @@ public interface NBMVP {
 
     public interface NBModule extends BaseDestroyModule {
         void onStartLoadingList(String url, int page, int limit, NBListener listener);
+
+        void onDeleteItemFromServer(String url, int pkid, NBListener  listener);
     }
 
 }

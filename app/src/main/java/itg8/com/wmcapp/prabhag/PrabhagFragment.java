@@ -3,6 +3,7 @@ package itg8.com.wmcapp.prabhag;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -15,14 +16,16 @@ import android.widget.TextView;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
-import itg8.com.wmcapp.common.OnRecyclerviewClickListener;
+import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.prabhag.model.PrabhagModel;
+import itg8.com.wmcapp.prabhag.model.WardList;
 import itg8.com.wmcapp.prabhag.mvp.PrabhagMVP;
 import itg8.com.wmcapp.prabhag.mvp.PrabhagPresenterImp;
 
@@ -32,24 +35,28 @@ import itg8.com.wmcapp.prabhag.mvp.PrabhagPresenterImp;
  * <p/>
  * interface.
  */
-public class PrabhagFragment extends Fragment implements PrabhagMVP.PrabhagView, OnRecyclerviewClickListener<PrabhagModel> {
+public class PrabhagFragment extends Fragment implements PrabhagMVP.PrabhagView, PrabhagItemRecyclerViewAdapter.ItemClickedListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     private static final int FROM_ERROR = 2;
     private static final int FROM_INTERNET = 1;
+    private static final String ARG_COLUMN_LIST = "COLUMN_LIST";
     @BindView(R.id.list)
     RecyclerView recyclerView;
     Unbinder unbinder;
     @BindView(R.id.progressView)
     CircularProgressView progressView;
-    onPrabhagClickedListener listener;
+    Context listener;
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private PrabhagMVP.PrabhagPresenter presenter;
     private Snackbar snackbar;
     private android.content.Context context;
     private PrabhagItemRecyclerViewAdapter adapter;
+    private int isFrom;
+    private List<WardList> wradList;
+    private List<PrabhagModel> list;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -68,12 +75,23 @@ public class PrabhagFragment extends Fragment implements PrabhagMVP.PrabhagView,
         return fragment;
     }
 
+    private static PrabhagFragment newInstance(List<WardList> wardList) {
+        PrabhagFragment fragment = new PrabhagFragment();
+        Bundle args = new Bundle();
+        args.putParcelableArrayList(ARG_COLUMN_LIST, (ArrayList<? extends Parcelable>) wardList);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+        }
+        if (getArguments() != null) {
+            wradList = getArguments().getParcelableArrayList(ARG_COLUMN_LIST);
         }
     }
 
@@ -83,8 +101,13 @@ public class PrabhagFragment extends Fragment implements PrabhagMVP.PrabhagView,
         View view = inflater.inflate(R.layout.fragment_prabhagitem_list, container, false);
         unbinder = ButterKnife.bind(this, view);
         presenter = new PrabhagPresenterImp(this);
-        presenter.onGetPrabhagList(getString(R.string.url_prabhag));
-        return view;
+        if (wradList == null)
+            presenter.onGetPrabhagList(getString(R.string.url_prabhag));
+        else {
+            isFrom = CommonMethod.WARD;
+            setRecyclerView(list, wradList);
+        }
+            return view;
     }
 
 
@@ -92,7 +115,7 @@ public class PrabhagFragment extends Fragment implements PrabhagMVP.PrabhagView,
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
-        listener = (onPrabhagClickedListener) context;
+        listener = context;
     }
 
     @Override
@@ -127,12 +150,17 @@ public class PrabhagFragment extends Fragment implements PrabhagMVP.PrabhagView,
 
     @Override
     public void onPrabhagListAvailable(List<PrabhagModel> o) {
+         this.list = o;
 
+        setRecyclerView(o, wradList);
+
+    }
+
+    private void setRecyclerView(List<PrabhagModel> o, List<WardList> wradList) {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
-        adapter = new PrabhagItemRecyclerViewAdapter(context, o, this);
+        adapter = new PrabhagItemRecyclerViewAdapter(context, o, wradList, this, isFrom);
         recyclerView.setAdapter(adapter);
-
     }
 
     @Override
@@ -155,8 +183,6 @@ public class PrabhagFragment extends Fragment implements PrabhagMVP.PrabhagView,
 
 
     private void showSnackerbar(int from, String message, boolean isConnected) {
-
-
         View sbView = snackbar.getView();
         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
 
@@ -197,17 +223,32 @@ public class PrabhagFragment extends Fragment implements PrabhagMVP.PrabhagView,
 
 
     @Override
-    public void onClick(int position, PrabhagModel prabhagModel) {
-        if (prabhagModel.isPragbhagSelected()) {
-            adapter.notifyDataSetChanged();
-        } else {
-            WardMemberFragment fragment=WardMemberFragment.newInstance(prabhagModel.getWardList().get(position).getMemberList());
-            android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-            ft.replace(R.id.frame_container,fragment);
-            ft.addToBackStack(fragment.getClass().getSimpleName());
-            ft.commit();
-        }
+    public void onItemPrabhagClicked(int position, PrabhagModel model) {
+        PrabhagFragment fragment = PrabhagFragment.newInstance(model.getWardList());
+        android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+        ft.replace(R.id.frame_container, fragment);
+        ft.addToBackStack(fragment.getClass().getSimpleName());
+        ft.commit();
+
+
+    }
+
+
+    @Override
+    public void onItemWardClicked(int position, WardList model) {
+        WardMemberFragment fragment = WardMemberFragment.newInstance(model.getMemberList());
+        android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+        ft.replace(R.id.frame_container, fragment);
+        ft.addToBackStack(fragment.getClass().getSimpleName());
+        ft.commit();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     public interface onPrabhagClickedListener {

@@ -4,9 +4,11 @@ package itg8.com.wmcapp.emergency;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,15 +19,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
-import itg8.com.wmcapp.common.OnRecyclerviewClickListener;
-import itg8.com.wmcapp.emergency.model.ContactModel;
+import itg8.com.wmcapp.emergency.model.Contact;
 import itg8.com.wmcapp.emergency.model.EmergencyModel;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -35,7 +35,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  * Use the {@link EmergencyDetailsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EmergencyDetailsFragment extends Fragment implements EasyPermissions.PermissionCallbacks, OnRecyclerviewClickListener<ContactModel>, View.OnClickListener {
+public class EmergencyDetailsFragment extends Fragment implements EasyPermissions.PermissionCallbacks, EmergencyCallListAdapter.CallItemClickedListner, View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -53,9 +53,9 @@ public class EmergencyDetailsFragment extends Fragment implements EasyPermission
 
     // TODO: Rename and change types of parameters
     private String mParam2;
-    private EmergencyModel emergencyModel;
     private Context mContext;
     private boolean hasCallPermission = false;
+    private EmergencyModel emergencyModel;
 
 
     public EmergencyDetailsFragment() {
@@ -102,10 +102,9 @@ public class EmergencyDetailsFragment extends Fragment implements EasyPermission
 
     private void initView() {
         imgBack.setOnClickListener(this);
-        lblName.setText(emergencyModel.getDeptName());
-        List<ContactModel> list = new ArrayList<>();
+        lblName.setText(emergencyModel.getCatgoryName());
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        recyclerView.setAdapter(new EmergencyCallListAdapter(mContext, list, this));
+        recyclerView.setAdapter(new EmergencyCallListAdapter(mContext, emergencyModel.getContact(), this));
     }
 
     @Override
@@ -128,12 +127,22 @@ public class EmergencyDetailsFragment extends Fragment implements EasyPermission
 
     }
 
-    private void callGranted(ContactModel from) {
+    private void callGranted(Contact from) {
         if (!hasCallPermission)
             return;
         Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse(from.getNumber()));
-        startActivity(callIntent);
+        callIntent.setData(Uri.parse("tel:" +from.getMobileNo()));
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mContext.startActivity(callIntent);
     }
 
     @AfterPermissionGranted(RC_CALL)
@@ -162,21 +171,20 @@ public class EmergencyDetailsFragment extends Fragment implements EasyPermission
         hasCallPermission = false;
     }
 
-    @Override
-    public void onClick(int position, ContactModel contactModel) {
-        contactModel.setCalling(true);
-
-        callGranted(contactModel);
-    }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId())
-        {
+        switch (view.getId()) {
             case R.id.img_back:
                 getFragmentManager().popBackStack();
                 break;
         }
 
+    }
+
+    @Override
+    public void onCallItem(int position, Contact contact) {
+        contact.setCalling(true);
+        callGranted(contact);
     }
 }

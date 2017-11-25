@@ -12,7 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.io.File;
@@ -45,8 +45,9 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     Unbinder unbinder;
-    @BindView(R.id.ll_no_item)
-    LinearLayout llNoItem;
+    @BindView(R.id.rl_no_item)
+    RelativeLayout rlNoItem;
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -100,7 +101,13 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
         View view = inflater.inflate(R.layout.fragment_online_complaint, container, false);
         unbinder = ButterKnife.bind(this, view);
         presenter = new ComplaintPresenterImp(this);
-        init();
+        if (listOfComplaint != null && listOfComplaint.size() > 0) {
+            CommonMethod.showHideItem(recyclerView,rlNoItem );
+            init();
+
+        } else {
+            CommonMethod.showHideItem(rlNoItem,recyclerView);
+        }
         presenter.onLoadMoreItem(getString(R.string.url_complaint), CommonMethod.FROM_COMPLAINT_USER);
         return view;
     }
@@ -112,6 +119,7 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
         adapter = new ComplaintAdapter(mContext, CommonMethod.FROM_COMPLAINT_USER, this);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(presenter.scrollListener(layoutManager, CommonMethod.FROM_COMPLAINT_USER));
+
 
     }
 
@@ -196,7 +204,7 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
             model.setCityName(city != null ? city.getName() : null);
         }
 
-
+        listOfComplaint = o;
         adapter.addItems(o);
     }
 

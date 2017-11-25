@@ -23,8 +23,10 @@ import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.board.model.NoticeBoardModel;
 import itg8.com.wmcapp.board.mvp.NBMVP;
 import itg8.com.wmcapp.board.mvp.NBPresenterImp;
+import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.complaint.AddComplaintFragment;
+import itg8.com.wmcapp.complaint.ComplaintFragment;
 import itg8.com.wmcapp.torisum.TorisumDetailsFragment;
 import ru.alexbykov.nopaginate.paginate.Paginate;
 import ru.alexbykov.nopaginate.paginate.PaginateBuilder;
@@ -107,6 +109,7 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
     }
 
     private void initPaginate() {
+
 
     }
 
@@ -243,4 +246,15 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
 
 
     }
+
+    @Override
+    public void onNBItemDeleteClicked(int position, NoticeBoardModel model) {
+       // presenter.removeItemFromServer(getString(R.string.url_delete_notice),model.getPkid());
+        model.setItemDelete(true);
+        adapter.removeItem( position);
+
+    }
+
+
+
 }

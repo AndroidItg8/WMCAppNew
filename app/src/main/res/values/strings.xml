@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WMCApp</string>
+    <string name="app_name">WMC App</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -11,7 +11,7 @@
     <string name="ward">Ward Information</string>
     <string name="contact">Contact Us</string>
     <string name="emegency_numbers">Emergency Numbers</string>
-    <string name="forget_pswd">Forget Password</string>
+    <string name="forget_pswd">Forgot Password</string>
     <string name="feedback">Feedback</string>
     <string name="change_pswd">Change Password</string>
     <string name="suggestion">Suggestion</string>
@@ -40,7 +40,7 @@
     <string name="enter_description">Enter Description</string>
     <string name="other_address">Address</string>
     <string name="rationale_no_permission">Please grant permission to further proceed.</string>
-    <string name="rationale_call_permission">Please provide call permission</string>
+    <string name="rationale_call_permission">Please provide call  and  sms permission</string>
     <string name="current_location">Current Location</string>
     <string name="other_location">Other Location</string>
     <string name="show_identity">Show Identity</string>
@@ -69,14 +69,14 @@
     <string name="invalid_number">Please Enter 10 digit Number</string>
     <string name="pswd">Password does not match.</string>
     <string name="url_registration">/api/CustomerApp/Register</string>
-    <string name="url_profile_edit">/api/CustomerApp/EditUserProfile</string>
-    <string name="url_edit_profile">/api/CustomerApp/EditUserProfile</string>
+    <!--<string name="url_profile_edit">/api/CustomerApp/EditUserProfile</string>-->
+    <string name="url_edit_profile">/api/UploadFileApp/EditUserProfile</string>
     <string name="fail_to_load">Fail to load information</string>
     <string name="rationale_no_internet">No Internet Connection</string>
     <string name="invalid_pass_not">Password must be minimum 6 character</string>
     <string name="url_change_password">/api/CustomerApp/changePassword</string>
     <string name="url_forget_pswd">/api/CustomerApp/ForgotPassword</string>
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_login">Login</string>
     <string name="dismiss">Dismiss</string>
     <string name="url_toriusm">/api/CustomerApp/TourismList</string>
     <!--<string name="default_web_client_id">911695149245-hoihh8tl5vaormgrom6j79bdf5e6rp1j.apps.googleusercontent.com-->
@@ -102,7 +102,14 @@
     <string name="url_prabhag">/api/CustomerApp/PrabhagList</string>
     <string name="user_name">User Name</string>
     <string name="mobile_number">10 digit mobile number</string>
-    <string name="person_name">Edit Profile</string>
+    <string name="person_name">Update Profile</string>
     <string name="password">6 digit password</string>
     <string name="emaiId">Email Id/ Mobile Number</string>
+    <string name="enter_emailid">EmailId/mobile number</string>
+    <string name="url_emergency">/api/CustomerApp/EmergencyContactList</string>
+    <string name="title_activity_profiles">Profile</string>
+    <string name="url_delete_notice">aaa</string>
+    <string name="no_list">List are not availble!!!!</string>
+    <string name="vote_list">Voted List</string>
+    <string name="url_like_complaint_user">api/CustomerApp/UserLikeComplaintList</string>
 </resources>

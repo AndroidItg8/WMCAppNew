@@ -33,7 +33,8 @@ import itg8.com.wmcapp.widget.CustomFontTextView;
  * Use the {@link ImageZoomFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ImageZoomFragment extends Fragment implements View.OnTouchListener {
+public class ImageZoomFragment extends Fragment  {
+    //implements View.OnTouchListener
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -112,7 +113,6 @@ public class ImageZoomFragment extends Fragment implements View.OnTouchListener 
     }
 
     private void init() {
-        img.setOnTouchListener(this);
 
         Picasso.with(mContext)
                 .load(CommonMethod.BASE_URL +model.getFilepath())
@@ -129,7 +129,7 @@ public class ImageZoomFragment extends Fragment implements View.OnTouchListener 
 //                            img.setImageMatrix(matrix);
 //                        }
 
-                        scaleImage(2);
+//                        scaleImage(2);
 
                     }
 
@@ -166,156 +166,156 @@ public class ImageZoomFragment extends Fragment implements View.OnTouchListener 
         unbinder.unbind();
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-
-        ImageView view = (ImageView) v;
-        view.setScaleType(ImageView.ScaleType.MATRIX);
-        float scale;
-
-        dumpEvent(event);
-        // Handle touch events here...
-
-        switch (event.getAction() & MotionEvent.ACTION_MASK)
-        {
-            case MotionEvent.ACTION_DOWN:   // first finger down only
-//                savedMatrix.set(matrix);
-//                start.set(event.getX(), event.getY());
-//               Logs.d(TAG, "mode=DRAG"); // write to LogCat
-//                mode = DRAG;
-                break;
-
-            case MotionEvent.ACTION_UP: // first finger lifted
-                Log.d(TAG," mode =UP");
-                break;
-
-            case MotionEvent.ACTION_POINTER_UP: // second finger lifted
-
-                mode = NONE;
-                Logs.d(TAG, "mode=NONE");
-                break;
-
-            case MotionEvent.ACTION_POINTER_DOWN: // first and second finger down
-
-                oldDist = spacing(event);
-                Logs.d(TAG, "oldDist=" + oldDist);
-                if (oldDist > 50f) {
-                    savedMatrix.set(matrix);
-                    midPoint(mid, event);
-                    mode = ZOOM;
-                    Logs.d(TAG, "mode=ZOOM");
-
-                }
-                break;
-
-            case MotionEvent.ACTION_MOVE:
-
-                if (mode == DRAG)
-                {
-//                    matrix.set(savedMatrix);
-//                    matrix.postTranslate(event.getX() - start.x, event.getY() - start.y); // create the transformation in the matrix  of points
-
-//                    matrix.postTranslate(event.getX(), event.getY()); // create the transformation in the matrix  of points
-                }
-                else if (mode == ZOOM)
-                {
-                    // pinch zooming
-                    float newDist = spacing(event);
-                    Logs.d(TAG, "newDist=" + newDist);
-                    if (newDist > TEMP)
-                    {
-
-
-                        matrix.set(savedMatrix);
-                        scale = newDist / oldDist;// setting the scaling of the
-                        // matrix...if scale > 1 means
-                        // zoom in...if scale < 1 means
-                        // zoom out
-                        Log.d(TAG,"scale= "+scale+" Mid.x="+mid.x+" mid.y="+mid.y);
+//    @Override
+//    public boolean onTouch(View v, MotionEvent event) {
+//
+//        ImageView view = (ImageView) v;
+//        view.setScaleType(ImageView.ScaleType.MATRIX);
+//        float scale;
+//
+//        dumpEvent(event);
+//        // Handle touch events here...
+//
+//        switch (event.getAction() & MotionEvent.ACTION_MASK)
+//        {
+//            case MotionEvent.ACTION_DOWN:   // first finger down only
+////                savedMatrix.set(matrix);
+////                start.set(event.getX(), event.getY());
+////               Logs.d(TAG, "mode=DRAG"); // write to LogCat
+////                mode = DRAG;
+//                break;
+//
+//            case MotionEvent.ACTION_UP: // first finger lifted
+//                Log.d(TAG," mode =UP");
+//                break;
+//
+//            case MotionEvent.ACTION_POINTER_UP: // second finger lifted
+//
+//                mode = NONE;
+//                Logs.d(TAG, "mode=NONE");
+//                break;
+//
+//            case MotionEvent.ACTION_POINTER_DOWN: // first and second finger down
+//
+//                oldDist = spacing(event);
+//                Logs.d(TAG, "oldDist=" + oldDist);
+//                if (oldDist > 50f) {
+//                    savedMatrix.set(matrix);
+//                    midPoint(mid, event);
+//                    mode = ZOOM;
+//                    Logs.d(TAG, "mode=ZOOM");
+//
+//                }
+//                break;
+//
+//            case MotionEvent.ACTION_MOVE:
+//
+//                if (mode == DRAG)
+//                {
+////                    matrix.set(savedMatrix);
+////                    matrix.postTranslate(event.getX() - start.x, event.getY() - start.y); // create the transformation in the matrix  of points
+//
+////                    matrix.postTranslate(event.getX(), event.getY()); // create the transformation in the matrix  of points
+//                }
+//                else if (mode == ZOOM)
+//                {
+//                    // pinch zooming
+//                    float newDist = spacing(event);
+//                    Logs.d(TAG, "newDist=" + newDist);
+//                    if (newDist > TEMP)
+//                    {
+//
+//
+//                        matrix.set(savedMatrix);
+//                        scale = newDist / oldDist;// setting the scaling of the
+//                        // matrix...if scale > 1 means
+//                        // zoom in...if scale < 1 means
+//                        // zoom out
+//                        Log.d(TAG,"scale= "+scale+" Mid.x="+mid.x+" mid.y="+mid.y);
+////                        matrix.postScale(scale, scale, mid.x, mid.y);
 //                        matrix.postScale(scale, scale, mid.x, mid.y);
-                        matrix.postScale(scale, scale, mid.x, mid.y);
-                    }else
-                    {
-                        Log.d(TAG,"less than temp distance ");
-                    }
-                }
-                break;
-        }
-
-
-        view.setImageMatrix(matrix); // display the transformation on screen
-
-        return true;
-    }
-
-    private float spacing(MotionEvent event)
-    {
-        float x = event.getX(0) - event.getX(1);
-//        float x = event.getX(0);
-//        float y = event.getY(0);
-        float y = event.getY(0) - event.getY(1);
-        return (float) Math.sqrt(x * x + y * y);
-//        return (float) Math.abs(x + y );
-    }
-
-    /*
-     * --------------------------------------------------------------------------
-     * Method: midPoint Parameters: PointF object, MotionEvent Returns: void
-     * Description: calculates the midpoint between the two fingers
-     * ------------------------------------------------------------
-     */
-
-    private void midPoint(PointF point, MotionEvent event)
-    {
-        float x = event.getX(0) + event.getX(1);
-        float y = event.getY(0) + event.getY(1);
-        point.set(x / 2, y / 2);
-//        point.set(x , y );
-    }
-
-    /** Show an event in the LogCat view, for debugging */
-    private void dumpEvent(MotionEvent event)
-    {
-        String names[] = { "DOWN", "UP", "MOVE", "CANCEL", "OUTSIDE","POINTER_DOWN", "POINTER_UP", "7?", "8?", "9?" };
-        StringBuilder sb = new StringBuilder();
-        int action = event.getAction();
-        int actionCode = action & MotionEvent.ACTION_MASK;
-        sb.append("event ACTION_").append(names[actionCode]);
-
-        if (actionCode == MotionEvent.ACTION_POINTER_DOWN || actionCode == MotionEvent.ACTION_POINTER_UP)
-        {
-            sb.append("(pid ").append(action >> MotionEvent.ACTION_POINTER_ID_SHIFT);
-            sb.append(")");
-        }
-
-        sb.append("[");
-        for (int i = 0; i < event.getPointerCount(); i++)
-        {
-            sb.append("#").append(i);
-            sb.append("(pid ").append(event.getPointerId(i));
-            sb.append(")=").append((int) event.getX(i));
-            sb.append(",").append((int) event.getY(i));
-            if (i + 1 < event.getPointerCount())
-                sb.append(";");
-        }
-
-        sb.append("]");
-        Logs.d("Touch Events ---------", sb.toString());
-    }
-
-    private void scaleImage(float scaleFactor) {
-        Matrix displayMatrix = new Matrix();
-        matrix = img.getImageMatrix();
-
-//        float x = (img.getWidth() - img.getDrawable().getIntrinsicWidth() * scaleFactor) / 2;
-//        float y = (img.getHeight() - img.getDrawable().getIntrinsicHeight() * scaleFactor) / 2;
-float x = (700 - img.getDrawable().getIntrinsicWidth() * scaleFactor) / 2;
-        float y = (1600 - img.getDrawable().getIntrinsicHeight() * scaleFactor) / 2;
-
-        matrix.postScale(scaleFactor, scaleFactor);
-        matrix.postTranslate(x, y);
-
-        displayMatrix.set(matrix);
-        img.setImageMatrix(displayMatrix);
-    }
+//                    }else
+//                    {
+//                        Log.d(TAG,"less than temp distance ");
+//                    }
+//                }
+//                break;
+//        }
+//
+//
+//        view.setImageMatrix(matrix); // display the transformation on screen
+//
+//        return true;
+//    }
+//
+//    private float spacing(MotionEvent event)
+//    {
+//        float x = event.getX(0) - event.getX(1);
+////        float x = event.getX(0);
+////        float y = event.getY(0);
+//        float y = event.getY(0) - event.getY(1);
+//        return (float) Math.sqrt(x * x + y * y);
+////        return (float) Math.abs(x + y );
+//    }
+//
+//    /*
+//     * --------------------------------------------------------------------------
+//     * Method: midPoint Parameters: PointF object, MotionEvent Returns: void
+//     * Description: calculates the midpoint between the two fingers
+//     * ------------------------------------------------------------
+//     */
+//
+//    private void midPoint(PointF point, MotionEvent event)
+//    {
+//        float x = event.getX(0) + event.getX(1);
+//        float y = event.getY(0) + event.getY(1);
+//        point.set(x / 2, y / 2);
+////        point.set(x , y );
+//    }
+//
+//    /** Show an event in the LogCat view, for debugging */
+//    private void dumpEvent(MotionEvent event)
+//    {
+//        String names[] = { "DOWN", "UP", "MOVE", "CANCEL", "OUTSIDE","POINTER_DOWN", "POINTER_UP", "7?", "8?", "9?" };
+//        StringBuilder sb = new StringBuilder();
+//        int action = event.getAction();
+//        int actionCode = action & MotionEvent.ACTION_MASK;
+//        sb.append("event ACTION_").append(names[actionCode]);
+//
+//        if (actionCode == MotionEvent.ACTION_POINTER_DOWN || actionCode == MotionEvent.ACTION_POINTER_UP)
+//        {
+//            sb.append("(pid ").append(action >> MotionEvent.ACTION_POINTER_ID_SHIFT);
+//            sb.append(")");
+//        }
+//
+//        sb.append("[");
+//        for (int i = 0; i < event.getPointerCount(); i++)
+//        {
+//            sb.append("#").append(i);
+//            sb.append("(pid ").append(event.getPointerId(i));
+//            sb.append(")=").append((int) event.getX(i));
+//            sb.append(",").append((int) event.getY(i));
+//            if (i + 1 < event.getPointerCount())
+//                sb.append(";");
+//        }
+//
+//        sb.append("]");
+//        Logs.d("Touch Events ---------", sb.toString());
+//    }
+//
+//    private void scaleImage(float scaleFactor) {
+//        Matrix displayMatrix = new Matrix();
+//        matrix = img.getImageMatrix();
+//
+////        float x = (img.getWidth() - img.getDrawable().getIntrinsicWidth() * scaleFactor) / 2;
+////        float y = (img.getHeight() - img.getDrawable().getIntrinsicHeight() * scaleFactor) / 2;
+//float x = (700 - img.getDrawable().getIntrinsicWidth() * scaleFactor) / 2;
+//        float y = (1600 - img.getDrawable().getIntrinsicHeight() * scaleFactor) / 2;
+//
+//        matrix.postScale(scaleFactor, scaleFactor);
+//        matrix.postTranslate(x, y);
+//
+//        displayMatrix.set(matrix);
+//        img.setImageMatrix(displayMatrix);
+//    }
 }

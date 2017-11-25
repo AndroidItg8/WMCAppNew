@@ -16,9 +16,9 @@ public class ChangePswdPresenterImp extends BaseWeakPresenter<ChangePasswordMVP.
 
 
     private final ChangePasswordMVP.ChangePswdModule module;
-    private String oldPassword="";
-    private String newPassword;
-    private String confirmPassword;
+    String oldPassword;
+    String newPassword;
+    String confirmPassword;
 
     public ChangePswdPresenterImp(ChangePasswordMVP.ChangePswdView changePswdView) {
         super(changePswdView);
@@ -34,19 +34,10 @@ public class ChangePswdPresenterImp extends BaseWeakPresenter<ChangePasswordMVP.
 
     @Override
     public void onSubmitButtonClicked(View view,  String url) {
+
         if(hasView()) {
             boolean isValid = true;
-
-                oldPassword = getView().getOldPassword();
-                if (oldPassword.length() < 6) {
-                    isValid = false;
-                    getView().onOldPswdInvalid(view.getContext().getString(R.string.invalid_pass));
-
-                }
-                isValid =PasswordValidity(view);
-
-
-
+            isValid =PasswordValidity(view);
 
             if (isValid) {
                 getView().showProgress();
@@ -59,13 +50,34 @@ public class ChangePswdPresenterImp extends BaseWeakPresenter<ChangePasswordMVP.
     }
 
     private boolean PasswordValidity(View view) {
-        boolean isValid = true;
+
+        oldPassword = getView().getOldPassword();
         newPassword = getView().getNewPassword();
         confirmPassword = getView().getConfirmPassword();
+        boolean isValid = true;
+        if(TextUtils.isEmpty(oldPassword))
+        {
+            isValid=false;
+            getView().onOldPswdInvalid(view.getContext().getString(R.string.empty));
+        }
+        if(TextUtils.isEmpty(newPassword))
+        {
+            isValid=false;
+            getView().onOldPswdInvalid(view.getContext().getString(R.string.empty));
+        }
+        if(TextUtils.isEmpty(confirmPassword))
+        {
+            isValid=false;
+            getView().onOldPswdInvalid(view.getContext().getString(R.string.empty));
+        }
 
         if (newPassword.length() < 6) {
             isValid = false;
             getView().onNewPswdInvalid(view.getContext().getString(R.string.invalid_pass));
+        }
+        if (oldPassword.length() < 6) {
+            isValid = false;
+            getView().onOldPswdInvalid(view.getContext().getString(R.string.invalid_pass));
         }
         if (confirmPassword.length() < 6) {
             isValid = false;

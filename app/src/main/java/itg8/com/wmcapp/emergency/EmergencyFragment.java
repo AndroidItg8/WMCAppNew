@@ -24,8 +24,10 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.OnRecyclerviewClickListener;
+import itg8.com.wmcapp.emergency.model.Contact;
 import itg8.com.wmcapp.emergency.model.EmergencyModel;
 import itg8.com.wmcapp.emergency.mvp.EmergencyMVP;
+import itg8.com.wmcapp.emergency.mvp.EmergencyPresenterImp;
 import itg8.com.wmcapp.torisum.TorisumDetailsFragment;
 
 /**
@@ -33,7 +35,7 @@ import itg8.com.wmcapp.torisum.TorisumDetailsFragment;
  * Use the {@link EmergencyFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EmergencyFragment extends Fragment implements OnRecyclerviewClickListener<EmergencyModel>, EmergencyMVP.EmergencyView {
+public class EmergencyFragment extends Fragment implements EmergencyAdapter.ItemClickedListner, EmergencyMVP.EmergencyView {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -57,6 +59,7 @@ public class EmergencyFragment extends Fragment implements OnRecyclerviewClickLi
     private String mParam2;
     private Context mContext;
     private Snackbar snackbar;
+    private EmergencyMVP.EmergencyPresenter presenter;
 
 
     public EmergencyFragment() {
@@ -96,19 +99,16 @@ public class EmergencyFragment extends Fragment implements OnRecyclerviewClickLi
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_emergency, container, false);
         unbinder = ButterKnife.bind(this, view);
+        presenter = new EmergencyPresenterImp(this);
+        presenter.onGetList(getString(R.string.url_emergency));
         return view;
     }
 
     private void initView(List<EmergencyModel> lists) {
-        List<EmergencyModel> list = new ArrayList<>();
-        list.add(new EmergencyModel());
-        list.add(new EmergencyModel());
-        list.add(new EmergencyModel());
-        list.add(new EmergencyModel());
-        list.add(new EmergencyModel());
+
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        recyclerView.setAdapter(new EmergencyAdapter(mContext, list, this));
+        recyclerView.setAdapter(new EmergencyAdapter(mContext, lists, this));
 
     }
 
@@ -133,14 +133,6 @@ public class EmergencyFragment extends Fragment implements OnRecyclerviewClickLi
 
     }
 
-    @Override
-    public void onClick(int position, EmergencyModel emergencyModel) {
-        Fragment fragment = EmergencyDetailsFragment.newInstance(emergencyModel, "");
-        FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.frame_container, fragment).addToBackStack(TorisumDetailsFragment.class.getSimpleName()).commit();
-
-
-    }
 
     @Override
     public void onSuccess(List<EmergencyModel> list) {
@@ -220,5 +212,15 @@ public class EmergencyFragment extends Fragment implements OnRecyclerviewClickLi
 
     private void hideSnackbar() {
         snackbar.dismiss();
+    }
+
+
+
+    @Override
+    public void onItemClicked(int position, EmergencyModel model) {
+        Fragment fragment = EmergencyDetailsFragment.newInstance(model, "");
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.frame_container, fragment).addToBackStack(TorisumDetailsFragment.class.getSimpleName()).commit();
+
     }
 }
