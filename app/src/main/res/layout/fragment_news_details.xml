@@ -53,6 +53,7 @@
 After downloading the files, please transfer them to your mobile phone either by using Bluetooth or data cable. For more information on how to install games/applications, please refer to your phone's user manual."
         android:textColor="@color/colorBlack"
         android:textSize="15sp"
+        android:id="@+id/lbl_description"
        android:fontFamily="@font/roboto_light" />
 
     </RelativeLayout>

@@ -12,8 +12,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.CommonMethod;
-import itg8.com.wmcapp.complaint.LikeAdapter;
-import itg8.com.wmcapp.complaint.model.LikeModel;
+import itg8.com.wmcapp.profile.model.UserLikeModel;
 import itg8.com.wmcapp.widget.CircularImageView;
 import itg8.com.wmcapp.widget.CustomFontTextView;
 
@@ -23,10 +22,10 @@ import itg8.com.wmcapp.widget.CustomFontTextView;
 
 public class LikeProfileAdapter extends RecyclerView.Adapter<LikeProfileAdapter.ViewHolder> {
     private final Context mContext;
-    private final List<LikeModel> likeList;
+    private final List<UserLikeModel> likeList;
 
 
-    public LikeProfileAdapter(Context mContext, List<LikeModel> likeList) {
+    public LikeProfileAdapter(Context mContext, List<UserLikeModel> likeList) {
 
         this.mContext = mContext;
         this.likeList = likeList;
@@ -40,9 +39,8 @@ public class LikeProfileAdapter extends RecyclerView.Adapter<LikeProfileAdapter.
 
     @Override
     public void onBindViewHolder(final LikeProfileAdapter.ViewHolder holder, int position) {
-        holder.lblNameValue.setText(CommonMethod.checkEmptyProfile(likeList.get(position).getCustomername()));
-        CommonMethod.setUserPicaso(mContext, likeList.get(position).getCustomername(), holder.imgGarbage);
-
+        holder.lblNameValue.setText(CommonMethod.checkEmptyProfile(likeList.get(position).getComplaintName()));
+        CommonMethod.setUserPicaso(mContext, likeList.get(position).getUserFkid(), holder.imgGarbage);
     }
 
     @Override

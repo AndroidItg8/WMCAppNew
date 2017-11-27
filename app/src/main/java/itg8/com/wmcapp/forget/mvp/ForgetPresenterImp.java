@@ -3,8 +3,11 @@ package itg8.com.wmcapp.forget.mvp;
 import android.text.TextUtils;
 import android.view.View;
 
+import java.util.HashMap;
+
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.BaseWeakPresenter;
+import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.MyApplication;
 
 
@@ -34,6 +37,7 @@ public class ForgetPresenterImp extends BaseWeakPresenter<ForgetMVP.ForgetView> 
     public void onSubmitButtonClicked(View view, boolean isDigit) {
         if(hasView()) {
             boolean isValid = true;
+            HashMap<String, String> hashMap = new HashMap<>();
             String email = getView().getEmailId();
 
             if(TextUtils.isEmpty(email))
@@ -44,22 +48,30 @@ public class ForgetPresenterImp extends BaseWeakPresenter<ForgetMVP.ForgetView> 
 
             if(TextUtils.isDigitsOnly(email))
             {
+
+
                 if(email.length() != 10)
-                {
-                    isValid = false;
+                {isValid = false;
                     getView().onEmailInvalid(view.getContext().getString(R.string.invalid_number));
+                }else
+                {
+                    hashMap.put("Mobile",email);
                 }
             }else {
+
                 if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     isValid = false;
                     getView().onEmailInvalid(view.getContext().getString(R.string.invalid_email));
+                }else
+                {
+                    hashMap.put("Email", email);
                 }
             }
 
             if(isValid){
                 getView().showProgress();
 
-                module.onSendForgetToServer((MyApplication.getInstance().getRetroController()),email,view.getContext().getString(R.string.url_forget_pswd), this);
+                module.onSendForgetToServer((MyApplication.getInstance().getRetroController()),hashMap,view.getContext().getString(R.string.url_forget_pswd), this);
 
             }
         }

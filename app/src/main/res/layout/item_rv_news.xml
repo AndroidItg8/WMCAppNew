@@ -63,6 +63,7 @@
                 android:background="@drawable/bg_rectangle"
                 android:gravity="center"
                 android:text="X"
+                android:visibility="gone"
                  android:id="@+id/img_close"
                 android:textColor="@color/colorRed"
                 android:textSize="12sp" />

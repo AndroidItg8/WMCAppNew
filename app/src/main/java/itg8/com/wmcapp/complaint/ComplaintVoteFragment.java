@@ -2,13 +2,17 @@ package itg8.com.wmcapp.complaint;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -16,10 +20,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.MyApplication;
+import itg8.com.wmcapp.common.NoConnectivityException;
 import itg8.com.wmcapp.profile.LikeProfileAdapter;
 import itg8.com.wmcapp.profile.model.UserLikeModel;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,11 +43,14 @@ public class ComplaintVoteFragment extends Fragment {
     Unbinder unbinder;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private Context mContext;
+    private Snackbar snackbar;
 
 
     public ComplaintVoteFragment() {
@@ -78,18 +89,91 @@ public class ComplaintVoteFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_complaint_vote, container, false);
-getLikeListFromServer();
-
-         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//         recyclerView.setAdapter(new LikeProfileAdapter(mContext, list ));
-
         unbinder = ButterKnife.bind(this, view);
+        getLikeListFromServer();
+
 
         return view;
     }
 
     private void getLikeListFromServer() {
-//        Call<List<UserLikeModel>> call = MyApplication.getInstance().getRetroController();
+        progressBar.setVisibility(View.VISIBLE);
+
+        Call<List<UserLikeModel>> call = MyApplication.getInstance().getRetroController().getUserLikeList(getString(R.string.url_like_complaint_user));
+        call.enqueue(new Callback<List<UserLikeModel>>() {
+            @Override
+            public void onResponse(Call<List<UserLikeModel>> call, Response<List<UserLikeModel>> response) {
+                progressBar.setVisibility(View.GONE);
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        setRecyclerView(response.body());
+                    } else {
+                        showSnackbar(false, CommonMethod.FROM_ERROR, "Download Failed");
+                    }
+                } else {
+                    showSnackbar(false, CommonMethod.FROM_ERROR, "Download Failed");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<UserLikeModel>> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                if (t instanceof NoConnectivityException) {
+                    showSnackbar(true, CommonMethod.FROM_INTERNET, "Not connected to internet...Please try again");
+
+                } else {
+                    showSnackbar(false, CommonMethod.FROM_ERROR, "Download Failed");
+                }
+
+            }
+        });
+    }
+
+    private void showSnackbar(boolean b, int from, String message) {
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+
+        int color = 0;
+        if (from == CommonMethod.FROM_INTERNET) {
+
+            if (!b) {
+                color = Color.WHITE;
+                hideSnackbar();
+
+            } else {
+
+                color = Color.RED;
+
+            }
+            textView.setTextColor(color);
+            textView.setMaxLines(2);
+
+        } else {
+            textView.setTextColor(color);
+            textView.setMaxLines(2);
+        }
+        snackbar = Snackbar.make(recyclerView, message, Snackbar.LENGTH_INDEFINITE);
+        snackbar.show();
+        snackbar.setAction("OK", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideSnackbar();
+
+            }
+        });
+        snackbar.show();
+    }
+
+
+    private void hideSnackbar() {
+        snackbar.dismiss();
+    }
+
+
+    private void setRecyclerView(List<UserLikeModel> body) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        recyclerView.setAdapter(new LikeProfileAdapter(mContext, body));
     }
 
     @Override
@@ -107,8 +191,7 @@ getLikeListFromServer();
     @Override
     public void onDetach() {
         super.onDetach();
-        if(mContext!= null)
-        {
+        if (mContext != null) {
             mContext = null;
         }
     }

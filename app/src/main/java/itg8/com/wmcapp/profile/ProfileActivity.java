@@ -54,18 +54,16 @@ public class ProfileActivity extends BaseActivity implements LoginFragment.OnAtt
                     break;
                 case R.id.navigation_complaint:
                     fragment = UnSendComplaintFragment.newInstance("", "");
-                    from = getString(R.string.complaint);
+                    from = getString(R.string.complaint_profile);
 
                     break;
                 case R.id.navigation_notifications:
                     fragment = NotificationFragment.newInstance("", "");
                     from = getString(R.string.title_notifications);
-
                     break;
                 case R.id.navigation_vote:
                     fragment = ComplaintVoteFragment.newInstance("", "");
                     from = getString(R.string.title_vote);
-
                     break;
             }
             if (fragment != null) {

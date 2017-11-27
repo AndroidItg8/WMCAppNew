@@ -42,6 +42,7 @@
                     android:textColor="@color/colorWhite"
                     android:textSize="25sp"
                     android:textStyle="bold"
+                    android:background="@drawable/bg_gradient"
                     app:font_value="ROBOTO_MEDIUM" />
 
 

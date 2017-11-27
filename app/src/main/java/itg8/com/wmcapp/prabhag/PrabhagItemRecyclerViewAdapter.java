@@ -51,10 +51,10 @@ public class PrabhagItemRecyclerViewAdapter extends RecyclerView.Adapter<Prabhag
         if (isFrom== CommonMethod.WARD) {
 
             holder.content.setText(wradList.get(position).getWardName());
-//            holder.id.setText(wradList.get(position).getPkid());
+            holder.id.setText(wradList.get(position).getPkid());
         } else {
             holder.content.setText(list.get(position).getPrabhagName());
-          //  holder.id.setText(list.get(position).getPkid());
+            holder.id.setText(list.get(position).getPkid());
         }
 
 

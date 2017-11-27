@@ -1,6 +1,8 @@
 package itg8.com.wmcapp.torisum.model;
 
 import android.content.Context;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -10,7 +12,12 @@ import com.mindorks.placeholderview.annotations.View;
 import com.mindorks.placeholderview.annotations.expand.ChildPosition;
 import com.mindorks.placeholderview.annotations.expand.ParentPosition;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.common.CommonMethod;
+import itg8.com.wmcapp.widget.CustomFontTextView;
 
 /**
  * Created by Android itg 8 on 11/18/2017.
@@ -26,31 +33,33 @@ public class InfoView  {
     private int mChildPosition;
 
     @View(R.id.titleTxt)
-    private TextView titleTxt;
+    private CustomFontTextView titleTxt;
+    @View(R.id.checkbox)
+    private CheckBox checkBox;
 
-    @View(R.id.captionTxt)
-    private TextView captionTxt;
 
-    @View(R.id.timeTxt)
-    private TextView timeTxt;
 
-    @View(R.id.imageView)
-    private ImageView imageView;
 
     private SubCatList mInfo;
     private Context mContext;
 
     public InfoView(Context context, SubCatList info) {
-//         super(context);
         mContext = context;
         mInfo = info;
     }
 
     @Resolve
     public void onResolved() {
-        titleTxt.setText(mInfo.getSubCategoryName());
-        captionTxt.setText(mInfo.getSubCategoryDescription());
-        timeTxt.setText(mInfo.getLastModifiedDate());
-//        Glide.with(mContext).load(mInfo.getImageUrl()).into(imageView);
+        titleTxt.setText(CommonMethod.checkEmpty(mInfo.getSubCategoryName()));
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                compoundButton.setChecked(true);
+
+
+            }
+        });
+
+
     }
 }

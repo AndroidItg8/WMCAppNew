@@ -5,9 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.view.ViewCompat;
-import android.transition.Fade;
-import android.transition.TransitionInflater;
-import android.transition.TransitionSet;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,19 +13,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.news.model.NewsModel;
+import itg8.com.wmcapp.news.mvp.NewsMVP;
+import itg8.com.wmcapp.news.mvp.NewsPresenterImp;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link NewsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewsFragment extends Fragment implements NewsAdapter.NewsItemClickedListner {
+public class NewsFragment extends Fragment implements NewsAdapter.NewsItemClickedListner , NewsMVP.NewsView{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -43,6 +44,7 @@ public class NewsFragment extends Fragment implements NewsAdapter.NewsItemClicke
     private String mParam1;
     private String mParam2;
     private NewsDetailsFragment fragment;
+    private NewsMVP.NewsPresenter presenter;
 
 
     public NewsFragment() {
@@ -82,13 +84,14 @@ public class NewsFragment extends Fragment implements NewsAdapter.NewsItemClicke
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         unbinder = ButterKnife.bind(this, view);
-        init();
+         presenter = new NewsPresenterImp(this);
+        presenter.onGetNewsList(getString(R.string.url_news));
         return view;
     }
 
-    private void init() {
+    private void init(List<NewsModel> list) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter( new NewsAdapter(getActivity(), this));
+        recyclerView.setAdapter( new NewsAdapter(getActivity(),list, this));
     }
 
     @Override
@@ -99,37 +102,43 @@ public class NewsFragment extends Fragment implements NewsAdapter.NewsItemClicke
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onItemNewsClicked(int position, ImageView img) {
-        fragment = NewsDetailsFragment.newInstance(ViewCompat.getTransitionName(img), "");
-
-//        // 1. Exit for Previous Fragment
-//        Fade exitFade = new Fade();
-//        exitFade.setDuration(FADE_DEFAULT_TIME);
-//        Fragment previousFragment = getFragmentManager().findFragmentById(R.id.frame_container);
-//
-//        previousFragment.setExitTransition(exitFade);
-//
-//
-//        // 2. Shared Elements Transition
-//        TransitionSet enterTransitionSet = new TransitionSet();
-//        enterTransitionSet.addTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.move));
-//        enterTransitionSet.setDuration(MOVE_DEFAULT_TIME);
-//        enterTransitionSet.setStartDelay(FADE_DEFAULT_TIME);
-//        fragment.setSharedElementEnterTransition(enterTransitionSet);
-//
-//        // 3. Enter Transition for New Fragment
-//        Fade enterFade = new Fade();
-//        enterFade.setStartDelay(MOVE_DEFAULT_TIME + FADE_DEFAULT_TIME);
-//        enterFade.setDuration(FADE_DEFAULT_TIME);
-//        fragment.setEnterTransition(enterFade);
-
-    FragmentManager fm =getFragmentManager();
-
-    FragmentTransaction fragmentTransaction= fm.beginTransaction();
-        fragmentTransaction.addSharedElement(img,  ViewCompat.getTransitionName(img));
+    public void onItemNewsClicked(int position, NewsModel model) {
+        fragment = NewsDetailsFragment.newInstance(model, "");
+        FragmentManager fm =getFragmentManager();
+        FragmentTransaction fragmentTransaction= fm.beginTransaction();
         fragmentTransaction.replace(R.id.frame_container, fragment);
         fragmentTransaction.addToBackStack(fragment.getClass().getSimpleName());
         fragmentTransaction.commit();
-    //    fragmentTransaction.commitAllowingStateLoss();
+    }
+
+    @Override
+    public void onSuccess(List<NewsModel> list) {
+        init(list);
+
+    }
+
+    @Override
+    public void onFail(String message) {
+
+    }
+
+    @Override
+    public void onError(Object t) {
+
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    public void onNoInternetConnect(boolean b) {
+
     }
 }

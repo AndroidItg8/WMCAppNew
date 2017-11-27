@@ -1,13 +1,17 @@
 package itg8.com.wmcapp.common;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.complaint.model.LikeModel;
 import itg8.com.wmcapp.emergency.model.EmergencyModel;
+import itg8.com.wmcapp.news.model.NewsModel;
 import itg8.com.wmcapp.prabhag.model.PrabhagModel;
 import itg8.com.wmcapp.profile.ProfileModel;
+import itg8.com.wmcapp.profile.model.UserLikeModel;
 import itg8.com.wmcapp.registration.RegistrationModel;
 import itg8.com.wmcapp.torisum.model.TorisumModel;
 import itg8.com.wmcapp.torisum.model.TourismFilterModel;
@@ -16,6 +20,7 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -86,7 +91,7 @@ public interface RetroController {
     @FormUrlEncoded
     @POST()
     @Headers("Content-Type:application/x-www-form-urlencoded")
-    Call<RegistrationModel> forgetPaswd(@Url String url, @Field("Email") String email);
+    Call<RegistrationModel> forgetPaswd(@Url String url, @FieldMap Map<String, String> parameters);
 
 //    Category_fkid:1
 //    ComplaintName:Dash
@@ -169,4 +174,20 @@ public interface RetroController {
     Call<List<PrabhagModel>> getPragbhagList(@Url String loadUrl);
 
     Call<ResponseBody> deleteNBFromServer(@Url String url, int pkid);
+
+    @GET()
+    Call<List<UserLikeModel>> getUserLikeList(@Url String url);
+
+    @GET()
+    Call<List<NewsModel>> getNewsList(@Url String url);
+
+    @FormUrlEncoded
+    @POST()
+    @Headers("Content-Type:application/x-www-form-urlencoded")
+    Call<RegistrationModel> submitFeedback(@Url String url,
+                                           @Field("rateAmt") int rating,
+                                           @Field("description") String description);
+//    @Field("Title") String title,
+
+
 }

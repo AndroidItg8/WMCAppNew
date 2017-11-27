@@ -1,7 +1,6 @@
 package itg8.com.wmcapp.news;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +8,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.common.CommonMethod;
+import itg8.com.wmcapp.news.model.NewsModel;
 import itg8.com.wmcapp.widget.CustomFontTextView;
 
 
@@ -23,14 +26,16 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
 
 
     public interface NewsItemClickedListner {
-        void onItemNewsClicked(int position, ImageView img);
+        void onItemNewsClicked(int position, NewsModel model);
     }
 
     private Context context;
+    private List<NewsModel> list;
     private NewsItemClickedListner listner;
 
-    public NewsAdapter(Context context, NewsItemClickedListner listner) {
+    public NewsAdapter(Context context, List<NewsModel> list, NewsItemClickedListner listner) {
         this.context = context;
+        this.list = list;
         this.listner = listner;
     }
 
@@ -43,15 +48,16 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
 
     @Override
     public void onBindViewHolder(NewsViewHolder holder, int position) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            holder.img.setTransitionName("MyItem" + position);
-        }
+        holder.lblHeading.setText(list.get(position).getTitle());
+        CommonMethod.setUserPicaso(context, list.get(position).getProfilePic(),holder.img);
+        holder.lblDate.setText(CommonMethod.getFormattedDateTime(list.get(position).getAddate()));
+
 
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return list.size();
     }
 
     public class NewsViewHolder extends RecyclerView.ViewHolder {
@@ -71,7 +77,7 @@ class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listner.onItemNewsClicked(getAdapterPosition(), img);
+                    listner.onItemNewsClicked(getAdapterPosition(), list.get(getAdapterPosition()));
 
                 }
             });

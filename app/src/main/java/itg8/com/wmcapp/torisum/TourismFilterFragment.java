@@ -4,6 +4,7 @@ package itg8.com.wmcapp.torisum;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.mindorks.placeholderview.ExpandablePlaceHolderView;
-import com.mindorks.placeholderview.annotations.Resolve;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ import itg8.com.wmcapp.torisum.model.TourismFilterModel;
  * Use the {@link TourismFilterFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TourismFilterFragment extends Fragment {
+public class TourismFilterFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -40,13 +40,14 @@ public class TourismFilterFragment extends Fragment {
     Unbinder unbinder;
     @BindView(R.id.img)
     ImageView img;
+    @BindView(R.id.fab_filter)
+    FloatingActionButton fabFilter;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private Context mContext;
     private List<TourismFilterModel> listofCategoryModel;
-    private InfoView infoView;
 
 
     public TourismFilterFragment() {
@@ -93,12 +94,11 @@ public class TourismFilterFragment extends Fragment {
             }
         }
 
-
+        fabFilter.setOnClickListener(this);
         return view;
     }
 ///https://github.com/janishar/PlaceHolderView/blob/master/app/src/main/java/com/mindorks/test/ExpandableActivity.java
     //https://blog.mindorks.com/android-expandable-news-feed-example-4b4544e1fe7e
-
 
 
     @Override
@@ -118,5 +118,16 @@ public class TourismFilterFragment extends Fragment {
         super.onDetach();
         if (mContext != null) ;
         mContext = null;
+    }
+
+    @Override
+    public void onClick(View view) {
+switch (view.getId())
+{
+    case R.id.fab_filter:
+
+        break;
+
+}
     }
 }

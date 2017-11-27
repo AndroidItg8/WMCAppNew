@@ -15,12 +15,15 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -28,8 +31,8 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -67,7 +70,6 @@ import itg8.com.wmcapp.signup.LoginActivity;
 import itg8.com.wmcapp.suggestion.SuggestionFragment;
 import itg8.com.wmcapp.torisum.TorisumFragment;
 import itg8.com.wmcapp.widget.CircularImageView;
-import itg8.com.wmcapp.widget.CustomFontTextView;
 
 public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -100,6 +102,7 @@ public class HomeActivity extends BaseActivity
     private TextView lblMobile;
     private CircularImageView imageView;
     private NavigationView navigationView;
+    private RecyclerView recyclerView;
 
 
     @Override
@@ -215,12 +218,30 @@ public class HomeActivity extends BaseActivity
         mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
         mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-        Button btnDismiss = view.findViewById(R.id.btn_dismiss);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        cityAdapter = new CityAdapter(getApplicationContext(), cityList, this);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
-        recyclerView.setAdapter(cityAdapter);
+         recyclerView = view.findViewById(R.id.recyclerView);
+        FloatingActionButton btnDismiss = view.findViewById(R.id.btn_dismiss);
+        EditText edtSearch = view.findViewById(R.id.edt_search);
+
+
+        edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                onQueryTextChange(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        CityTableManipulate cityTableManipulate = new CityTableManipulate(this);
+       this.list = cityTableManipulate.getAll();
+       initCityRecyclerView(cityTableManipulate.getAll());
         btnDismiss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -229,6 +250,32 @@ public class HomeActivity extends BaseActivity
         });
         mBottomSheetDialog.show();
 
+    }
+
+    private void initCityRecyclerView(List<CityModel> filteredModelList) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        cityAdapter = new CityAdapter(getApplicationContext(), filteredModelList, this);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(cityAdapter);
+    }
+
+    private boolean onQueryTextChange(String s) {
+        final List<CityModel> filteredModelList = filter(list, s);
+        initCityRecyclerView(filteredModelList);
+        return true;
+    }
+
+    private List<CityModel> filter(List<CityModel> mainList, String query) {
+        final String lowerCaseQuery = query.toLowerCase();
+
+        final List<CityModel> filteredModelList = new ArrayList<>();
+        for (CityModel model : mainList) {
+            final String text = model.getName().toLowerCase();
+            if (text.contains(lowerCaseQuery)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
     }
 
     private void openBottomSheetForLanguage() {

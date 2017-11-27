@@ -94,8 +94,8 @@ public class UnSendComplaintFragment extends Fragment  {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(new OnlineComplaint(), "Online");
-        adapter.addFragment(new OfflineComplaint(), "Offline");
+        adapter.addFragment(new OnlineComplaint(), "  Online");
+        adapter.addFragment(new OfflineComplaint(), "  Offline");
         viewPager.setAdapter(adapter);
     }
 

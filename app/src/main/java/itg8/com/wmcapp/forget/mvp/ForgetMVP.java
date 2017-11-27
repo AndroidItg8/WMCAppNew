@@ -3,6 +3,8 @@ package itg8.com.wmcapp.forget.mvp;
 
 import android.view.View;
 
+import java.util.HashMap;
+
 import itg8.com.wmcapp.common.RetroController;
 
 
@@ -42,7 +44,7 @@ public interface ForgetMVP {
     {
         void onDestroy();
         void onFail(String message);
-        void onSendForgetToServer(RetroController controller, String email, String url, ForgetPresenterImp listener);
+        void onSendForgetToServer(RetroController controller,HashMap<String, String> hashMap, String url, ForgetPresenterImp listener);
     }
 
     public interface ForgetListener{

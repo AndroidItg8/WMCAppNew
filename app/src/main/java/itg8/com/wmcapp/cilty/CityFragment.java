@@ -3,14 +3,16 @@ package itg8.com.wmcapp.cilty;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
@@ -52,7 +54,7 @@ public class CityFragment extends Fragment implements CityAdapter.CityItemClicke
     @BindView(R.id.progressView)
     CircularProgressView progressView;
     @BindView(R.id.btn_dismiss)
-    Button btnDismiss;
+    FloatingActionButton btnDismiss;
     Unbinder unbinder;
 
     // TODO: Rename and change types of parameters
@@ -106,10 +108,50 @@ public class CityFragment extends Fragment implements CityAdapter.CityItemClicke
 
     private void init() {
         btnDismiss.setOnClickListener(this);
+        initRecyclerView(list);
+
+        edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                onQueryTextChange(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
+    private void initRecyclerView(List<CityModel> filteredModelList) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        cityAdapter = new CityAdapter(getActivity(), list, this);
+        cityAdapter = new CityAdapter(getActivity(), filteredModelList, this);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(cityAdapter);
+    }
+
+    private boolean onQueryTextChange(String s) {
+        final List<CityModel> filteredModelList = filter(list, s);
+        initRecyclerView(filteredModelList);
+        return true;
+    }
+
+    private List<CityModel> filter(List<CityModel> mainList, String query) {
+        final String lowerCaseQuery = query.toLowerCase();
+
+        final List<CityModel> filteredModelList = new ArrayList<>();
+        for (CityModel model : mainList) {
+            final String text = model.getName().toLowerCase();
+            if (text.contains(lowerCaseQuery)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -148,6 +190,7 @@ public class CityFragment extends Fragment implements CityAdapter.CityItemClicke
         Prefs.putInt(CommonMethod.SELECTED_CITY, cityModel.getID());
         lblSelectCity.setText("Your Selected City:"+CommonMethod.checkEmpty(cityModel.getName()));
         cityAdapter.notifyDataSetChanged();
+
 
     }
 

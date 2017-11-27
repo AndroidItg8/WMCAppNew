@@ -104,11 +104,11 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
         if (listOfComplaint != null && listOfComplaint.size() > 0) {
             CommonMethod.showHideItem(recyclerView,rlNoItem );
             init();
-
+            presenter.onLoadMoreItem(getString(R.string.url_complaint), CommonMethod.FROM_COMPLAINT_USER);
         } else {
             CommonMethod.showHideItem(rlNoItem,recyclerView);
         }
-        presenter.onLoadMoreItem(getString(R.string.url_complaint), CommonMethod.FROM_COMPLAINT_USER);
+
         return view;
     }
 
@@ -177,6 +177,8 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        presenter.onDetach();
+
     }
 
 
@@ -192,7 +194,7 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
         super.onDetach();
         if (mContext != null)
             mContext = null;
-        presenter.onDetach();
+
     }
 
     @Override
@@ -281,5 +283,6 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
     }
 
 
-//
+
+
 }

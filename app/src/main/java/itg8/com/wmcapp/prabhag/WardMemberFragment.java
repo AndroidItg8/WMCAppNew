@@ -152,11 +152,13 @@ public class WardMemberFragment extends Fragment implements ContactRvAdapter.OnC
         txtProfileName.setText(CommonMethod.checkEmpty(contactList.get(0).getMemberName()));
         lblAddress.setText(CommonMethod.checkEmpty(contactList.get(0).getAddress()));
         txtFromDate.setText(CommonMethod.getFormattedDateTime(contactList.get(0).getAdddate()));
+        CommonMethod.setUserPicaso(mContext, contactList.get(0).getProfilePic(),imgProfile);
 
         rvContact.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         ContactRvAdapter adapter = new ContactRvAdapter(contactList, this);
         rvContact.setLayoutManager(new LinearLayoutManager(getContext()));
         rvContact.setAdapter(adapter);
+
     }
 
     @AfterPermissionGranted(RC_CALL)

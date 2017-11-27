@@ -1,6 +1,8 @@
 package itg8.com.wmcapp.forget.mvp;
 
 
+import java.util.HashMap;
+
 import itg8.com.wmcapp.common.NoConnectivityException;
 import itg8.com.wmcapp.common.RetroController;
 import itg8.com.wmcapp.registration.RegistrationModel;
@@ -30,9 +32,12 @@ public class ForgetModuleImp  implements ForgetMVP.ForgetModule {
 
     }
 
+
+
     @Override
-    public void onSendForgetToServer(RetroController controller, String email, String url, final ForgetPresenterImp listener) {
-    call = controller.forgetPaswd(url, email);
+    public void onSendForgetToServer(RetroController controller,HashMap<String, String> parametrs,String url, final ForgetPresenterImp listener) {
+
+    call = controller.forgetPaswd(url, parametrs);
         call.enqueue(new Callback<RegistrationModel>() {
             @Override
             public void onResponse(Call<RegistrationModel> call, Response<RegistrationModel> response) {

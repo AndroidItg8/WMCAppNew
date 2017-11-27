@@ -38,13 +38,6 @@
             android:layout_centerVertical="true"
             android:textStyle="bold"
             app:font_value="ROBOTO_MEDIUM" />
-
-
-
-
-
-
-
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

@@ -93,7 +93,6 @@ public class ForgetFragment extends Fragment implements ForgetMVP.ForgetView, Vi
         unbinder = ButterKnife.bind(this, view);
         fabGo.setOnClickListener(this);
         listener.onSetTitle(getString(R.string.forget_pswd));
-
         presenter = new ForgetPresenterImp(this);
         return view;
     }
@@ -111,13 +110,13 @@ public class ForgetFragment extends Fragment implements ForgetMVP.ForgetView, Vi
 
     @Override
     public void onSuccess(String message) {
-        showToast(message);
-        getActivity().finish();
+        showSnackbar(false, CommonMethod.FROM_ERROR, message);
 
     }
 
     @Override
-    public void onFail(String message) {
+    public void onFail(String message)
+    {
         showSnackbar(false, CommonMethod.FROM_ERROR, message);
     }
 
@@ -200,7 +199,8 @@ public class ForgetFragment extends Fragment implements ForgetMVP.ForgetView, Vi
     }
 
     private void onSnackbarOkClicked(View view) {
-        presenter.onSubmitButtonClicked(view, isDigit);
+        hideSnackbar();
+
     }
 
     public void hideSnackbar() {

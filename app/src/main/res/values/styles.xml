@@ -63,12 +63,12 @@
     </style>
 
 
-    <style name="MyRaidoButtonTwo" parent="Widget.AppCompat.CompoundButton.RadioButton">
+    <style name="MyRaidoButtonTwo" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <item name="android:colorControlNormal" tools:ignore="NewApi">@color/colorBlack</item>
         <item name="android:colorControlActivated" tools:ignore="NewApi">#460745</item>
-        <item name="android:colorControlHighlight" tools:ignore="NewApi">#c51162</item>
-        <item name="android:textColorPrimaryDisableOnly">@color/colorGray</item>
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
+        <!--<item name="android:colorControlHighlight" tools:ignore="NewApi">#c51162</item>-->
+        <!--<item name="android:textColorPrimaryDisableOnly">@color/colorGray</item>-->
+        <!--<item name="android:textAppearance">@style/TextAppearance.AppCompat</item>-->
     </style>
 
     <style name="MyRadioButtonStyle" parent="@android:style/Widget.CompoundButton.RadioButton">
