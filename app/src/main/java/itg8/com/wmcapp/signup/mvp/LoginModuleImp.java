@@ -71,7 +71,7 @@ public class LoginModuleImp implements LoginMvp.LoginModule {
                                        listener.onSuccess();
                                    }
                                } else {
-                                   listener.onSuccess();
+                                   listener.onFail("Invalid User");
                                }
                            }else
                            {

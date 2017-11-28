@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import itg8.com.wmcapp.board.model.DeleteNoticeModel;
 import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.complaint.model.LikeModel;
 import itg8.com.wmcapp.emergency.model.EmergencyModel;
@@ -173,7 +174,10 @@ public interface RetroController {
     @GET()
     Call<List<PrabhagModel>> getPragbhagList(@Url String loadUrl);
 
-    Call<ResponseBody> deleteNBFromServer(@Url String url, int pkid);
+    @FormUrlEncoded
+    @POST()
+    @Headers("Content-Type:application/x-www-form-urlencoded")
+    Call<RegistrationModel> deleteNBFromServer(@Url String url,@Field("Notice_fkid") int pkid);
 
     @GET()
     Call<List<UserLikeModel>> getUserLikeList(@Url String url);
@@ -187,6 +191,9 @@ public interface RetroController {
     Call<RegistrationModel> submitFeedback(@Url String url,
                                            @Field("rateAmt") int rating,
                                            @Field("description") String description);
+
+    @GET()
+    Call<List<DeleteNoticeModel>> getDeleteNBList(@Url String url);
 //    @Field("Title") String title,
 
 

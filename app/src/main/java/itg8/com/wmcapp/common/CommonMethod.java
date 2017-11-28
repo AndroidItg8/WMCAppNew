@@ -67,6 +67,10 @@ public final class CommonMethod {
     public static final int FROM_ERROR = 2;
     public static final String USER_NAME = "USER_NAME";
     public static final String USER_MOBILE = "USER_MOBILE";
+    // Successfully deleted item from server
+    public static final String TYPE_NOTICE_SYNC = "NOTICE_SYNC";
+    public static final String TYPE_NOTICE_UNSYNC ="NOTICE_SYNC" ;
+    public static final String SYNC_NB_JOB = "SYNC_NB_JOB";
 
 
 //    1) Complaint

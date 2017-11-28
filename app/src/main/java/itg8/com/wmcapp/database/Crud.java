@@ -24,7 +24,10 @@ public interface Crud<T> {
      }
       public  interface CityCrud{
           CityModel getCity(String value,String key);
+      }
+      public interface DeleteNBItem{
 
+         int deleteNBItem(int value,String key);
       }
 
 }

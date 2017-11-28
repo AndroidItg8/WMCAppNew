@@ -10,6 +10,8 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
+import itg8.com.wmcapp.board.model.NoticeBoardModel;
+import itg8.com.wmcapp.board.model.TempNoticeBoardModel;
 import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.complaint.model.TempComplaintModel;
 
@@ -22,10 +24,11 @@ import itg8.com.wmcapp.complaint.model.TempComplaintModel;
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     private static final String DATABASE_NAME    ="ormlite.db";
-    private static final int    DATABASE_VERSION = 3;
+    private static final int    DATABASE_VERSION = 4;
 
     private Dao<CityModel, Integer> mDAOCity = null;
     private Dao<TempComplaintModel, Integer> mDAOComplaint;
+    private Dao<TempNoticeBoardModel, Integer> mDAONB= null;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,6 +40,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         try {
             TableUtils.createTable(connectionSource, CityModel.class);
             TableUtils.createTable(connectionSource, TempComplaintModel.class);
+            TableUtils.createTable(connectionSource, TempNoticeBoardModel.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -48,6 +52,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         try {
             TableUtils.dropTable(connectionSource, CityModel.class, true);
             TableUtils.dropTable(connectionSource, TempComplaintModel.class, true);
+            TableUtils.dropTable(connectionSource, TempNoticeBoardModel.class, true);
 
             onCreate(database,connectionSource);
         } catch (SQLException e) {
@@ -62,6 +67,14 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         }
 
         return mDAOCity;
+    }
+
+    public Dao<TempNoticeBoardModel, Integer> getmDAONoticeBoard() throws SQLException {
+        if (mDAONB == null) {
+            mDAONB = getDao(TempNoticeBoardModel.class);
+        }
+
+        return mDAONB;
     }
     public Dao<TempComplaintModel, Integer> getmDAOComplaint() throws SQLException {
         if (mDAOComplaint == null) {

@@ -11,11 +11,11 @@ import itg8.com.wmcapp.common.BaseWeakPresenter;
 
 public class NBPresenterImp extends BaseWeakPresenter<NBMVP.NBView> implements NBMVP.NBListener, NBMVP.NBPresenter {
 
-    itg8.com.wmcapp.board.mvp.NBMVP.NBModule module;
     private static final int LIMIT = 10;
-    private int page=0;
+    itg8.com.wmcapp.board.mvp.NBMVP.NBModule module;
+    private int page = 0;
     private boolean isLoading;
-    private boolean isFinished=false;
+    private boolean isFinished = false;
 
     public NBPresenterImp(NBMVP.NBView nbView) {
         super(nbView);
@@ -49,12 +49,12 @@ public class NBPresenterImp extends BaseWeakPresenter<NBMVP.NBView> implements N
 
     @Override
     public void onLoadMore() {
-        getItems(page,LIMIT);
+        getItems(page, LIMIT);
     }
 
     @Override
     public void onLoadMoreItems(String url) {
-        this.url=url;
+        this.url = url;
         onLoadMore();
     }
 
@@ -71,67 +71,58 @@ public class NBPresenterImp extends BaseWeakPresenter<NBMVP.NBView> implements N
                 int totalItemCount = linearLayoutManager.getItemCount();
                 int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
 
-                if (!isLoading && !isFinished)
-                {
-                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0)
-                    {
+                if (!isLoading && !isFinished) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
 
                         page++;
 
-                        getItems(page,LIMIT);
+                        getItems(page, LIMIT);
                     }
                 }
             }
         };
     }
 
-    @Override
-    public void removeItemFromServer(String url, int pkid) {
-        if(hasView()){
-
-            module.onDeleteItemFromServer(url,pkid,this);
-        }
-
-    }
 
     private void getItems(int page, int limit) {
-        if(hasView()){
+        if (hasView()) {
             getView().onPaginationError(false);
             getView().onShowPaginationLoading(true);
-            isLoading=true;
-            module.onStartLoadingList(url,page,limit,this);
+            isLoading = true;
+            module.onStartLoadingList(url, page, limit, this);
         }
     }
 
     @Override
     public void onNBListAvailable(List<NoticeBoardModel> o) {
-        if(hasView()){
+        if (hasView()) {
             getView().onShowPaginationLoading(false);
-            if(o.size()>0)
+            if (o.size() > 0)
                 getView().onNBListAvailable(o);
             else {
                 getView().onNoMoreList();
-                isFinished=true;
+                isFinished = true;
             }
-            isLoading=false;
+            isLoading = false;
         }
     }
 
     @Override
     public void onNoMoreList() {
-        if(hasView()){
+        if (hasView()) {
             getView().onShowPaginationLoading(false);
             getView().onNoMoreList();
-            isLoading=false;
+            isLoading = false;
         }
     }
 
     @Override
     public void onPaginationError() {
-        if(hasView()){
+        if (hasView()) {
             getView().onShowPaginationLoading(false);
             getView().onPaginationError(true);
-            isLoading=false;
+            isLoading = false;
         }
     }
+
 }

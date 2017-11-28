@@ -18,9 +18,12 @@ import io.reactivex.schedulers.Schedulers;
 import itg8.com.wmcapp.board.model.NoticeBoardModel;
 import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.MyApplication;
+import itg8.com.wmcapp.registration.RegistrationModel;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.HttpException;
+import retrofit2.Response;
 
 /**
  * Created by swapnilmeshram on 03/11/17.
@@ -87,8 +90,5 @@ public class NBModuleImp  implements itg8.com.wmcapp.board.mvp.NBMVP.NBModule {
                 });
     }
 
-    @Override
-    public void onDeleteItemFromServer(String url, int pkid, NBMVP.NBListener listener) {
-        Call<ResponseBody> call = MyApplication.getInstance().getRetroController().deleteNBFromServer(url, pkid);
-    }
+
 }

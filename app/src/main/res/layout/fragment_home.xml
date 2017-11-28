@@ -1,0 +1,93 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
+    tools:context="itg8.com.wmcapp.home.HomeFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            app:cardUseCompatPadding="true"
+            app:cardPreventCornerOverlap="true">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_st_gradient">
+
+                <itg8.com.wmcapp.widget.CustomFontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="15dp"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlack"
+                    android:text="@string/complaint"
+                    android:textSize="18sp"
+                    app:font_value="ROBOTO_MEDIUM" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_complaint"
+                    android:gravity="center"/>
+
+
+            </RelativeLayout>
+
+
+
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            app:cardUseCompatPadding="true"
+            app:cardPreventCornerOverlap="true">
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+   <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="200dp"-->
+        <!--android:orientation="horizontal">-->
+       <!--<android.support.v7.widget.CardView-->
+           <!--android:layout_width="0dp"-->
+           <!--android:layout_height="match_parent"-->
+           <!--android:layout_weight="1"-->
+           <!--app:cardUseCompatPadding="true"-->
+           <!--app:cardPreventCornerOverlap="true">-->
+
+
+
+       <!--</android.support.v7.widget.CardView> -->
+       <!--<android.support.v7.widget.CardView-->
+           <!--android:layout_width="0dp"-->
+           <!--android:layout_height="match_parent"-->
+           <!--android:layout_weight="1"-->
+           <!--app:cardUseCompatPadding="true"-->
+           <!--app:cardPreventCornerOverlap="true">-->
+
+
+
+       <!--</android.support.v7.widget.CardView>-->
+
+    <!--</LinearLayout>-->
+   <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="200dp"-->
+        <!--android:orientation="horizontal">-->
+
+    <!--</LinearLayout>-->
+
+
+    <!--</LinearLayout>-->
+
+</ScrollView>

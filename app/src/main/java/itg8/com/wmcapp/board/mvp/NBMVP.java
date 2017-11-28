@@ -21,6 +21,7 @@ public interface NBMVP {
         void onNoMoreList();
         void onShowPaginationLoading(boolean show);
         void onPaginationError(boolean show);
+
     }
 
     public interface NBPresenter extends BaseFragmentPresenter {
@@ -39,19 +40,20 @@ public interface NBMVP {
 
         RecyclerView.OnScrollListener scrollListener(LinearLayoutManager layoutManager);
 
-        void removeItemFromServer(String string, int pkid);
     }
 
-    public interface NBListener{
+    public interface NBListener {
         void onNBListAvailable(List<NoticeBoardModel> o);
+
         void onNoMoreList();
+
         void onPaginationError();
+
     }
 
     public interface NBModule extends BaseDestroyModule {
         void onStartLoadingList(String url, int page, int limit, NBListener listener);
 
-        void onDeleteItemFromServer(String url, int pkid, NBListener  listener);
     }
 
 }

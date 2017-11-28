@@ -7,10 +7,18 @@ import android.os.Parcelable;
 import android.os.Parcelable.Creator;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+import itg8.com.wmcapp.cilty.model.CityModel;
 
 @Generated("org.jsonschema2pojo")
+
 public class NoticeBoardModel implements Parcelable
 {
+
+
+
 
     @SerializedName("pkid")
     @Expose

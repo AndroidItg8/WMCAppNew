@@ -112,7 +112,7 @@ public class HomeActivity extends BaseActivity
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-//        MyApplication.getInstance().uploadAllRemaining();
+        MyApplication.getInstance().getDeletedNBList();
 
         //  presenter = new CityPresenterImp(this);
 
@@ -157,7 +157,9 @@ public class HomeActivity extends BaseActivity
                 @Override
                 public void onSetProfile(ProfileModel model) {
                     if (model != null) {
-                        Picasso.with(getApplicationContext()).load(CommonMethod.BASE_URL+model.getPicProfle()).into(imageView);}}
+                        Picasso.with(getApplicationContext()).load(CommonMethod.BASE_URL + model.getPicProfle()).into(imageView);
+                    }
+                }
 
                 @Override
                 public void onFailed(String s) {
@@ -218,7 +220,7 @@ public class HomeActivity extends BaseActivity
         mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
         mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
-         recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView = view.findViewById(R.id.recyclerView);
         FloatingActionButton btnDismiss = view.findViewById(R.id.btn_dismiss);
         EditText edtSearch = view.findViewById(R.id.edt_search);
 
@@ -240,8 +242,8 @@ public class HomeActivity extends BaseActivity
             }
         });
         CityTableManipulate cityTableManipulate = new CityTableManipulate(this);
-       this.list = cityTableManipulate.getAll();
-       initCityRecyclerView(cityTableManipulate.getAll());
+        this.list = cityTableManipulate.getAll();
+        initCityRecyclerView(cityTableManipulate.getAll());
         btnDismiss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -407,7 +409,9 @@ public class HomeActivity extends BaseActivity
         Prefs.remove(CommonMethod.HEADER);
         FirebaseAuth.getInstance().signOut();
         Log.d(TAG, "Firebase User:" + FirebaseAuth.getInstance().getCurrentUser());
+
         callLoginActivity();
+        MyApplication.getInstance().deleteNoticeBoard();
         finish();
 
 
@@ -643,7 +647,7 @@ public class HomeActivity extends BaseActivity
 
     @Override
     public void moveComplaint() {
-        callFragmentWithoutStack(ComplaintFragment.newInstance("",""));
+        callFragmentWithoutStack(ComplaintFragment.newInstance("", ""));
     }
 
 

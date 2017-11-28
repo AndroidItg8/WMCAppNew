@@ -8,12 +8,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -23,13 +23,9 @@ import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.board.model.NoticeBoardModel;
 import itg8.com.wmcapp.board.mvp.NBMVP;
 import itg8.com.wmcapp.board.mvp.NBPresenterImp;
-import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.Logs;
+import itg8.com.wmcapp.common.MyApplication;
 import itg8.com.wmcapp.complaint.AddComplaintFragment;
-import itg8.com.wmcapp.complaint.ComplaintFragment;
-import itg8.com.wmcapp.torisum.TorisumDetailsFragment;
-import ru.alexbykov.nopaginate.paginate.Paginate;
-import ru.alexbykov.nopaginate.paginate.PaginateBuilder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -134,6 +130,8 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
         Logs.d("CYCLE : onDestroyView()");
         unbinder.unbind();
         presenter.onDetach();
+        MyApplication.getInstance().setNbID(null);
+
     }
 
     @Override
@@ -188,13 +186,23 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
     public void onDetach() {
         super.onDetach();
         Logs.d("CYCLE : Detach()");
+
         if (mContext != null)
             mContext = null;
     }
 
     @Override
     public void onNBListAvailable(List<NoticeBoardModel> o) {
-        adapter.addItems(o);
+        List<NoticeBoardModel> list = new ArrayList<>(o);
+
+        List<Integer> synclistId = MyApplication.getInstance().setNBListToArray();
+        for (NoticeBoardModel model : o) {
+                if (synclistId.contains(model.getPkid())) {
+                    list.remove(model);
+                }
+            }
+
+        adapter.addItems(list);
     }
 
     @Override
@@ -238,6 +246,7 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
 
     }
 
+
     @Override
     public void onNBItemClicked(int position, NoticeBoardModel model) {
         Fragment fragment = NoticeBoardDeatilsFragment.newInstance(model, "");
@@ -249,12 +258,11 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onNBItemDeleteClicked(int position, NoticeBoardModel model) {
-       // presenter.removeItemFromServer(getString(R.string.url_delete_notice),model.getPkid());
-        model.setItemDelete(true);
-        adapter.removeItem( position);
+        adapter.removeItem(position);
 
+        MyApplication.getInstance().deleteNoticeItemFromServer(getString(R.string.url_delete_notice), model.getPkid());
+        MyApplication.getInstance().setNbID(null);
     }
-
 
 
 }
