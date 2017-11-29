@@ -1,8 +1,8 @@
 package itg8.com.wmcapp.complaint;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.support.v4.graphics.drawable.DrawableCompat;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +18,7 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -46,9 +47,12 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private final Context mContext;
     private final int from;
 
+
     private ComplaintListner listner;
     private List<ComplaintModel> models;
     private int likedSize;
+    private String status;
+    private int colorStatus;
 
     public ComplaintAdapter(Context mContext, int fromComplaint, ComplaintListner listner) {
         this.mContext = mContext;
@@ -123,6 +127,30 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((ComplaintViewHolder) holder).lblCityName.setText(CommonMethod.checkEmpty(models.get(position).getCityName()));
             ((ComplaintViewHolder) holder).lblAddressValue.setText(CommonMethod.checkEmpty(models.get(position).getComplaintName()));
             ((ComplaintViewHolder) holder).lblProblemValue.setText(CommonMethod.checkEmpty(models.get(position).getComplaintDescription()));
+            CommonMethod.setUserPicaso(mContext, models.get(position).getUserProfilepic(), ((ComplaintViewHolder) holder).img);
+            ((ComplaintViewHolder) holder).lblNameValue.setText(models.get(position).getUserFullename());
+            Calendar date = CommonMethod.convertStringToComplaintDate(models.get(position).getAddedDate());
+            ((ComplaintViewHolder) holder).lblDaysValue.setText(String.valueOf(CommonMethod.calculateDays(date)));
+
+
+            if (models.get(position).getActive() == CommonMethod.PENDING) {
+                status =mContext.getString(R.string.pending_status);
+                colorStatus=ContextCompat.getColor(mContext, R.color.colorRed);
+                }
+                else if (models.get(position).getActive() == CommonMethod.CLOSED) {
+                status =mContext.getString(R.string.solved_status);
+                colorStatus=ContextCompat.getColor(mContext, R.color.colorGreen);
+                }
+                else if (models.get(position).getActive() == CommonMethod.PROCESS) {
+                status =mContext.getString(R.string.process_status);
+                colorStatus=ContextCompat.getColor(mContext, R.color.colorFacebook);
+            }
+
+            ((ComplaintViewHolder) holder).complaintStatus.setText(status);
+            ((ComplaintViewHolder) holder).complaintStatus.setTextColor(colorStatus);
+
+
+
 
             if (models.get(position).getLikeList() != null) {
                 likedSize = models.get(position).getLikeList().size();
@@ -260,6 +288,8 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         CustomFontTextView lblShareOnline;
         @BindView(R.id.ll_vote_up)
         LinearLayout llVoteUp;
+        @BindView(R.id.complaint_status)
+        CustomFontTextView complaintStatus;
 
         public ComplaintViewHolder(View itemView) {
             super(itemView);
@@ -271,19 +301,18 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 }
             });
             frame.setOnClickListener(new View.OnClickListener() {
-                 @Override
-                 public void onClick(View view) {
-                     listner.onVoteUpClicked(getAdapterPosition(),models.get(getAdapterPosition()));
-                 }
-             });
-              lblShare.setOnClickListener(new View.OnClickListener() {
-                  @Override
-                  public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
+                    listner.onVoteUpClicked(getAdapterPosition(), models.get(getAdapterPosition()));
+                }
+            });
+            lblShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
                     listner.onShareClicked(getAdapterPosition(), models.get(getAdapterPosition()));
 
-                  }
-              });
-
+                }
+            });
 
 
         }

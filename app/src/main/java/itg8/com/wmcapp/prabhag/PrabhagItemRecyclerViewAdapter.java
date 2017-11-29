@@ -24,6 +24,7 @@ public class PrabhagItemRecyclerViewAdapter extends RecyclerView.Adapter<Prabhag
 
     private final List<PrabhagModel> list;
     private final Context context;
+
     private List<WardList> wradList;
     public ItemClickedListener listener;
     private int isFrom;
@@ -48,13 +49,13 @@ public class PrabhagItemRecyclerViewAdapter extends RecyclerView.Adapter<Prabhag
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        if (isFrom== CommonMethod.WARD) {
+        if (isFrom == CommonMethod.WARD) {
 
             holder.content.setText(wradList.get(position).getWardName());
-            holder.id.setText(wradList.get(position).getPkid());
+                holder.txtId.setText((String.valueOf(wradList.get(position).getPkid())));
         } else {
             holder.content.setText(list.get(position).getPrabhagName());
-            holder.id.setText(list.get(position).getPkid());
+                holder.txtId.setText(String.valueOf(list.get(position).getPkid()));
         }
 
 
@@ -62,8 +63,8 @@ public class PrabhagItemRecyclerViewAdapter extends RecyclerView.Adapter<Prabhag
 
     @Override
     public int getItemCount() {
-        if(isFrom == CommonMethod.WARD)
-          return wradList.size();
+        if (isFrom == CommonMethod.WARD)
+            return wradList.size();
         else
             return list.size();
     }
@@ -76,8 +77,8 @@ public class PrabhagItemRecyclerViewAdapter extends RecyclerView.Adapter<Prabhag
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.id)
-        TextView id;
+        @BindView(R.id.txt_id)
+        TextView txtId;
         @BindView(R.id.content)
         TextView content;
 

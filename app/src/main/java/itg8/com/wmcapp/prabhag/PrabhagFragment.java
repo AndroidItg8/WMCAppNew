@@ -183,6 +183,8 @@ public class PrabhagFragment extends Fragment implements PrabhagMVP.PrabhagView,
 
 
     private void showSnackerbar(int from, String message, boolean isConnected) {
+        snackbar = Snackbar.make(recyclerView, message, Snackbar.LENGTH_INDEFINITE);
+
         View sbView = snackbar.getView();
         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
 
@@ -205,7 +207,6 @@ public class PrabhagFragment extends Fragment implements PrabhagMVP.PrabhagView,
             textView.setTextColor(color);
             textView.setMaxLines(2);
         }
-        snackbar = Snackbar.make(recyclerView, message, Snackbar.LENGTH_INDEFINITE);
         snackbar.show();
         snackbar.setAction("OK", new View.OnClickListener() {
             @Override

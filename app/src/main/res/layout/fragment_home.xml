@@ -1,93 +1,289 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true"
     tools:context="itg8.com.wmcapp.home.HomeFragment">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.v7.widget.CardView
+        <itg8.com.wmcapp.widget.CustomFontTextView
+            android:id="@+id/txt_name"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            app:cardUseCompatPadding="true"
-            app:cardPreventCornerOverlap="true">
-            <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/title_welcome"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            app:font_value="ROBOTO_LIGHT" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                layout="@layout/layout_complaint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_st_gradient">
-
-                <itg8.com.wmcapp.widget.CustomFontTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="15dp"
-                    android:gravity="center"
-                    android:textColor="@color/colorBlack"
-                    android:text="@string/complaint"
-                    android:textSize="18sp"
-                    app:font_value="ROBOTO_MEDIUM" />
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_complaint"
-                    android:gravity="center"/>
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp" />
+        </RelativeLayout>
 
 
-            </RelativeLayout>
-
-
-
-        </android.support.v7.widget.CardView>
-        <android.support.v7.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            app:cardUseCompatPadding="true"
-            app:cardPreventCornerOverlap="true">
-        </android.support.v7.widget.CardView>
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="105dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/card_news"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/colorCenterLight"
+                    app:cardCornerRadius="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="105dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+
+                        <ImageView
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:layout_margin="10dp"
+                            app:srcCompat="@drawable/ic_news_white" />
+
+                        <itg8.com.wmcapp.widget.CustomFontTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="10dp"
+                            android:gravity="center"
+                            android:paddingEnd="05dp"
+                            android:paddingStart="05dp"
+                            android:text="@string/new_updates"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="14sp"
+                            app:font_value="ROBOTO_LIGHT" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/card_tourism"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/colorMenu1"
+                    app:cardCornerRadius="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="105dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+
+                        <ImageView
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:layout_margin="10dp"
+                            app:srcCompat="@drawable/ic_tourism" />
+
+                        <itg8.com.wmcapp.widget.CustomFontTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="10dp"
+                            android:gravity="center"
+                            android:paddingEnd="05dp"
+                            android:paddingStart="05dp"
+                            android:text="@string/torisum"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="14sp"
+                            app:font_value="ROBOTO_LIGHT" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="105dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/colorMenu2"
+                    android:id="@+id/card_ward"
+                    app:cardCornerRadius="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="105dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+
+                        <ImageView
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:layout_margin="10dp"
+                            app:srcCompat="@drawable/ic_ward" />
+
+                        <itg8.com.wmcapp.widget.CustomFontTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="10dp"
+                            android:gravity="center"
+                            android:paddingEnd="05dp"
+                            android:paddingStart="05dp"
+                            android:text="@string/ward"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="14sp"
+                            app:font_value="ROBOTO_LIGHT" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/colorMenu3"
+                    android:id="@+id/card_notice"
+
+                    app:cardCornerRadius="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="105dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+
+                        <ImageView
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:layout_margin="10dp"
+                            app:srcCompat="@drawable/ic_dashboard_black_24dp" />
+
+                        <itg8.com.wmcapp.widget.CustomFontTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="10dp"
+                            android:gravity="center"
+                            android:paddingEnd="05dp"
+                            android:paddingStart="05dp"
+                            android:text="@string/notice_board"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="14sp"
+                            app:font_value="ROBOTO_LIGHT" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="105dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/colorMenu4"
+                    android:id="@+id/card_emergency"
+
+                    app:cardCornerRadius="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="105dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+
+                        <ImageView
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:layout_margin="10dp"
+                            app:srcCompat="@drawable/ic_emergency" />
+
+                        <itg8.com.wmcapp.widget.CustomFontTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="10dp"
+                            android:gravity="center"
+                            android:paddingEnd="05dp"
+                            android:paddingStart="05dp"
+                            android:text="@string/emegency_numbers"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="14sp"
+                            app:font_value="ROBOTO_LIGHT" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/colorMenu5"
+                    android:id="@+id/card_complaint"
+
+                    app:cardCornerRadius="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="105dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+
+                        <ImageView
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:layout_margin="10dp"
+                            app:srcCompat="@drawable/ic_complaint" />
+
+                        <itg8.com.wmcapp.widget.CustomFontTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="10dp"
+                            android:gravity="center"
+                            android:paddingEnd="05dp"
+                            android:paddingStart="05dp"
+                            android:text="@string/complaint"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="14sp"
+                            app:font_value="ROBOTO_LIGHT" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
-   <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="200dp"-->
-        <!--android:orientation="horizontal">-->
-       <!--<android.support.v7.widget.CardView-->
-           <!--android:layout_width="0dp"-->
-           <!--android:layout_height="match_parent"-->
-           <!--android:layout_weight="1"-->
-           <!--app:cardUseCompatPadding="true"-->
-           <!--app:cardPreventCornerOverlap="true">-->
-
-
-
-       <!--</android.support.v7.widget.CardView> -->
-       <!--<android.support.v7.widget.CardView-->
-           <!--android:layout_width="0dp"-->
-           <!--android:layout_height="match_parent"-->
-           <!--android:layout_weight="1"-->
-           <!--app:cardUseCompatPadding="true"-->
-           <!--app:cardPreventCornerOverlap="true">-->
-
-
-
-       <!--</android.support.v7.widget.CardView>-->
-
-    <!--</LinearLayout>-->
-   <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="200dp"-->
-        <!--android:orientation="horizontal">-->
-
-    <!--</LinearLayout>-->
-
-
-    <!--</LinearLayout>-->
-
 </ScrollView>

@@ -5,12 +5,12 @@
         <menu>
         <item
             android:id="@+id/nav_notice_board"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_dashboard_24dp"
             android:title="@string/notice_board" />
 
         <item
             android:id="@+id/nav_complaint"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_complaints"
             android:title="@string/complaint" />
         <item
             android:id="@+id/nav_news"
@@ -50,8 +50,6 @@
 
             </menu>
     </item>
-
-
     <item android:title="Contact">
         <menu>
             <item

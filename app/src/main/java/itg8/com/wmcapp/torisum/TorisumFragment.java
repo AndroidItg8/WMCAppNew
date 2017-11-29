@@ -176,7 +176,7 @@ listOfTourismFilter =tourismFilterModelList;
 
     private void showSnackerbar(int from, String message, boolean isConnected) {
 
-
+        snackbar = Snackbar.make(recyclerView, message, Snackbar.LENGTH_INDEFINITE);
         View sbView = snackbar.getView();
         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
 
@@ -188,7 +188,6 @@ listOfTourismFilter =tourismFilterModelList;
                 hideSnackbar();
 
             } else {
-                message = " Not connected to internet...Please try again";
                 color = Color.RED;
 
             }
@@ -199,8 +198,7 @@ listOfTourismFilter =tourismFilterModelList;
             textView.setTextColor(color);
             textView.setMaxLines(2);
         }
-        snackbar = Snackbar.make(recyclerView, message, Snackbar.LENGTH_INDEFINITE);
-        snackbar.show();
+
         snackbar.setAction("OK", new View.OnClickListener() {
             @Override
             public void onClick(View view) {

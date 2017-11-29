@@ -169,7 +169,7 @@ public class HomeActivity extends BaseActivity
             });
         }
 
-        callFragmentWithoutStack(NoticeBoardFragment.newInstance("", ""));
+        callFragmentWithoutStack(HomeFragment.newInstance("", ""));
     }
 
     private void checkLogin() {
@@ -407,6 +407,8 @@ public class HomeActivity extends BaseActivity
 
     private void clearNLogout() {
         Prefs.remove(CommonMethod.HEADER);
+        Prefs.remove(CommonMethod.USER_NAME);
+        Prefs.remove(CommonMethod.USER_MOBILE);
         FirebaseAuth.getInstance().signOut();
         Log.d(TAG, "Firebase User:" + FirebaseAuth.getInstance().getCurrentUser());
 

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
@@ -27,6 +28,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import itg8.com.wmcapp.R;
@@ -65,6 +67,13 @@ public final class CommonMethod {
     // these two are for snackbar.
     public static final int FROM_INTERNET = 1;
     public static final int FROM_ERROR = 2;
+    //COMPLAINT STATUS
+    public static final int PENDING = 0;
+    public static final int PROCESS = 1;
+    public static final int CLOSED = 2;
+    public static final int SOLVED = 3;
+
+
     public static final String USER_NAME = "USER_NAME";
     public static final String USER_MOBILE = "USER_MOBILE";
     // Successfully deleted item from server
@@ -172,6 +181,21 @@ public final class CommonMethod {
         return customername;
         else
             return "UNKNOWN PERSON";
+    }
+
+    public static   long calculateDays(Calendar date) {
+
+        Calendar cal = Calendar.getInstance();
+        Date firstDate = cal.getTime();
+        Date secondDate = date.getTime();
+
+
+        long diff = secondDate.getTime() - firstDate.getTime();
+        long diffs = diff / 1000 / 60 / 60 / 24;
+
+        System.out.println ("Days: " + diff / 1000 / 60 / 60 / 24);
+
+        return diffs;
     }
 
     public static interface ResultListener{

@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--<color name="colorPrimary">#3B835A</color>-->
+    <color name="colorMenu1">#00e9c6</color>
+    <color name="colorMenu2">#02ccae</color>
+    <color name="colorMenu3">#d800bfa5</color>
+    <color name="colorMenu4">#cc008774</color>
+    <color name="colorMenu5">#dd006b59</color>
+    <color name="colorCenterLight">#c501ffdf</color>
     <color name="colorPrimary">#00bfa5</color>
+    <color name="colorStart">#4bc6b5</color>
     <color name="colorPrimaryLight">#004D40</color>
     <!--<color name="colorPrimaryDark">#215624</color>-->
     <color name="colorPrimaryDark">#FF009688</color>
@@ -10,9 +17,12 @@
     <color name="colorBlack">#000</color>
     <color name="colorGray">#6b6969</color>
     <color name="colorGrayLight">#afb6b4b4</color>
+    <color name="colorGrayLights">#afedecec</color>
     <color name="colorGreen">#076810</color>
     <color name="transparentBlack">#b7000000</color>
     <color name="transparentBlackList">#32000000</color>
+    <color name="transparentBlackLists">#5a000000</color>
+    <color name="transparentLight">#0d131313</color>
     <color name="colorFacebook">#385C8E</color>
     <color name="colorGoogle">#631109</color>
     <color name="colorRed">#5563120a</color>
