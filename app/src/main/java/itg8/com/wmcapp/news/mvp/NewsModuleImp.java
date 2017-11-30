@@ -14,8 +14,14 @@ import retrofit2.Response;
  */
 
 public class NewsModuleImp implements NewsMVP.NewsModule {
+    private Call<List<NewsModel>> call;
+
     @Override
     public void onDestroy() {
+        if(call!=null)
+        {
+            call.cancel();
+        }
 
     }
 
@@ -23,7 +29,7 @@ public class NewsModuleImp implements NewsMVP.NewsModule {
 
     @Override
     public void onGetNewsListFromServer(String url, final NewsMVP.NewsListener listener) {
-        Call<List<NewsModel>> call = MyApplication.getInstance().getRetroController().getNewsList(url);
+         call = MyApplication.getInstance().getRetroController().getNewsList(url);
         call.enqueue(new Callback<List<NewsModel>>() {
             @Override
             public void onResponse(Call<List<NewsModel>> call, Response<List<NewsModel>> response) {

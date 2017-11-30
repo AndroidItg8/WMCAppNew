@@ -239,7 +239,6 @@ public class TorisumDetailsFragment extends Fragment implements OnMapReadyCallba
         {
             case R.id.lbl_direction:
                 CommonMethod.directionShow(getActivity(),generateDirection());
-
                 break;
             case R.id.lbl_share:
                 if(lastLatLng!= null)

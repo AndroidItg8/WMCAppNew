@@ -115,6 +115,7 @@ public class EmergencyFragment extends Fragment implements EmergencyAdapter.Item
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        presenter.onDestroy();
         unbinder.unbind();
     }
 

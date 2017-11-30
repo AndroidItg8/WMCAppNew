@@ -33,14 +33,11 @@ public class LoginModuleImp implements LoginMvp.LoginModule {
 
     @Override
     public void onDestroy() {
-//        if (cal != null) {
-//            if (!cal.isCanceled())
-//                cal.cancel();
-//        } else if (call != null) {
-//            if (!call.isCanceled())
-//                call.cancel();
-//
-//        }
+       if (call != null) {
+            if (!call.isCanceled())
+                call.cancel();
+
+        }
     }
 
 

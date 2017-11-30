@@ -109,6 +109,7 @@ public class ChangePswdFragment extends Fragment implements ChangePasswordMVP.Ch
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        presenter.onDestroy();
         unbinder.unbind();
     }
 

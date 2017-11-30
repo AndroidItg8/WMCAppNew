@@ -40,7 +40,6 @@ public class ProfilePresenterImp extends BaseWeakPresenter<ProfileMVp.ProfileVie
         {
            detachView();
         }
-
     }
 
     @Override

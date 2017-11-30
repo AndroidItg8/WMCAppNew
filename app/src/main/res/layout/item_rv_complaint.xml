@@ -63,7 +63,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/bg_status"
                 android:padding="4dp"
                 android:text="Solved"
                 android:textAllCaps="true"

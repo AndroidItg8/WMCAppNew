@@ -207,6 +207,7 @@ public class LoginFragment extends Fragment implements LoginMvp.LoginView, View.
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        presenter.onDestroy();
         unbinder.unbind();
     }
 

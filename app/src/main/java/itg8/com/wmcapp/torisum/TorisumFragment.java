@@ -131,6 +131,7 @@ public class TorisumFragment extends Fragment implements OnRecyclerviewClickList
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        presenter.onDetach();
         unbinder.unbind();
     }
 

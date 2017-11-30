@@ -112,6 +112,7 @@ public class FeedbackFragment extends Fragment implements FeedbackMVP.FeedbackVi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        presenter.onDestroy();
         unbinder.unbind();
     }
 

@@ -181,6 +181,7 @@ public class CityFragment extends Fragment implements CityAdapter.CityItemClicke
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         unbinder.unbind();
     }
 

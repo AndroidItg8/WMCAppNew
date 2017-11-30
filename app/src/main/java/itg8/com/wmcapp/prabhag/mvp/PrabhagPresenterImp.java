@@ -25,6 +25,8 @@ public class PrabhagPresenterImp extends BaseWeakPresenter<PrabhagMVP.PrabhagVie
     @Override
     public void onDetach() {
         module.onDestroy();
+        if(hasView())
+            detachView();
 
     }
 

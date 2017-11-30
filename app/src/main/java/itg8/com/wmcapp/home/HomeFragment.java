@@ -1,6 +1,7 @@
 package itg8.com.wmcapp.home;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -8,6 +9,7 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,6 +18,7 @@ import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.board.NoticeBoardFragment;
 import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.Prefs;
+import itg8.com.wmcapp.complaint.AddComplaintFragment;
 import itg8.com.wmcapp.complaint.ComplaintFragment;
 import itg8.com.wmcapp.emergency.EmergencyFragment;
 import itg8.com.wmcapp.news.NewsFragment;
@@ -48,11 +51,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     Unbinder unbinder;
     @BindView(R.id.txt_name)
     CustomFontTextView txtName;
+    @BindView(R.id.rl_include)
+    RelativeLayout rlInclude;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private Fragment fragment;
+     CommonMethod.onSetToolbarTitle listener;
+    private Context mContext;
 
 
     public HomeFragment() {
@@ -93,17 +100,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         unbinder = ButterKnife.bind(this, view);
         init();
+
         return view;
     }
 
     private void init() {
-        txtName.setText(String.valueOf(getString(R.string.title_welcome )+String.valueOf( Prefs.getString(CommonMethod.USER_NAME))));
+        txtName.setText(String.valueOf(getString(R.string.title_welcome) + String.valueOf(Prefs.getString(CommonMethod.USER_NAME))));
         cardComplaint.setOnClickListener(this);
         cardNews.setOnClickListener(this);
         cardEmergency.setOnClickListener(this);
         cardNotice.setOnClickListener(this);
         cardWard.setOnClickListener(this);
         cardTourism.setOnClickListener(this);
+        rlInclude.setOnClickListener(this);
+        listener.onSetTitle(getString(R.string.app_name));
+        listener.setDrawer();
     }
 
     @Override
@@ -133,7 +144,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.card_ward:
                 fragment = PrabhagFragment.newInstance(1);
                 break;
-
+            case R.id.rl_include:
+                fragment = AddComplaintFragment.newInstance("", "");
+                break;
         }
 
         if (fragment != null) {
@@ -147,5 +160,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         ft.replace(R.id.frame_container, fragment);
         ft.addToBackStack(fragment.getClass().getSimpleName());
         ft.commit();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+        listener= (CommonMethod.onSetToolbarTitle) mContext;
     }
 }

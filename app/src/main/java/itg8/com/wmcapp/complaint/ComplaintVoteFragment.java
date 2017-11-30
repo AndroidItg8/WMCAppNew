@@ -179,6 +179,7 @@ public class ComplaintVoteFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         unbinder.unbind();
     }
 

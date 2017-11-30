@@ -123,6 +123,7 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        presenter.onDetach();
     }
 
     @Override

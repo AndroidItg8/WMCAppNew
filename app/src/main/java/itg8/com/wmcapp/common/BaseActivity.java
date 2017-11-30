@@ -42,7 +42,6 @@ public class BaseActivity  extends AppCompatActivity{
         ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
         ft.replace(R.id.frame_container,fragment);
-
         ft.commit();
     }
 

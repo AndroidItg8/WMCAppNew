@@ -93,6 +93,7 @@ public class ForgetFragment extends Fragment implements ForgetMVP.ForgetView, Vi
         unbinder = ButterKnife.bind(this, view);
         fabGo.setOnClickListener(this);
         listener.onSetTitle(getString(R.string.forget_pswd));
+        listener.setDrawer();
         presenter = new ForgetPresenterImp(this);
         return view;
     }
@@ -100,6 +101,7 @@ public class ForgetFragment extends Fragment implements ForgetMVP.ForgetView, Vi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        presenter.onDestroy();
         unbinder.unbind();
     }
 

@@ -64,4 +64,10 @@ public class LoginActivity extends BaseActivity implements LoginFragment.OnAttac
     public void onSetTitle(String name) {
         toolbar.setTitle(name);
     }
+
+    @Override
+    public void setDrawer() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 }

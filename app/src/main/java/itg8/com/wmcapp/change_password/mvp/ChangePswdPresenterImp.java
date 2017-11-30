@@ -28,6 +28,10 @@ public class ChangePswdPresenterImp extends BaseWeakPresenter<ChangePasswordMVP.
     @Override
     public void onDestroy() {
         module.onDestroy();
+        if(hasView())
+        {
+            detachView();
+        }
 
     }
 

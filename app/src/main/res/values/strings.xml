@@ -210,5 +210,5 @@
     <string name="title_welcome">Welcome,</string>
     <string name="pending_status">PENDING</string>
     <string name="solved_status">SOLVED</string>
-    <string name="process_status">PROCESS</string>
+    <string name="process_status">PROCESSING</string>
 </resources>

@@ -12,4 +12,5 @@ public interface BaseFragmentPresenter {
     void onPause();
     void onResume();
      void onError(String message);
+
 }

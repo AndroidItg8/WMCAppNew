@@ -166,6 +166,7 @@ public class PrabhagFragment extends Fragment implements PrabhagMVP.PrabhagView,
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        presenter.onDetach();
         unbinder.unbind();
     }
 

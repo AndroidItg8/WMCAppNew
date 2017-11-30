@@ -21,6 +21,10 @@ public class NewsPresenterImp extends BaseWeakPresenter<NewsMVP.NewsView> implem
     @Override
     public void onDestroy() {
        module.onDestroy();
+       if(hasView())
+       {
+           detachView();
+       }
 
     }
 

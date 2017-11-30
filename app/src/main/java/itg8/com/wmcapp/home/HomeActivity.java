@@ -1,13 +1,17 @@
 package itg8.com.wmcapp.home;
 
+import android.app.ActivityOptions;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -77,9 +81,10 @@ public class HomeActivity extends BaseActivity
         CustomDialogFragment.DialogItemClickListener,
         CommonMethod.OnBackPressListener,
         CommonMethod.OnMoveComplaintListener,
-        CityMVP.CityView, CityAdapter.CityItemClickedListener {
+        CityMVP.CityView, CityAdapter.CityItemClickedListener, CommonMethod.onSetToolbarTitle {
     //   PrabhagFragment.onPrabhagClickedListener,
     private static final String TAG = HomeActivity.class.getSimpleName();
+
     private static int english = 0;
     private static int hindi = 1;
     private static int marathi = 2;
@@ -103,6 +108,9 @@ public class HomeActivity extends BaseActivity
     private CircularImageView imageView;
     private NavigationView navigationView;
     private RecyclerView recyclerView;
+    private ActionBarDrawerToggle toggle;
+    private int mItemToOpenWhenDrawerCloses = -1;
+    private DrawerLayout drawer;
 
 
     @Override
@@ -111,11 +119,7 @@ public class HomeActivity extends BaseActivity
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-
         MyApplication.getInstance().getDeletedNBList();
-
-        //  presenter = new CityPresenterImp(this);
-
         int result = CommonMethod.calculateTerm();
         Logs.d("Result" + result);
         checkLogin();
@@ -134,11 +138,9 @@ public class HomeActivity extends BaseActivity
         mDAOCity = new CityTableManipulate(this);
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        setDrawerToggle();
+
+
         navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         View view = navigationView.getHeaderView(0);
@@ -158,6 +160,10 @@ public class HomeActivity extends BaseActivity
                 public void onSetProfile(ProfileModel model) {
                     if (model != null) {
                         Picasso.with(getApplicationContext()).load(CommonMethod.BASE_URL + model.getPicProfle()).into(imageView);
+                        Prefs.putString(CommonMethod.USER_NAME, model.getFullName());
+                        Prefs.putString(CommonMethod.USER_MOBILE, model.getContactNumber());
+                        lblName.setText(Prefs.getString(CommonMethod.USER_NAME));
+                        lblMobile.setText(Prefs.getString(CommonMethod.USER_MOBILE));
                     }
                 }
 
@@ -168,8 +174,26 @@ public class HomeActivity extends BaseActivity
                 }
             });
         }
+        fragment = HomeFragment.newInstance("", "");
+        callFragmentWithoutStack(fragment);
+    }
 
-        callFragmentWithoutStack(HomeFragment.newInstance("", ""));
+    private void setDrawerToggle() {
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer != null) {
+
+            toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            populateDrawerItems(navigationView);
+            toggle.setDrawerIndicatorEnabled(true);
+            setSupportActionBar(toolbar);
+            setDrawerUpdateToggle();
+        } else {
+            setSupportActionBar(toolbar);
+        }
+
     }
 
     private void checkLogin() {
@@ -206,6 +230,11 @@ public class HomeActivity extends BaseActivity
                 CityTableManipulate cityTableManipulate = new CityTableManipulate(this);
                 openBottomSheetForCity(cityTableManipulate.getAll());
                 break;
+            case android.R.id.home:
+                Logs.d("Home Clicked");
+                onBackPressed();
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -346,12 +375,10 @@ public class HomeActivity extends BaseActivity
                 break;
             case R.id.nav_tourism:
                 from = "Tourism";
-
                 fragment = TorisumFragment.newInstance("", "");
                 break;
             case R.id.nav_news:
                 from = "News and Event";
-
                 fragment = NewsFragment.newInstance("", "");
                 break;
             case R.id.nav_praphag:
@@ -414,6 +441,7 @@ public class HomeActivity extends BaseActivity
 
         callLoginActivity();
         MyApplication.getInstance().deleteNoticeBoard();
+        MyApplication.getInstance().setProfileModel(null);
         finish();
 
 
@@ -432,20 +460,29 @@ public class HomeActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+      drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-
-            if (isFrom == CommonMethod.WARD)
-                isFrom = CommonMethod.PRABHAG;
-            else if (isFrom == CommonMethod.PRABHAG)
-                isFrom = 0;
-            else if (isFrom == CommonMethod.WARD_MEMEBER)
-                isFrom = CommonMethod.WARD;
-            super.onBackPressed();
+            return;
         }
+
+        Logs.d(" Activity onBackPressed");
+        toolbar.setTitle(getString(R.string.app_name));
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStack();
+        } else {
+            // Lastly, it will rely on the system behavior for back
+            // super.onBackPressed();
+
+
+           // super.onBackPressed();
+        }
+        if(fragment instanceof HomeFragment)
+        {
+            setDrawerToggle();
+        }
+
     }
 
     @Override
@@ -603,9 +640,7 @@ public class HomeActivity extends BaseActivity
         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
         textView.setTextColor(Color.WHITE);
         textView.setText(s);
-
         textView.setMaxLines(2);
-
         snackbar.setAction("OK", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -652,8 +687,130 @@ public class HomeActivity extends BaseActivity
         callFragmentWithoutStack(ComplaintFragment.newInstance("", ""));
     }
 
+    @Override
+    public void onSetTitle(String name) {
+        toolbar.setTitle(name);
+    }
 
-//    @Override
+    @Override
+    public void setDrawer() {
+        setDrawerUpdateToggle();
+    }
+
+    private void setDrawerUpdateToggle() {
+        if (toggle == null) {
+            return;
+        }
+        boolean isRoot = getSupportFragmentManager().getBackStackEntryCount() == 0;
+        Logs.d("Root:" + isRoot);
+        Logs.d("getFragmentManager().getBackStackEntryCount():" + getFragmentManager().getBackStackEntryCount());
+        toggle.setDrawerIndicatorEnabled(isRoot);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowHomeEnabled(!isRoot);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(!isRoot);
+            getSupportActionBar().setHomeButtonEnabled(!isRoot);
+        }
+        if (isRoot) {
+            toggle.syncState();
+        }
+    }
+
+    private final DrawerLayout.DrawerListener mDrawerListener = new DrawerLayout.DrawerListener() {
+        @Override
+        public void onDrawerClosed(View drawerView) {
+            if (toggle != null) toggle.onDrawerClosed(drawerView);
+            if (mItemToOpenWhenDrawerCloses >= 0) {
+
+
+                Class activityClass = null;
+                switch (mItemToOpenWhenDrawerCloses) {
+//                    case R.id.navigation_allmusic:
+//                        activityClass = MusicPlayerActivity.class;
+//                        break;
+//                    case R.id.navigation_playlists:
+//                        activityClass = PlaceholderActivity.class;
+//                        break;
+//                }
+//                if (activityClass != null) {
+//                    startActivity(new Intent(ActionBarCastActivity.this, activityClass), extras);
+//                    finish();
+//                }
+                }
+            }
+        }
+
+        @Override
+        public void onDrawerStateChanged(int newState) {
+            if (toggle != null) toggle.onDrawerStateChanged(newState);
+        }
+
+        @Override
+        public void onDrawerSlide(View drawerView, float slideOffset) {
+            if (toggle != null) toggle.onDrawerSlide(drawerView, slideOffset);
+        }
+
+        @Override
+        public void onDrawerOpened(View drawerView) {
+            if (toggle != null) toggle.onDrawerOpened(drawerView);
+            if (getSupportActionBar() != null) getSupportActionBar()
+                    .setTitle(R.string.app_name);
+        }
+    };
+
+    private final FragmentManager.OnBackStackChangedListener mBackStackChangedListener =
+            new FragmentManager.OnBackStackChangedListener() {
+                @Override
+                public void onBackStackChanged() {
+                    setDrawerUpdateToggle();
+                }
+            };
+
+
+
+
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (toggle != null) {
+            toggle.syncState();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+//        if (mCastContext != null) {
+//            mCastContext.addCastStateListener(mCastStateListener);
+//        }
+//
+//        // Whenever the fragment back stack changes, we may need to update the
+//        // action bar toggle: only top level screens show the hamburger-like icon, inner
+//        // screens - either Activities or fragments - show the "Up" icon instead.
+//        getFragmentManager().addOnBackStackChangedListener(mBackStackChangedListener);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (toggle != null) {
+            toggle.onConfigurationChanged(newConfig);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+//        if (mCastContext != null) {
+//            mCastContext.removeCastStateListener(mCastStateListener);
+//        }
+//        getFragmentManager().removeOnBackStackChangedListener(mBackStackChangedListener);
+//    }
+//}
+    //    @Override
 //    public void onPrabhagSelected() {
 //        if (isFrom == PRABHAG) {
 //            showWard();
@@ -661,7 +818,41 @@ public class HomeActivity extends BaseActivity
 //            showWardMemberDetail();
 //        }
 //    }
+//    private final FragmentManager.OnBackStackChangedListener mBackStackChangedListener =
+//            new FragmentManager.OnBackStackChangedListener() {
+//                @Override
+//                public void onBackStackChanged() {
+//                    setDrawerUpdateToggle();
+//                }
+//            };
 
+
+
+
+
+
+
+    private void populateDrawerItems(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                        menuItem.setChecked(true);
+                        mItemToOpenWhenDrawerCloses = menuItem.getItemId();
+                        drawer.closeDrawers();
+                        return true;
+                    }
+                });
+    }
 
 }
+
+
+
+
+
+
+
+
+
 

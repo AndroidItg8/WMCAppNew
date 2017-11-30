@@ -1,7 +1,9 @@
 package itg8.com.wmcapp.complaint;
 
 import android.content.Context;
-import android.os.Build;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,7 +20,6 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -53,6 +54,7 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private int likedSize;
     private String status;
     private int colorStatus;
+    private Drawable drawables= null;
 
     public ComplaintAdapter(Context mContext, int fromComplaint, ComplaintListner listner) {
         this.mContext = mContext;
@@ -128,26 +130,34 @@ public class ComplaintAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((ComplaintViewHolder) holder).lblAddressValue.setText(CommonMethod.checkEmpty(models.get(position).getComplaintName()));
             ((ComplaintViewHolder) holder).lblProblemValue.setText(CommonMethod.checkEmpty(models.get(position).getComplaintDescription()));
             CommonMethod.setUserPicaso(mContext, models.get(position).getUserProfilepic(), ((ComplaintViewHolder) holder).img);
-            ((ComplaintViewHolder) holder).lblNameValue.setText(models.get(position).getUserFullename());
-            Calendar date = CommonMethod.convertStringToComplaintDate(models.get(position).getAddedDate());
-            ((ComplaintViewHolder) holder).lblDaysValue.setText(String.valueOf(CommonMethod.calculateDays(date)));
+            ((ComplaintViewHolder) holder).lblNameValue.setText(CommonMethod.checkEmptyProfile(models.get(position).getUserFullename()));
+            ((ComplaintViewHolder) holder).lblDaysValue.setText(String.valueOf(CommonMethod.calculateDays(models.get(position).getAddedDate())));
 
 
             if (models.get(position).getActive() == CommonMethod.PENDING) {
-                status =mContext.getString(R.string.pending_status);
-                colorStatus=ContextCompat.getColor(mContext, R.color.colorRed);
-                }
-                else if (models.get(position).getActive() == CommonMethod.CLOSED) {
-                status =mContext.getString(R.string.solved_status);
-                colorStatus=ContextCompat.getColor(mContext, R.color.colorGreen);
-                }
-                else if (models.get(position).getActive() == CommonMethod.PROCESS) {
-                status =mContext.getString(R.string.process_status);
-                colorStatus=ContextCompat.getColor(mContext, R.color.colorFacebook);
+                status = mContext.getString(R.string.pending_status);
+                colorStatus = ContextCompat.getColor(mContext, R.color.colorGoogle);
+                drawables = ContextCompat.getDrawable(mContext, R.drawable.bg_pending_status);
+
+
+            } else if (models.get(position).getActive() == CommonMethod.CLOSED) {
+                status = mContext.getString(R.string.solved_status);
+                colorStatus = ContextCompat.getColor(mContext, R.color.colorGreen);
+                drawables = ContextCompat.getDrawable(mContext, R.drawable.bg_status);
+
+            } else
+//                    if (models.get(position).getActive() == CommonMethod.PROCESS)
+            {
+                status = mContext.getString(R.string.process_status);
+                colorStatus = ContextCompat.getColor(mContext, R.color.colorFacebook);
+                drawables = ContextCompat.getDrawable(mContext, R.drawable.bg_process_status);
+
             }
 
             ((ComplaintViewHolder) holder).complaintStatus.setText(status);
             ((ComplaintViewHolder) holder).complaintStatus.setTextColor(colorStatus);
+            ((ComplaintViewHolder) holder).complaintStatus.setBackground(drawables);
+
 
 
 

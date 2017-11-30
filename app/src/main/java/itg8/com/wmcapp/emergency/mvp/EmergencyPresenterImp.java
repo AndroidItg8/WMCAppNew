@@ -22,6 +22,11 @@ public class EmergencyPresenterImp extends BaseWeakPresenter<EmergencyMVP.Emerge
 
     @Override
     public void onDestroy() {
+        module.onDestroy();
+        if(hasView())
+        {
+            detachView();
+        }
 
     }
 

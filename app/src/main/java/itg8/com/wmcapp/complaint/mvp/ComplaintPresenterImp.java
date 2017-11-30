@@ -30,7 +30,9 @@ public class ComplaintPresenterImp extends BaseWeakPresenter<ComplaintMVP.Compla
 
     @Override
     public void onDetach() {
-        detachView();
+        module.onDestroy();
+        if(hasView())
+         detachView();
     }
 
     @Override

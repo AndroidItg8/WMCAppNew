@@ -34,8 +34,15 @@ class ComplaintModuleImp implements ComplaintMVP.ComplaintModule {
 
 
     Observable<ResponseBody> call;
+    private Call<RegistrationModel> callLike;
+
     @Override
     public void onDestroy() {
+       if(callLike!= null)
+       {
+           if(!callLike.isCanceled())
+               callLike.cancel();
+       }
 
     }
 
@@ -97,7 +104,7 @@ class ComplaintModuleImp implements ComplaintMVP.ComplaintModule {
 
     @Override
     public void onSendLikesToServer(String url, int SubMaster_fkid, final ComplaintModel model, final int position, final ComplaintMVP.ComplaintListener listener) {
-        Call<RegistrationModel> callLike = MyApplication.getInstance().getRetroController().sendLike(url, CommonMethod.COMPLAINT,SubMaster_fkid,1);
+       callLike = MyApplication.getInstance().getRetroController().sendLike(url, CommonMethod.COMPLAINT,SubMaster_fkid,1);
         callLike.enqueue(new Callback<RegistrationModel>() {
             @Override
             public void onResponse(Call<RegistrationModel> call, Response<RegistrationModel> response) {

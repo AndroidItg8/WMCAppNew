@@ -139,6 +139,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         unbinder.unbind();
     }
 

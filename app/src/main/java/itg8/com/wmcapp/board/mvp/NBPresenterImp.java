@@ -24,7 +24,9 @@ public class NBPresenterImp extends BaseWeakPresenter<NBMVP.NBView> implements N
 
     @Override
     public void onDetach() {
-        detachView();
+        module.onDestroy();
+        if(hasView())
+            detachView();
     }
 
     @Override

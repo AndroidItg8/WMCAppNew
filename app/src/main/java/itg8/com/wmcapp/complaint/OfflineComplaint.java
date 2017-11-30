@@ -118,6 +118,7 @@ public class OfflineComplaint extends Fragment implements ComplaintProfilOffline
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         unbinder.unbind();
     }
 
