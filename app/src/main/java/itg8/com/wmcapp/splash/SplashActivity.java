@@ -3,6 +3,7 @@ package itg8.com.wmcapp.splash;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -32,6 +33,7 @@ import itg8.com.wmcapp.common.BaseActivity;
 import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.database.BaseDatabaseHelper;
 import itg8.com.wmcapp.home.HomeActivity;
+import itg8.com.wmcapp.home.HomeFragment;
 
 public class SplashActivity extends BaseActivity implements CityMVP.CityView {
 
@@ -44,7 +46,7 @@ public class SplashActivity extends BaseActivity implements CityMVP.CityView {
     FloatingActionButton fab;
     private Fragment fragment;
     // Splash screen timer
-    private static int SPLASH_TIME_OUT = 3000;
+    private static int SPLASH_TIME_OUT = 2000;
     private FragmentTransaction ft;
     private CityMVP.CityPresenter presenter;
     private Snackbar snackbar;
@@ -65,28 +67,43 @@ public class SplashActivity extends BaseActivity implements CityMVP.CityView {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         presenter = new CityPresenterImp(this);
-        presenter.onGetCity(getString(R.string.url_city));
+      //  presenter.onGetCity(getString(R.string.url_city));
 //        presenter.onGetCity(getString(R.string.url_city));
         setSupportActionBar(toolbar);
         Animation animation= AnimationUtils.loadAnimation(this,R.anim.splash_animation);
         imgLogo.setAnimation(animation);
 
-        imgLogo.setOnClickListener(new View.OnClickListener() {
+//        imgLogo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+//                imgLogo.clearAnimation();
+//                finish();
+//            }
+//        });
+
+        new Handler().postDelayed(new Runnable() {
+
+            /*
+             * Showing splash screen with a timer. This will be useful when you
+             * want to show case your app logo / company
+             */
+
             @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                imgLogo.clearAnimation();
+            public void run() {
+                // This method will be executed once the timer is over
+                // Start your app main activity
+                Intent i = new Intent(SplashActivity.this, HomeActivity.class);
+                startActivity(i);
+
+                // close this activity
                 finish();
             }
-        });
-
-
+        }, SPLASH_TIME_OUT);
     }
 
-    private void splash(List<CityModel> cityList) {
-        Fragment  fragment= CityFragment.newInstance(cityList,"");
-        callFragment(fragment);
-    }
+
+
 
 
 
@@ -230,7 +247,6 @@ public class SplashActivity extends BaseActivity implements CityMVP.CityView {
             }
 
 
-            splash(cityList);
 
 
         }

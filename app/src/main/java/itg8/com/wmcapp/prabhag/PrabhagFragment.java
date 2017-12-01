@@ -57,6 +57,7 @@ public class PrabhagFragment extends Fragment implements PrabhagMVP.PrabhagView,
     private int isFrom;
     private List<WardList> wradList;
     private List<PrabhagModel> list;
+    CommonMethod.onSetToolbarTitle titleListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -107,6 +108,8 @@ public class PrabhagFragment extends Fragment implements PrabhagMVP.PrabhagView,
             isFrom = CommonMethod.WARD;
             setRecyclerView(list, wradList);
         }
+
+        titleListener.onSetTitle(getString(R.string.prabhag));
             return view;
     }
 
@@ -116,6 +119,7 @@ public class PrabhagFragment extends Fragment implements PrabhagMVP.PrabhagView,
         super.onAttach(context);
         this.context = context;
         listener = context;
+        titleListener= (CommonMethod.onSetToolbarTitle) context;
     }
 
     @Override
@@ -167,6 +171,7 @@ public class PrabhagFragment extends Fragment implements PrabhagMVP.PrabhagView,
     public void onDestroyView() {
         super.onDestroyView();
         presenter.onDetach();
+        titleListener =null;
         unbinder.unbind();
     }
 

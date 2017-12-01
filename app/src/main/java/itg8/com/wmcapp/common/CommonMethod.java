@@ -32,7 +32,8 @@ import itg8.com.wmcapp.profile.ProfileModel;
 
 public final class CommonMethod {
 
-    public static final String BASE_URL = "http://192.168.1.54:8080";
+//    public static final String BASE_URL = "http://192.168.1.54:8080";
+    public static final String BASE_URL = "http://wmc.itechgalaxyprojects.com";
     public static final String RECEIVER = "myReceiver";
     public static final String LOCATION_DATA_EXTRA = "LocationDataExtras";
     public static final int FAILURE_RESULT = 111;
@@ -333,7 +334,6 @@ if(TextUtils.isEmpty(date))
 
     public interface onSetToolbarTitle {
         void onSetTitle(String name);
-        void setDrawer();
     }
 
     public interface ProfileSetListener {

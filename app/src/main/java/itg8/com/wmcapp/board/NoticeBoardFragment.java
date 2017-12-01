@@ -23,6 +23,7 @@ import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.board.model.NoticeBoardModel;
 import itg8.com.wmcapp.board.mvp.NBMVP;
 import itg8.com.wmcapp.board.mvp.NBPresenterImp;
+import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.MyApplication;
 import itg8.com.wmcapp.complaint.AddComplaintFragment;
@@ -52,6 +53,7 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
     private NoticeBoardAdater adapter;
     private LinearLayoutManager layoutManager;
     private FragmentTransaction ft;
+     CommonMethod.onSetToolbarTitle listenerTitle;
 
 
     public NoticeBoardFragment() {
@@ -101,6 +103,7 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
         init();
         initPaginate();
         presenter.onLoadMoreItems(getString(R.string.url_notice_board));
+        listenerTitle.onSetTitle(getString(R.string.notice_board));
         return view;
     }
 
@@ -122,6 +125,7 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
         super.onAttach(context);
         mContext = context;
         Logs.d("CYCLE : Attach()");
+         listenerTitle = (CommonMethod.onSetToolbarTitle) mContext;
     }
 
     @Override

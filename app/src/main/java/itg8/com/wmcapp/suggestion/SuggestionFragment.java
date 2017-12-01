@@ -104,6 +104,7 @@ public class SuggestionFragment extends Fragment implements View.OnClickListener
     private String description;
     private File selectedFile;
     private CommonCallback.OnImagePickListener listener;
+    CommonMethod.onSetToolbarTitle titleListener;
     CommonMethod.OnBackPressListener mBackPressListener;
     private boolean canAccessCamera;
 
@@ -148,6 +149,7 @@ public class SuggestionFragment extends Fragment implements View.OnClickListener
         imgAdd.setOnClickListener(this);
         fabLogin.setOnClickListener(this);
         imgMoreMenu.setOnClickListener(this);
+        titleListener.onSetTitle(getString(R.string.suggestion));
         checkStoragePerm();
         return view;
     }
@@ -392,6 +394,7 @@ public class SuggestionFragment extends Fragment implements View.OnClickListener
             listener = (CommonCallback.OnImagePickListener) context;
         }
         mBackPressListener = (CommonMethod.OnBackPressListener) context;
+        titleListener = (CommonMethod.onSetToolbarTitle) context;
     }
 
     @Override

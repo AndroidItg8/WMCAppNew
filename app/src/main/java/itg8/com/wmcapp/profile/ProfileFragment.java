@@ -79,7 +79,7 @@ public class ProfileFragment extends Fragment implements ProfileMVp.ProfileView,
     private static final int FROM_INTERNET = 2;
     private static final int FROM_ERROR = 1;
     private static final int RC_STORAGE_CAMERA = 234;
-
+CommonMethod.onSetToolbarTitle titleListener;
 
     Unbinder unbinder;
     @BindView(R.id.lbl_profile)
@@ -251,6 +251,7 @@ public class ProfileFragment extends Fragment implements ProfileMVp.ProfileView,
         unbinder = ButterKnife.bind(this, view);
         Logs.d("LF Fragment: onCreateView()");
         checkStoragePerm();
+        titleListener.onSetTitle(getString(R.string.profile));
 
         isViewDestroyed = false;
 
@@ -517,6 +518,7 @@ public class ProfileFragment extends Fragment implements ProfileMVp.ProfileView,
     public void onDetach() {
         super.onDetach();
         Logs.d("LF Fragment: onDetach()");
+        titleListener =null;
 
     }
 
@@ -744,6 +746,7 @@ public class ProfileFragment extends Fragment implements ProfileMVp.ProfileView,
         if (context instanceof CommonCallback.OnImagePickListener) {
             listener = (CommonCallback.OnImagePickListener) context;
         }
+        titleListener = (CommonMethod.onSetToolbarTitle) context;
         mFinishedListener = (ActivityFinishListener) context;
     }
 

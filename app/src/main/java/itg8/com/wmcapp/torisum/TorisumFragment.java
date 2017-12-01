@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,8 +28,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.OnRecyclerviewClickListener;
-
 import itg8.com.wmcapp.torisum.model.TorisumModel;
 import itg8.com.wmcapp.torisum.model.TourismFilterModel;
 import itg8.com.wmcapp.torisum.mvp.TorisumPresenterImp;
@@ -62,7 +61,7 @@ public class TorisumFragment extends Fragment implements OnRecyclerviewClickList
     CustomFontTextView lblFilter;
     @BindView(R.id.lbl_filter_near)
     CustomFontTextView lblFilterNear;
-
+    CommonMethod.onSetToolbarTitle listenerTitle;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -114,9 +113,10 @@ public class TorisumFragment extends Fragment implements OnRecyclerviewClickList
         unbinder = ButterKnife.bind(this, view);
         presenter = new TorisumPresenterImp(this);
         presenter.onGetTorismList(getString(R.string.url_toriusm));
+        listenerTitle.onSetTitle(getString(R.string.torisum));
 
-         lblFilter.setOnClickListener(this);
-         lblFilterNear.setOnClickListener(this);
+        lblFilter.setOnClickListener(this);
+        lblFilterNear.setOnClickListener(this);
 
         return view;
     }
@@ -145,7 +145,7 @@ public class TorisumFragment extends Fragment implements OnRecyclerviewClickList
     @Override
     public void onTourismCategoryFilterList(List<TourismFilterModel> tourismFilterModelList) {
 
-listOfTourismFilter =tourismFilterModelList;
+        listOfTourismFilter = tourismFilterModelList;
     }
 
 
@@ -226,24 +226,21 @@ listOfTourismFilter =tourismFilterModelList;
 
     @Override
     public void onClick(View view) {
-        switch (view.getId())
-        {
+        switch (view.getId()) {
             case R.id.lbl_filter:
-                 if(listOfTourismFilter!= null&&listOfTourismFilter.size()>0)
-                    fragment=  TourismFilterFragment.newInstance(listOfTourismFilter,"");
-
-//                openFilterFromBottom(listOfTourismFilter);
-
+                if (listOfTourismFilter != null && listOfTourismFilter.size() > 0)
+                    fragment = TourismFilterFragment.newInstance(listOfTourismFilter, "");
+//              openFilterFromBottom(listOfTourismFilter);
                 break;
-                case R.id.lbl_filter_near:
+
+            case R.id.lbl_filter_near:
                 break;
 
         }
-        if(fragment != null)
-        {
+        if (fragment != null) {
             ft = getFragmentManager().beginTransaction();
             ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-            ft.replace(R.id.frame_container,fragment);
+            ft.replace(R.id.frame_container, fragment);
             ft.addToBackStack(fragment.getClass().getSimpleName());
             ft.commit();
         }
@@ -261,8 +258,6 @@ listOfTourismFilter =tourismFilterModelList;
         mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
         com.mindorks.placeholderview.ExpandablePlaceHolderView mExpandableView = view.findViewById(R.id.expandableView);
         Button btnDismiss = view.findViewById(R.id.btn_dismiss);
-
-
 
 
 //        listAdapter = new ExpandableListAdapters(this, listDataHeader, listDataChild);
@@ -285,15 +280,16 @@ listOfTourismFilter =tourismFilterModelList;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mContext=context;
+        mContext = context;
+        listenerTitle = (CommonMethod.onSetToolbarTitle) mContext;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        if(mContext!= null)
-        {
+        if (mContext != null) {
             mContext = null;
+            listenerTitle = null;
         }
     }
 }

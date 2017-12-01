@@ -58,6 +58,8 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
     private CityTableManipulate cityManipulate;
     private CityModel city;
 
+     CommonMethod.onSetToolbarTitle listener;
+
 
     public ComplaintFragment() {
         // Required empty public constructor
@@ -102,6 +104,7 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
         initPagination();
         init();
         presenter.onLoadMoreItem(getString(R.string.url_complaint), CommonMethod.FROM_COMPLAINT);
+        listener.onSetTitle(getString(R.string.complaint));
 
         return view;
     }
@@ -130,15 +133,18 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
+        listener= (CommonMethod.onSetToolbarTitle) mContext;
 
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        if (mContext != null)
+        if (mContext != null) {
             mContext = null;
-        presenter.onDetach();
+            listener = null;
+            presenter.onDetach();
+        }
     }
 
     @Override

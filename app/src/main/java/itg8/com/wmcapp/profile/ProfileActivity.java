@@ -27,7 +27,7 @@ import itg8.com.wmcapp.home.HomeActivity;
 import itg8.com.wmcapp.notification.NotificationFragment;
 import itg8.com.wmcapp.signup.LoginFragment;
 
-public class ProfileActivity extends BaseActivity implements LoginFragment.OnAttachActivityListener, CityFragment.OnFragmentInteractionListener, CommonCallback.OnImagePickListener, CustomDialogFragment.DialogItemClickListener, ProfileFragment.ActivityFinishListener {
+public class ProfileActivity extends BaseActivity implements LoginFragment.OnAttachActivityListener, CityFragment.OnFragmentInteractionListener, CommonCallback.OnImagePickListener, CustomDialogFragment.DialogItemClickListener, ProfileFragment.ActivityFinishListener , CommonMethod.onSetToolbarTitle{
 
 
     @BindView(R.id.navigation)
@@ -152,5 +152,10 @@ public class ProfileActivity extends BaseActivity implements LoginFragment.OnAtt
             onBackPressed();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSetTitle(String name) {
+        toolbar.setTitle(getString(R.string.profile));
     }
 }

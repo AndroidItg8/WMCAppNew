@@ -1,4 +1,4 @@
-package itg8.com.wmcapp.contact;
+package itg8.com.wmcapp.setting;
 
 
 import android.os.Bundle;
@@ -8,14 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import itg8.com.wmcapp.R;
-import itg8.com.wmcapp.common.CommonMethod;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ContactUsFragment#newInstance} factory method to
+ * Use the {@link SecurityFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ContactUsFragment extends Fragment {
+public class SecurityFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -24,10 +23,9 @@ public class ContactUsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-     CommonMethod.onSetToolbarTitle listener;
 
 
-    public ContactUsFragment() {
+    public SecurityFragment() {
         // Required empty public constructor
     }
 
@@ -37,11 +35,11 @@ public class ContactUsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ContactUsFragment.
+     * @return A new instance of fragment SecurityFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ContactUsFragment newInstance(String param1, String param2) {
-        ContactUsFragment fragment = new ContactUsFragment();
+    public static SecurityFragment newInstance(String param1, String param2) {
+        SecurityFragment fragment = new SecurityFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -62,9 +60,7 @@ public class ContactUsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view  =  inflater.inflate(R.layout.fragment_contact_us, container, false);
-        listener.onSetTitle(getString(R.string.contact));
-         return view ;
+        return inflater.inflate(R.layout.fragment_security, container, false);
     }
 
 }

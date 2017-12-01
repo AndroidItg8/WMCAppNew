@@ -211,4 +211,22 @@
     <string name="pending_status">PENDING</string>
     <string name="solved_status">SOLVED</string>
     <string name="process_status">PROCESSING</string>
+
+    <string name="utility">Utility</string>
+    <string name="about">About</string>
+    <string name="user_info">User Information</string>
+
+    <!--// setting Page -->
+    <string name="preferences_category_main">Notification</string>
+    <string name="preferences_category_security">Security</string>
+    <string name="notice_pref">NoticeBoard</string>
+    <string name="pref_security_key">SecurityKey</string>
+    <string name="pref_notice_switch_summ">Switching for accept  NoticeBoard  Notification </string>
+    <string name="pref_news_switch_summ">Switching for accept News and Event Notification </string>
+    <string name="preferences_security_summ">Show Security and Privacy of the App. </string>
+    <string name="notice">Notice Board </string>
+    <string name="news">News and Event </string>
+    <string name="security">Security and Privacy</string>
+    <string name="title_activity_setting">SettingActivity</string>
+
 </resources>

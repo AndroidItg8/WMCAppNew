@@ -98,7 +98,6 @@ public class NewsFragment extends Fragment implements NewsAdapter.NewsItemClicke
         setHasOptionsMenu(true);
         presenter.onGetNewsList(getString(R.string.url_news));
          listener.onSetTitle(getString(R.string.new_updates));
-        listener.setDrawer();
         return view;
     }
 

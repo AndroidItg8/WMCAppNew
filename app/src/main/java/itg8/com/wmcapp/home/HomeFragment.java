@@ -114,7 +114,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         cardTourism.setOnClickListener(this);
         rlInclude.setOnClickListener(this);
         listener.onSetTitle(getString(R.string.app_name));
-        listener.setDrawer();
+//        listener.setDrawer();
     }
 
     @Override

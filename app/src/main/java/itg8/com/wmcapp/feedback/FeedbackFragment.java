@@ -65,6 +65,7 @@ public class FeedbackFragment extends Fragment implements FeedbackMVP.FeedbackVi
      CommonMethod.OnBackPressListener listener;
     private Context mContext;
     private FeedbackMVP.FeedbackPresenter presenter;
+    CommonMethod.onSetToolbarTitle titleListener;
 
 
     public FeedbackFragment() {
@@ -105,6 +106,7 @@ public class FeedbackFragment extends Fragment implements FeedbackMVP.FeedbackVi
         View view = inflater.inflate(R.layout.fragment_feedback, container, false);
         unbinder = ButterKnife.bind(this, view);
          presenter = new FeedbackPresenterImp(this);
+        titleListener.onSetTitle(getString(R.string.feedback));
         fabSubmit.setOnClickListener(this);
         return view;
     }
@@ -112,7 +114,10 @@ public class FeedbackFragment extends Fragment implements FeedbackMVP.FeedbackVi
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         presenter.onDestroy();
+        titleListener= null;
+        listener=null;
         unbinder.unbind();
     }
 
@@ -181,15 +186,11 @@ public class FeedbackFragment extends Fragment implements FeedbackMVP.FeedbackVi
     @Override
     public void hideProgress() {
         progressView.setVisibility(View.GONE);
-
-
     }
 
     @Override
     public void onNoInternetConnect(boolean b) {
         showSnackbar(b, CommonMethod.FROM_INTERNET,getString(R.string.no_internet_title));
-
-
     }
 
 
@@ -244,6 +245,7 @@ public class FeedbackFragment extends Fragment implements FeedbackMVP.FeedbackVi
         super.onAttach(context);
         mContext = context;
         listener = (CommonMethod.OnBackPressListener) mContext;
+        titleListener = (CommonMethod.onSetToolbarTitle) mContext;
     }
 
     @Override

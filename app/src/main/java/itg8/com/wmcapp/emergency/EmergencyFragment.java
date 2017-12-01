@@ -23,6 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.OnRecyclerviewClickListener;
 import itg8.com.wmcapp.emergency.model.Contact;
 import itg8.com.wmcapp.emergency.model.EmergencyModel;
@@ -47,6 +48,7 @@ public class EmergencyFragment extends Fragment implements EmergencyAdapter.Item
     private static final int RC_CALL = 123;
     private static final int FROM_INTERNET = 1;
     private static final int FROM_ERROR = 2;
+     CommonMethod.onSetToolbarTitle listener;
 
     Unbinder unbinder;
     @BindView(R.id.recyclerView)
@@ -101,15 +103,13 @@ public class EmergencyFragment extends Fragment implements EmergencyAdapter.Item
         unbinder = ButterKnife.bind(this, view);
         presenter = new EmergencyPresenterImp(this);
         presenter.onGetList(getString(R.string.url_emergency));
+        listener.onSetTitle(getString(R.string.emegency_numbers));
         return view;
     }
 
     private void initView(List<EmergencyModel> lists) {
-
-
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setAdapter(new EmergencyAdapter(mContext, lists, this));
-
     }
 
     @Override
@@ -124,17 +124,18 @@ public class EmergencyFragment extends Fragment implements EmergencyAdapter.Item
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
+        listener= (CommonMethod.onSetToolbarTitle) mContext;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        if (mContext != null)
+        if (mContext != null) {
             mContext = null;
+            listener =null;
+        }
 
     }
-
-
     @Override
     public void onSuccess(List<EmergencyModel> list) {
         initView(list);
@@ -176,6 +177,7 @@ public class EmergencyFragment extends Fragment implements EmergencyAdapter.Item
 
     private void showSnackerbar(int from, String message, boolean isConnected) {
 
+        snackbar = Snackbar.make(recyclerView, message, Snackbar.LENGTH_INDEFINITE);
 
         View sbView = snackbar.getView();
         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
@@ -199,7 +201,6 @@ public class EmergencyFragment extends Fragment implements EmergencyAdapter.Item
             textView.setTextColor(color);
             textView.setMaxLines(2);
         }
-        snackbar = Snackbar.make(recyclerView, message, Snackbar.LENGTH_INDEFINITE);
         snackbar.show();
         snackbar.setAction("OK", new View.OnClickListener() {
             @Override
