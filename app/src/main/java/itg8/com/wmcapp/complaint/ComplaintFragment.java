@@ -3,6 +3,7 @@ package itg8.com.wmcapp.complaint;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import itg8.com.wmcapp.complaint.model.TempComplaintModel;
 import itg8.com.wmcapp.complaint.mvp.ComplaintMVP;
 import itg8.com.wmcapp.complaint.mvp.ComplaintPresenterImp;
 import itg8.com.wmcapp.database.CityTableManipulate;
+import itg8.com.wmcapp.signup.LoginActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -210,6 +212,8 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
         adapter.showProgress(position);
 
     }
+
+
 
     @Override
     public void onComplaintItemClicked(int position, ComplaintModel model) {

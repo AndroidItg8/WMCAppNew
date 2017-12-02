@@ -50,5 +50,6 @@ public interface CityMVP {
         void showProgress();
         void hideProgress();
         void onNoInternetConnect(boolean b);
+
     }
 }

@@ -145,6 +145,15 @@ public class ProfilePresenterImp extends BaseWeakPresenter<ProfileMVp.ProfileVie
 
     }
 
+    @Override
+    public void onStartLoginActivity() {
+        if(hasView())
+        {
+            hideProgress();
+            getView().onStartLoginActivity();
+        }
+
+    }
 
 
     @Override

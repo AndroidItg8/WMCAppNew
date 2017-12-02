@@ -1,13 +1,26 @@
 package itg8.com.wmcapp.setting;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mindorks.placeholderview.ExpandablePlaceHolderView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.common.CommonMethod;
+import itg8.com.wmcapp.setting.model.SecurityModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,9 +33,15 @@ public class SecurityFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    Unbinder unbinder;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Context mContext;
+    CommonMethod.onSetToolbarTitle listener;
 
 
     public SecurityFragment() {
@@ -60,7 +79,50 @@ public class SecurityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_security, container, false);
+        View view = inflater.inflate(R.layout.fragment_security, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        listener.onSetTitle(getString(R.string.security));
+        initRecyclerView();
+
+
+        return view;
     }
 
+    private void initRecyclerView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        recyclerView.setAdapter(new SettingAdapter(mContext,getSecurityList()));
+    }
+
+    private List<SecurityModel> getSecurityList() {
+        List<SecurityModel> list = new ArrayList<>(10);
+        for (int i=0;i<=19; i++)
+        {SecurityModel model = new SecurityModel();
+        model.setContent("Content"+i);
+        model.setHeading("Heading"+i);
+        model.setId("i"+i);
+        list.add(model);
+
+        }
+         return list;
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+        listener = (CommonMethod.onSetToolbarTitle) mContext;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener=null;
+    }
 }

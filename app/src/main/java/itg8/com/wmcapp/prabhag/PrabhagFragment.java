@@ -24,6 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.CommonMethod;
+import itg8.com.wmcapp.home.HomeActivity;
 import itg8.com.wmcapp.prabhag.model.PrabhagModel;
 import itg8.com.wmcapp.prabhag.model.WardList;
 import itg8.com.wmcapp.prabhag.mvp.PrabhagMVP;
@@ -147,7 +148,10 @@ public class PrabhagFragment extends Fragment implements PrabhagMVP.PrabhagView,
 
     @Override
     public void onError(String message) {
-        showSnackerbar(FROM_ERROR, message, false);
+        if(message.equalsIgnoreCase("401"))
+            ((HomeActivity)getActivity()).clearNLogout();
+        else
+            showSnackerbar(FROM_ERROR, message, false);
 
     }
 

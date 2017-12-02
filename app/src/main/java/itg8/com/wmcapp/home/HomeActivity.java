@@ -5,13 +5,13 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -34,12 +34,12 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,7 +59,6 @@ import itg8.com.wmcapp.common.BaseActivity;
 import itg8.com.wmcapp.common.CommonCallback;
 import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.CustomDialogFragment;
-import itg8.com.wmcapp.common.Language;
 import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.MyApplication;
 import itg8.com.wmcapp.common.Prefs;
@@ -72,7 +71,6 @@ import itg8.com.wmcapp.news.NewsFragment;
 import itg8.com.wmcapp.prabhag.PrabhagFragment;
 import itg8.com.wmcapp.profile.ProfileActivity;
 import itg8.com.wmcapp.profile.ProfileModel;
-import itg8.com.wmcapp.setting.PrefsSettingFragment;
 import itg8.com.wmcapp.setting.SettingActivity;
 import itg8.com.wmcapp.signup.LoginActivity;
 import itg8.com.wmcapp.suggestion.SuggestionFragment;
@@ -88,7 +86,7 @@ public class HomeActivity extends BaseActivity
         CityMVP.CityView, CityAdapter.CityItemClickedListener, CommonMethod.onSetToolbarTitle {
     //   PrabhagFragment.onPrabhagClickedListener,
     private static final String TAG = HomeActivity.class.getSimpleName();
-//
+    //
 //    private static int english = 0;
 //    private static int hindi = 1;
 //    private static int marathi = 2;
@@ -112,8 +110,6 @@ public class HomeActivity extends BaseActivity
     private NavigationView navigationView;
     private RecyclerView recyclerView;
     private ActionBarDrawerToggle toggle;
-    private String langauge;
-
     private final FragmentManager.OnBackStackChangedListener mBackStackChangedListener =
             new FragmentManager.OnBackStackChangedListener() {
                 @Override
@@ -121,8 +117,10 @@ public class HomeActivity extends BaseActivity
                     setDrawerUpdateToggle();
                 }
             };
+    private String langauge;
     private int mItemToOpenWhenDrawerCloses = -1;
     private DrawerLayout drawer;
+    private HomeFragment homeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +132,7 @@ public class HomeActivity extends BaseActivity
         int result = CommonMethod.calculateTerm();
         Logs.d("Result" + result);
         checkLogin();
+        subscripeTopic();
 //        startActivity(new Intent(this, TestActivity.class));
 
 
@@ -146,8 +145,10 @@ public class HomeActivity extends BaseActivity
             }
         });
 
-        mDAOCity = new CityTableManipulate(this);
+        homeFragment = HomeFragment.newInstance("", "");
+        callFragmentWithoutStack(homeFragment);
 
+        mDAOCity = new CityTableManipulate(this);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         setDrawerToggle();
 
@@ -172,18 +173,27 @@ public class HomeActivity extends BaseActivity
                         Prefs.putString(CommonMethod.USER_MOBILE, model.getContactNumber());
                         lblName.setText(Prefs.getString(CommonMethod.USER_NAME));
                         lblMobile.setText(Prefs.getString(CommonMethod.USER_MOBILE));
+
+                        if (homeFragment != null) {
+                            homeFragment.sendProfleName(model.getFullName());
+
+                        }
+
+
+                    }else
+                    {
+                        clearNLogout();
                     }
                 }
 
                 @Override
                 public void onFailed(String s) {
 
-
+                    clearNLogout();
                 }
             });
         }
-        fragment = HomeFragment.newInstance("", "");
-        callFragmentWithoutStack(fragment);
+
 
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Refreshed :" + refreshedToken);
@@ -343,7 +353,7 @@ public class HomeActivity extends BaseActivity
         btnDismiss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setLocale(langauge, getApplicationContext().getResources().getConfiguration().locale.getCountry() );
+                setLocale(langauge, getApplicationContext().getResources().getConfiguration().locale.getCountry());
                 mBottomSheetDialog.dismiss();
 
             }
@@ -353,32 +363,30 @@ public class HomeActivity extends BaseActivity
             public void onCheckedChanged(RadioGroup radioGroup, int id) {
                 switch (id) {
                     case R.id.rgb_english:
-                        langauge ="eng";
+                        langauge = "eng";
                         break;
                     case R.id.rgb_hindi:
-                        langauge ="hi" ;
+                        langauge = "hi";
                         break;
                     case R.id.rgb_marathi:
-                        langauge ="mr";
+                        langauge = "mr";
                         break;
                     default:
                         break;
                 }
                 Prefs.putString(CommonMethod.LANGUAGE, langauge);
-                Logs.d("LANGUAGE:" +langauge);
+                Logs.d("LANGUAGE:" + langauge);
 
 
             }
         });
 
 
-         mBottomSheetDialog.show();
+        mBottomSheetDialog.show();
 
 
     }
 
-    private void changeLanguageOfApp(Language langauge) {
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -439,11 +447,11 @@ public class HomeActivity extends BaseActivity
             case R.id.nav_logout:
                 clearNLogout();
                 break;
-                case R.id.nav_setting:
-                    from="Setting";
+            case R.id.nav_setting:
+                from = "Setting";
 //                    fragment = PrefsSettingFragment.newInstance("","");
-                    startActivity(new Intent(this, SettingActivity.class));
-                    break;
+                startActivity(new Intent(this, SettingActivity.class));
+                break;
 
         }
         if (fragment != null) {
@@ -459,7 +467,7 @@ public class HomeActivity extends BaseActivity
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
     }
 
-    private void clearNLogout() {
+    public void clearNLogout() {
         Prefs.remove(CommonMethod.HEADER);
         Prefs.remove(CommonMethod.USER_NAME);
         Prefs.remove(CommonMethod.USER_MOBILE);
@@ -499,12 +507,10 @@ public class HomeActivity extends BaseActivity
             fragmentManager.popBackStack();
         } else {
             fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getSimpleName());
-            if(fragment != null)
-            {
+            if (fragment != null) {
                 super.onBackPressed();
 
-            }else
-            {
+            } else {
                 setDrawerUpdateToggle();
             }
             // setDrawerUpdateToggle();
@@ -583,7 +589,10 @@ public class HomeActivity extends BaseActivity
 
     @Override
     public void onFail(String message) {
-        showTextSnackbar(message);
+        if (message.equalsIgnoreCase("401"))
+            clearNLogout();
+        else
+            showTextSnackbar(message);
 
 
     }
@@ -614,6 +623,7 @@ public class HomeActivity extends BaseActivity
 
 
     }
+
 
     public void showSnackbar(boolean isConnected) {
 
@@ -718,7 +728,6 @@ public class HomeActivity extends BaseActivity
     }
 
 
-
     private void setDrawerUpdateToggle() {
         if (toggle == null) {
             return;
@@ -791,6 +800,19 @@ public class HomeActivity extends BaseActivity
         super.onPause();
 
         getSupportFragmentManager().removeOnBackStackChangedListener(mBackStackChangedListener);
+    }
+
+    private void subscripeTopic() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                FirebaseMessaging.getInstance().subscribeToTopic("NoticeBoard");
+                FirebaseMessaging.getInstance().subscribeToTopic("NewsEvent");
+                Log.d(TAG, "Subscribed");
+                String token = FirebaseInstanceId.getInstance().getToken();
+                Log.d(TAG, "Token: " + token);
+            }
+        }, 5000);
     }
 
 }

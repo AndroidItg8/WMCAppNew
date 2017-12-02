@@ -29,6 +29,7 @@ import itg8.com.wmcapp.emergency.model.Contact;
 import itg8.com.wmcapp.emergency.model.EmergencyModel;
 import itg8.com.wmcapp.emergency.mvp.EmergencyMVP;
 import itg8.com.wmcapp.emergency.mvp.EmergencyPresenterImp;
+import itg8.com.wmcapp.home.HomeActivity;
 import itg8.com.wmcapp.torisum.TorisumDetailsFragment;
 
 /**
@@ -144,7 +145,10 @@ public class EmergencyFragment extends Fragment implements EmergencyAdapter.Item
 
     @Override
     public void onFail(String message) {
-        showSnackerbar(FROM_ERROR,message, false);
+        if(message.equalsIgnoreCase("401"))
+            ((HomeActivity) getActivity()).clearNLogout();
+        else
+            showSnackerbar(FROM_ERROR,message, false);
 
 
 

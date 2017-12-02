@@ -37,6 +37,7 @@ public interface ProfileMVp {
         ProfileModel getProfileModel();
         File getImageFile();
 
+        void onStartLoginActivity();
     }
 
 
@@ -69,5 +70,7 @@ public interface ProfileMVp {
         void hideProgress();
         void onNoInternetConnect(boolean b);
         void onSaveSuccess(String status);
+
+        void onStartLoginActivity();
     }
 }

@@ -15,17 +15,26 @@ import retrofit2.Response;
  */
 
 public class TorisumModuleImp implements TourismMVP.TourismModule {
+    private Call<List<TorisumModel>> call;
+
     @Override
     public void onDestroy() {
+        if(call!= null)
+            call.cancel();
 
     }
 
     @Override
     public void onStartLoadingList(RetroController controller, String loadUrl, final TourismMVP.TourismListener listener) {
-Call<List<TorisumModel> > call = controller.getTorisumList(loadUrl);
+ call = controller.getTorisumList(loadUrl);
  call.enqueue(new Callback<List<TorisumModel>>() {
      @Override
      public void onResponse(Call<List<TorisumModel>> call, Response<List<TorisumModel>> response) {
+         if(response.code()==401)
+         {
+             listener.onError("401");
+             return;
+         }
          if(response.isSuccessful())
          {
              if(response.body()!= null)

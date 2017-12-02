@@ -1,14 +1,11 @@
 package itg8.com.wmcapp.cilty.mvp;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.common.BaseWeakPresenter;
 import itg8.com.wmcapp.common.MyApplication;
-import itg8.com.wmcapp.common.Retro;
-import itg8.com.wmcapp.database.BaseDatabaseHelper;
-import itg8.com.wmcapp.home.HomeActivity;
+
 
 /**
  * Created by Android itg 8 on 11/6/2017.
@@ -39,6 +36,7 @@ public class CityPresenterImp extends BaseWeakPresenter<CityMVP.CityView> implem
         }
 
     }
+
 
 
 
@@ -94,8 +92,6 @@ public class CityPresenterImp extends BaseWeakPresenter<CityMVP.CityView> implem
     public void onError(Object t) {
         if(hasView()) {
             getView().hideProgress();
-
-
 
             getView().onFail(t.toString());
         }

@@ -3,6 +3,7 @@ package itg8.com.wmcapp.complaint;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import itg8.com.wmcapp.complaint.model.TempComplaintModel;
 import itg8.com.wmcapp.complaint.mvp.ComplaintMVP;
 import itg8.com.wmcapp.complaint.mvp.ComplaintPresenterImp;
 import itg8.com.wmcapp.database.CityTableManipulate;
+import itg8.com.wmcapp.signup.LoginActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -252,6 +254,13 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
 
     @Override
     public void onFailedLike(String s) {
+        if(s.equalsIgnoreCase("401"))
+        {
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+            getActivity().finish();
+        }
+
+        else
         Toast.makeText(mContext, s, Toast.LENGTH_SHORT).show();
 
     }

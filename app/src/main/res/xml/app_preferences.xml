@@ -6,20 +6,13 @@
         android:title="@string/preferences_category_main">
 
         <android.support.v7.preference.SwitchPreferenceCompat
-            android:defaultValue="true"
             android:key="@string/notice_pref"
             android:summary="@string/pref_notice_switch_summ"
             android:title="@string/notice"/>
         <android.support.v7.preference.SwitchPreferenceCompat
-            android:defaultValue="true"
-            android:key="@string/notice_pref"
+            android:key="@string/news_pref"
             android:summary="@string/pref_news_switch_summ"
-            android:title="@string/notice"/>
-
-    </android.support.v7.preference.PreferenceCategory>
-    <android.support.v7.preference.PreferenceCategory
-
-        android:title="@string/preferences_category_security">
+            android:title="@string/news"/>
 
         <Preference
             android:key="@string/pref_security_key"
@@ -27,6 +20,7 @@
             android:title="@string/security"/>
 
     </android.support.v7.preference.PreferenceCategory>
+
 
 
 

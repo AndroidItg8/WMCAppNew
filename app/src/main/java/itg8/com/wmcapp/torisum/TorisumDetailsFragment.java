@@ -163,7 +163,7 @@ public class TorisumDetailsFragment extends Fragment implements OnMapReadyCallba
                     @Override
                     public void onNext(LatLng latLng) {
                         if (latLng != null && mMap != null) {
-                            lastLatLng=latLng;
+                            lastLatLng = latLng;
                             mMap.addMarker(new MarkerOptions().position(latLng).title(torisumModel.getName()));
                             mMap.setMinZoomPreference(17);
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -186,6 +186,7 @@ public class TorisumDetailsFragment extends Fragment implements OnMapReadyCallba
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+
     }
 
     @Override
@@ -235,20 +236,20 @@ public class TorisumDetailsFragment extends Fragment implements OnMapReadyCallba
 
     @Override
     public void onClick(View view) {
-        switch (view.getId())
-        {
+        switch (view.getId()) {
             case R.id.lbl_direction:
-                CommonMethod.directionShow(getActivity(),generateDirection());
+                CommonMethod.directionShow(getActivity(), generateDirection());
                 break;
             case R.id.lbl_share:
-                if(lastLatLng!= null)
+                if (lastLatLng != null)
                     //TODO Do It Properly  Share Itemn Tuorism
-                    CommonMethod.shareItem(getActivity(), generateTextToshare(),torisumModel.getName(), getLocalBitmapUri(torisumModel.getFileupload().get(0)));
+                    CommonMethod.shareItem(getActivity(), generateTextToshare(), torisumModel.getName(), getLocalBitmapUri(torisumModel.getFileupload().get(0)));
                 break;
             case R.id.lbl_like:
                 break;
         }
     }
+
     public Uri getLocalBitmapUri(Object model) {
         // Extract Bitmap from ImageView drawable
         String path = "";
@@ -271,11 +272,14 @@ public class TorisumDetailsFragment extends Fragment implements OnMapReadyCallba
 
 //        return  "https://www.google.com/maps/dir/?api=1&&query_place_id=lastLatLng.latitude,lastLatLng.longitude&travelmode=walking";
 //        return "http://maps.google.com/maps?daddr="+lastLatLng.latitude+","+lastLatLng.longitude+ " ("+torisumModel.getName()+")";
-        return "http://maps.google.com/maps?q="+lastLatLng.latitude+","+lastLatLng.longitude+ " ("+torisumModel.getName()+")&daddr="+lastLatLng.latitude+","+lastLatLng.longitude;
+        if (lastLatLng != null)
+            return "http://maps.google.com/maps?q=" + lastLatLng.latitude + "," + lastLatLng.longitude + " (" + torisumModel.getName() + ")&daddr=" + lastLatLng.latitude + "," + lastLatLng.longitude;
+        else
+            return "";
     }
 
     private String generateTextToshare() {
-        return  "Place visit to Wardha\n"+torisumModel.getName()+"\nAddress: "+torisumModel.getAddress() +"\nhttp://maps.google.com/maps?saddr="+lastLatLng.latitude+","+lastLatLng.longitude;
+        return "Place visit to Wardha\n" + torisumModel.getName() + "\nAddress: " + torisumModel.getAddress() + "\nhttp://maps.google.com/maps?saddr=" + lastLatLng.latitude + "," + lastLatLng.longitude;
     }
 
     @Override

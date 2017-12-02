@@ -153,6 +153,8 @@ public class SplashActivity extends BaseActivity implements CityMVP.CityView {
     }
 
 
+
+
     private void showSnackbar(boolean isConnected) {
 
         int color;

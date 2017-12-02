@@ -73,6 +73,9 @@ public final class CommonMethod {
     public static final String TYPE_NOTICE_SYNC = "NOTICE_SYNC";
     public static final String TYPE_NOTICE_UNSYNC = "NOTICE_SYNC";
     public static final String SYNC_NB_JOB = "SYNC_NB_JOB";
+    // FOR NOTIFICATION OF NEWS
+    public static final String SETTING_NEWS_NOTIFICATION = "SETTING_NEWS_NOTIFICATION";
+    public static final String SETTING_NOTICE_NOTIFICATION = "SETTING_NOTICE_NOTIFICATION";
 
 
 //    1) Complaint
@@ -148,10 +151,11 @@ public final class CommonMethod {
     }
 
     public static void directionShow(Context context, String generateDirection) {
-        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                Uri.parse(generateDirection));
-
-        context.startActivity(intent);
+        if(!TextUtils.isEmpty(generateDirection)) {
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                    Uri.parse(generateDirection));
+            context.startActivity(intent);
+        }
     }
 
     public static void sendSMS(String phoneNo, String message, Context mContext) {

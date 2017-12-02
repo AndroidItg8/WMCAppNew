@@ -36,16 +36,20 @@ public class InfoView  {
     private CustomFontTextView titleTxt;
     @View(R.id.checkbox)
     private CheckBox checkBox;
+    private boolean ischeck;
+
 
 
 
 
     private SubCatList mInfo;
+    private ItemCheckListener listener;
     private Context mContext;
 
-    public InfoView(Context context, SubCatList info) {
+    public InfoView(Context context, SubCatList info, ItemCheckListener listener) {
         mContext = context;
         mInfo = info;
+        this.listener = listener;
     }
 
     @Resolve
@@ -54,12 +58,25 @@ public class InfoView  {
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                compoundButton.setChecked(true);
+
+                if(b)
+                {
+                    listener.onItemCheck(mInfo);
+                }else
+                {
+                    listener.onItemUnCheck(mInfo);
+                }
+
 
 
             }
         });
 
 
+    }
+
+    public interface ItemCheckListener{
+        void onItemCheck(SubCatList info);
+        void onItemUnCheck(SubCatList info);
     }
 }

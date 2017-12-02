@@ -33,6 +33,11 @@ public class NewsModuleImp implements NewsMVP.NewsModule {
         call.enqueue(new Callback<List<NewsModel>>() {
             @Override
             public void onResponse(Call<List<NewsModel>> call, Response<List<NewsModel>> response) {
+                if(response.code()==401)
+                {
+                    listener.onFail("401");
+                    return;
+                }
                  if(response.isSuccessful())
                  {
                      if(response.body()!= null)

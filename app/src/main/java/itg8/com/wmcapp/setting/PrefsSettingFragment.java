@@ -1,18 +1,20 @@
 package itg8.com.wmcapp.setting;
 
 
-import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
-import android.support.v7.preference.PreferenceManager;
 import android.widget.FrameLayout;
 
 import butterknife.BindView;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.common.CommonMethod;
+import itg8.com.wmcapp.common.Logs;
+import itg8.com.wmcapp.common.Prefs;
 
 
 /**
@@ -28,10 +30,12 @@ public class PrefsSettingFragment extends PreferenceFragmentCompat {
     @BindView(R.id.frame_container)
     FrameLayout frameContainer;
     Unbinder unbinder;
+    CommonMethod.onSetToolbarTitle listener;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Context mContext;
 
 
     public PrefsSettingFragment() {
@@ -68,8 +72,10 @@ public class PrefsSettingFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.app_preferences);
+        listener.onSetTitle(getString(R.string.action_settings));
         Preference myPref = findPreference(getString(R.string.pref_security_key));
-//        bindPreferenceSummaryToValue()
+        Preference myNewsPref = findPreference(getString(R.string.news_pref));
+        Preference myNoticePref = findPreference(getString(R.string.news_pref));
         myPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -77,48 +83,46 @@ public class PrefsSettingFragment extends PreferenceFragmentCompat {
                 android.support.v4.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
                 ft.replace(R.id.frame_container, fragment, fragment.getClass().getSimpleName());
+                ft.addToBackStack(fragment.getClass().getSimpleName());
                 ft.commit();
                 return false;
             }
         });
-
-
-//         final Preference noticePref = findPreference(getString(R.string.notice_pref));
-//         noticePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-//             @Override
-//             public boolean onPreferenceChange(Preference preference, Object newValue) {
-//                 noticePref.setEnabled(true);
-//                 return true;
-//             }
-//         });
+        myNewsPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                Prefs.putBoolean(CommonMethod.SETTING_NEWS_NOTIFICATION, (Boolean) newValue);
+                Logs.d("Prefs News Values:"+newValue.toString());
+                return true;
+            }
+        });
+        myNoticePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                Prefs.putBoolean(CommonMethod.SETTING_NOTICE_NOTIFICATION, (Boolean) newValue);
+                Logs.d("Prefs  NoticeValues:"+newValue.toString());
+                return true;
+            }
+        });
 
 
     }
 
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        // Inflate the layout for this fragment
-//        View view = inflater.inflate(R.layout.fragment_prefs_setting, container, false);
-//        unbinder = ButterKnife.bind(this, view);
-//        return view;
-//    }
-//
-//    @Override
-//    public void onDestroyView() {
-//        super.onDestroyView();
-//        unbinder.unbind();
-//    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+        listener = (CommonMethod.onSetToolbarTitle) mContext;
+    }
 
-
-    private static void bindPreferenceSummaryToValue(Preference preference) {
-//        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-//
-//        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-//                PreferenceManager
-//                        .getDefaultSharedPreferences(preference.getContext())
-//                        .getString(preference.getKey(), ""));
-////    }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if(mContext!= null)
+        {
+            mContext=null;
+            listener=null;
+        }
     }
 }

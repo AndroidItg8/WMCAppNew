@@ -29,14 +29,11 @@ import itg8.com.wmcapp.widget.CustomFontTextView;
 
 public class TorisumAdapter extends RecyclerView.Adapter<TorisumAdapter.TorisumViewHolder> {
 
-
-
     private Context mContext;
     private List<TorisumModel> list;
     private OnRecyclerviewClickListener<TorisumModel> listener;
 
     public TorisumAdapter(Context mContext, List<TorisumModel> list, OnRecyclerviewClickListener listener) {
-
         this.mContext = mContext;
         this.list = list;
         this.listener = listener;

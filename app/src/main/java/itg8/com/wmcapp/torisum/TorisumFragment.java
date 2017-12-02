@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -29,7 +30,10 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.CommonMethod;
+import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.OnRecyclerviewClickListener;
+import itg8.com.wmcapp.home.HomeActivity;
+import itg8.com.wmcapp.torisum.model.SubCatList;
 import itg8.com.wmcapp.torisum.model.TorisumModel;
 import itg8.com.wmcapp.torisum.model.TourismFilterModel;
 import itg8.com.wmcapp.torisum.mvp.TorisumPresenterImp;
@@ -41,7 +45,7 @@ import itg8.com.wmcapp.widget.CustomFontTextView;
  * Use the {@link TorisumFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TorisumFragment extends Fragment implements OnRecyclerviewClickListener<TorisumModel>, TourismMVP.TourismView, View.OnClickListener {
+public class TorisumFragment extends Fragment implements OnRecyclerviewClickListener<TorisumModel>, TourismMVP.TourismView, View.OnClickListener , TourismFilterFragment.FilterItemListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -62,6 +66,8 @@ public class TorisumFragment extends Fragment implements OnRecyclerviewClickList
     @BindView(R.id.lbl_filter_near)
     CustomFontTextView lblFilterNear;
     CommonMethod.onSetToolbarTitle listenerTitle;
+    TourismFilterFragment.FilterItemListener listenerFilter;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -72,6 +78,7 @@ public class TorisumFragment extends Fragment implements OnRecyclerviewClickList
     private Context mContext;
     private Fragment fragment;
     private FragmentTransaction ft;
+     private List<SubCatList> filetList;
 
 
     public TorisumFragment() {
@@ -144,7 +151,6 @@ public class TorisumFragment extends Fragment implements OnRecyclerviewClickList
 
     @Override
     public void onTourismCategoryFilterList(List<TourismFilterModel> tourismFilterModelList) {
-
         listOfTourismFilter = tourismFilterModelList;
     }
 
@@ -171,7 +177,10 @@ public class TorisumFragment extends Fragment implements OnRecyclerviewClickList
 
     @Override
     public void onError(String message) {
-        showSnackerbar(FROM_ERROR, message, false);
+        if(message.equalsIgnoreCase("401"))
+            ((HomeActivity) getActivity()).clearNLogout();
+        else
+         showSnackerbar(FROM_ERROR, message, false);
 
     }
 
@@ -196,6 +205,7 @@ public class TorisumFragment extends Fragment implements OnRecyclerviewClickList
             textView.setMaxLines(2);
 
         } else {
+            color = Color.WHITE;
             textView.setTextColor(color);
             textView.setMaxLines(2);
         }
@@ -291,5 +301,12 @@ public class TorisumFragment extends Fragment implements OnRecyclerviewClickList
             mContext = null;
             listenerTitle = null;
         }
+    }
+
+    @Override
+    public void selectItemList(List<SubCatList> selectedList) {
+        Logs.d("selectItemList:"+new Gson().toJson(selectedList));
+
+
     }
 }

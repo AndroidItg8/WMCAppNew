@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.mindorks.placeholderview.ExpandablePlaceHolderView;
 
@@ -30,7 +29,7 @@ import itg8.com.wmcapp.torisum.model.TourismFilterModel;
  * Use the {@link TourismFilterFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TourismFilterFragment extends Fragment implements View.OnClickListener {
+public class TourismFilterFragment extends Fragment implements View.OnClickListener, InfoView.ItemCheckListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -38,18 +37,16 @@ public class TourismFilterFragment extends Fragment implements View.OnClickListe
     @BindView(R.id.expandableView)
     ExpandablePlaceHolderView expandableView;
     Unbinder unbinder;
-    @BindView(R.id.img)
-    ImageView img;
     @BindView(R.id.fab_filter)
     FloatingActionButton fabFilter;
+    FilterItemListener listener;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private Context mContext;
     private List<TourismFilterModel> listofCategoryModel;
-
-
+    private List<SubCatList> selectedList;
     public TourismFilterFragment() {
         // Required empty public constructor
     }
@@ -87,12 +84,16 @@ public class TourismFilterFragment extends Fragment implements View.OnClickListe
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tourism_filter, container, false);
         unbinder = ButterKnife.bind(this, view);
-        for (TourismFilterModel model : listofCategoryModel) {
-            expandableView.addView(new HeadingView(getActivity(), model.getCategoryName()));
-            for (SubCatList info : model.getSubCatList()) {
-                expandableView.addView(new InfoView(getActivity(), info));
+        if (listofCategoryModel != null) {
+            selectedList = new ArrayList<>();
+            for (TourismFilterModel model : listofCategoryModel) {
+                expandableView.addView(new HeadingView(getActivity(), model.getCategoryName()));
+                for (SubCatList info : model.getSubCatList()) {
+                    expandableView.addView(new InfoView(getActivity(), info, this));
+                }
             }
         }
+
 
         fabFilter.setOnClickListener(this);
         return view;
@@ -111,6 +112,7 @@ public class TourismFilterFragment extends Fragment implements View.OnClickListe
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
+//        listener =mContext;
     }
 
     @Override
@@ -122,12 +124,25 @@ public class TourismFilterFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-switch (view.getId())
-{
-    case R.id.fab_filter:
+        switch (view.getId()) {
+            case R.id.fab_filter:
+                listener.selectItemList(selectedList);
+                break;
 
-        break;
+        }
+    }
 
-}
+
+    @Override
+    public void onItemCheck(SubCatList info) {
+        selectedList.add(info);
+    }
+
+    @Override
+    public void onItemUnCheck(SubCatList info) {
+        selectedList.remove(info);
+    }
+    public interface FilterItemListener{
+        void selectItemList(List<SubCatList> selectedList);
     }
 }

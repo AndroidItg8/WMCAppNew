@@ -60,6 +60,7 @@ import itg8.com.wmcapp.database.BaseDatabaseHelper;
 import itg8.com.wmcapp.database.CityTableManipulate;
 import itg8.com.wmcapp.profile.mvp.ProfileMVp;
 import itg8.com.wmcapp.profile.mvp.ProfilePresenterImp;
+import itg8.com.wmcapp.signup.LoginActivity;
 import itg8.com.wmcapp.utility.compressor.Compressor;
 import itg8.com.wmcapp.utility.easyimg.DefaultCallback;
 import itg8.com.wmcapp.utility.easyimg.EasyImage;
@@ -507,6 +508,12 @@ CommonMethod.onSetToolbarTitle titleListener;
     @Override
     public File getImageFile() {
         return selectedFile;
+    }
+
+    @Override
+    public void onStartLoginActivity() {
+        startActivity(new Intent(getActivity(), LoginActivity.class));
+        getActivity().finish();
     }
 
 

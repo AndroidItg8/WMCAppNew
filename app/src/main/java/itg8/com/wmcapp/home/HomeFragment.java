@@ -17,7 +17,6 @@ import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.board.NoticeBoardFragment;
 import itg8.com.wmcapp.common.CommonMethod;
-import itg8.com.wmcapp.common.Prefs;
 import itg8.com.wmcapp.complaint.AddComplaintFragment;
 import itg8.com.wmcapp.complaint.ComplaintFragment;
 import itg8.com.wmcapp.emergency.EmergencyFragment;
@@ -53,13 +52,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     CustomFontTextView txtName;
     @BindView(R.id.rl_include)
     RelativeLayout rlInclude;
-
+    CommonMethod.onSetToolbarTitle listener;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private Fragment fragment;
-     CommonMethod.onSetToolbarTitle listener;
     private Context mContext;
+    private String name;
 
 
     public HomeFragment() {
@@ -105,7 +104,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void init() {
-        txtName.setText(String.valueOf(getString(R.string.title_welcome) + String.valueOf(Prefs.getString(CommonMethod.USER_NAME))));
+        if (name != null)
+            txtName.setText(String.valueOf(getString(R.string.title_welcome) + name));
         cardComplaint.setOnClickListener(this);
         cardNews.setOnClickListener(this);
         cardEmergency.setOnClickListener(this);
@@ -166,6 +166,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-        listener= (CommonMethod.onSetToolbarTitle) mContext;
+        listener = (CommonMethod.onSetToolbarTitle) mContext;
     }
+
+    public void sendProfleName(String fullName) {
+        if (txtName != null)
+            txtName.setText(String.valueOf(getString(R.string.title_welcome) + fullName));
+        else
+            name = fullName;
+    }
+
+
 }

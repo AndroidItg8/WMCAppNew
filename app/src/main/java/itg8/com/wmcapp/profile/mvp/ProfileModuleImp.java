@@ -23,6 +23,7 @@ import retrofit2.Response;
 public class ProfileModuleImp implements ProfileMVp.ProfileModule {
 
     private Call<List<ProfileModel>> cal;
+    private Call<List<CityModel>> call;
 
     @Override
     public void onDestroy() {
@@ -30,6 +31,11 @@ public class ProfileModuleImp implements ProfileMVp.ProfileModule {
         {
             if(!cal.isCanceled())
                 cal.cancel();
+        }
+        if(call != null)
+        {
+            if(!call.isCanceled())
+                call.cancel();
         }
     }
 
@@ -44,6 +50,10 @@ public class ProfileModuleImp implements ProfileMVp.ProfileModule {
         cal.enqueue(new Callback<List<ProfileModel>>() {
             @Override
             public void onResponse(Call<List<ProfileModel>> call, Response<List<ProfileModel>> response) {
+                if (response.code() == 401) {
+                    listener.onStartLoginActivity();
+                    return;
+                }
                 if(response.isSuccessful())
                 {
                     if(response.body()!= null)
@@ -79,10 +89,14 @@ public class ProfileModuleImp implements ProfileMVp.ProfileModule {
 
     @Override
     public void onGetCityListFromServer(RetroController retroController, String url, final ProfileMVp.ProfileListener listener) {
-        Call<List<CityModel>> call = retroController.getCityFromServer(url);
+        call = retroController.getCityFromServer(url);
         call.enqueue(new Callback<List<CityModel>>() {
             @Override
             public void onResponse(Call<List<CityModel>> call, Response<List<CityModel>> response) {
+                if (response.code() == 401) {
+                    listener.onStartLoginActivity();
+                    return;
+                }
                 if(response.isSuccessful()) {
                     if (response.body() != null) {
 

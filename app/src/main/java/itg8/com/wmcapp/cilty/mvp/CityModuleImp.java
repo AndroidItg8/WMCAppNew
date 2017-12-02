@@ -37,6 +37,10 @@ public class CityModuleImp  implements CityMVP.CityModule{
          call.enqueue(new Callback<List<CityModel>>() {
              @Override
              public void onResponse(Call<List<CityModel>> call, Response<List<CityModel>> response) {
+                 if (response.code() == 401) {
+                     listener.onError("401");
+                     return;
+                 }
                  if(response.isSuccessful()) {
                      if (response.body() != null) {
 

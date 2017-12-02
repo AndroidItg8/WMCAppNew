@@ -25,6 +25,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.CommonMethod;
+import itg8.com.wmcapp.home.HomeActivity;
 import itg8.com.wmcapp.news.model.NewsModel;
 import itg8.com.wmcapp.news.mvp.NewsMVP;
 import itg8.com.wmcapp.news.mvp.NewsPresenterImp;
@@ -133,7 +134,10 @@ public class NewsFragment extends Fragment implements NewsAdapter.NewsItemClicke
 
     @Override
     public void onFail(String message) {
-        showSnackerbar(CommonMethod.FROM_INTERNET,message,false);
+        if(message.equalsIgnoreCase("401"))
+            ((HomeActivity)getActivity()).clearNLogout();
+        else
+            showSnackerbar(CommonMethod.FROM_INTERNET,message,false);
 
     }
 

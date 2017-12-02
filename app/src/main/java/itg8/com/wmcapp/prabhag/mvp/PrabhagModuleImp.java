@@ -32,6 +32,11 @@ public class PrabhagModuleImp implements PrabhagMVP.PrabhagModule {
         call.enqueue(new Callback<List<PrabhagModel>>() {
             @Override
             public void onResponse(Call<List<PrabhagModel>> call, Response<List<PrabhagModel>> response) {
+                if(response.code()==401)
+                {
+                    listener.onError("401");
+                    return;
+                }
                 if(response.isSuccessful())
                 {
                     if(response.body()!= null)

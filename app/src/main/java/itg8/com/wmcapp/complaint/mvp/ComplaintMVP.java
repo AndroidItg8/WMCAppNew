@@ -26,6 +26,7 @@ public interface ComplaintMVP {
         void onFailedLike(String s);
 
         void showProgress(int position);
+
     }
 
     public interface ComplaintPresenter extends BaseFragmentPresenter{
@@ -54,6 +55,7 @@ public interface ComplaintMVP {
         void onSuccess(ComplaintModel model, int position);
         void onFailed(String s);
          void onFailedList(String s);
+
     }
 
     public interface ComplaintModule extends BaseDestroyModule{

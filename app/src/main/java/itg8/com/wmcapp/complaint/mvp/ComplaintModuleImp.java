@@ -48,6 +48,7 @@ class ComplaintModuleImp implements ComplaintMVP.ComplaintModule {
 
     @Override
     public void onStartLoadingList(String loadUrl, int page, int limit, int from, final ComplaintMVP.ComplaintListener listener) {
+
         if(from == CommonMethod.FROM_COMPLAINT) {
             call = MyApplication.getInstance().getRetroController().loadComplaint(loadUrl, page, limit, 0,0);
         }else
@@ -108,6 +109,10 @@ class ComplaintModuleImp implements ComplaintMVP.ComplaintModule {
         callLike.enqueue(new Callback<RegistrationModel>() {
             @Override
             public void onResponse(Call<RegistrationModel> call, Response<RegistrationModel> response) {
+                if (response.code() == 401) {
+                    listener.onFailed("401");
+                    return;
+                }
                 if(response.isSuccessful())
                 {
                     if(response.body().isFlag())
