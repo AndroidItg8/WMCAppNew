@@ -35,6 +35,7 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.sql.SQLException;
@@ -75,6 +76,8 @@ import itg8.com.wmcapp.setting.SettingActivity;
 import itg8.com.wmcapp.signup.LoginActivity;
 import itg8.com.wmcapp.suggestion.SuggestionFragment;
 import itg8.com.wmcapp.torisum.TorisumFragment;
+import itg8.com.wmcapp.torisum.TourismFilterFragment;
+import itg8.com.wmcapp.torisum.model.SubCatList;
 import itg8.com.wmcapp.widget.CircularImageView;
 
 public class HomeActivity extends BaseActivity
@@ -83,6 +86,7 @@ public class HomeActivity extends BaseActivity
         CustomDialogFragment.DialogItemClickListener,
         CommonMethod.OnBackPressListener,
         CommonMethod.OnMoveComplaintListener,
+        TourismFilterFragment.FilterItemListener,
         CityMVP.CityView, CityAdapter.CityItemClickedListener, CommonMethod.onSetToolbarTitle {
     //   PrabhagFragment.onPrabhagClickedListener,
     private static final String TAG = HomeActivity.class.getSimpleName();
@@ -121,6 +125,8 @@ public class HomeActivity extends BaseActivity
     private int mItemToOpenWhenDrawerCloses = -1;
     private DrawerLayout drawer;
     private HomeFragment homeFragment;
+    OnSelectTourismList listenersTourism;
+    private List<SubCatList> selectedTourismList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +140,10 @@ public class HomeActivity extends BaseActivity
         checkLogin();
         subscripeTopic();
 //        startActivity(new Intent(this, TestActivity.class));
+//         if(fragment!= null) {
+//             if (fragment instanceof TorisumFragment)
+//                 listenersTourism = (OnSelectTourismList) this;
+//         }
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -159,6 +169,8 @@ public class HomeActivity extends BaseActivity
             imageView = view.findViewById(R.id.imageView);
         }
         Menu menu = navigationView.getMenu();
+
+
         menu.findItem(R.id.nav_registration).setVisible(false);
         navigationView.setNavigationItemSelectedListener(this);
         lblName.setText(Prefs.getString(CommonMethod.USER_NAME));
@@ -793,13 +805,28 @@ public class HomeActivity extends BaseActivity
         // action bar toggle: only top level screens show the hamburger-like icon, inner
         // screens - either Activities or fragments - show the "Up" icon instead.
         getSupportFragmentManager().addOnBackStackChangedListener(mBackStackChangedListener);
+        Logs.d("onResume");
+      //  sendListToTourismFragment(selectedTourismList);
+
+
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
+        //sendListToTourismFragment(selectedTourismList);
         getSupportFragmentManager().removeOnBackStackChangedListener(mBackStackChangedListener);
+        Logs.d("OnPause");
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        sendListToTourismFragment(selectedTourismList);
+        Logs.d("onStart");
+
     }
 
     private void subscripeTopic() {
@@ -813,6 +840,35 @@ public class HomeActivity extends BaseActivity
                 Log.d(TAG, "Token: " + token);
             }
         }, 5000);
+    }
+
+    @Override
+    public void selectItemList(List<SubCatList> selectedList) {
+       selectedTourismList= selectedList;
+       Logs.d("selectItemList"+new Gson().toJson(selectedTourismList));
+
+        sendListToTourismFragment(selectedTourismList);
+
+    }
+
+    private void sendListToTourismFragment(List<SubCatList> selectedList) {
+//        Logs.d("sendListToTourismFragment:" + new Gson().toJson(selectedList));
+
+        if(selectedList!= null && selectedList.size()>0) {
+             Fragment f = getSupportFragmentManager().findFragmentById(R.id.frame_container);
+//             if (fragment != null) {
+//                 if (fragment instanceof TorisumFragment) {
+                     Logs.d("sendListToTourismFragment:" + new Gson().toJson(selectedList));
+
+            ((new TorisumFragment())).onSendTourismList(selectedList);
+//                 }
+//             }
+         }
+    }
+
+
+    public interface OnSelectTourismList{
+        void onSendTourismList(List<SubCatList> list);
     }
 
 }

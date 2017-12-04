@@ -2,10 +2,12 @@ package itg8.com.wmcapp.torisum;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
+import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.torisum.model.HeadingView;
 import itg8.com.wmcapp.torisum.model.InfoView;
 import itg8.com.wmcapp.torisum.model.SubCatList;
@@ -40,6 +43,7 @@ public class TourismFilterFragment extends Fragment implements View.OnClickListe
     @BindView(R.id.fab_filter)
     FloatingActionButton fabFilter;
     FilterItemListener listener;
+    CommonMethod.OnBackPressListener onBackPressListener;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -106,13 +110,16 @@ public class TourismFilterFragment extends Fragment implements View.OnClickListe
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        if (mContext != null) ;
+        mContext = null;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-//        listener =mContext;
+        listener = (FilterItemListener) mContext;
+        onBackPressListener = (CommonMethod.OnBackPressListener) mContext;
     }
 
     @Override
@@ -127,9 +134,17 @@ public class TourismFilterFragment extends Fragment implements View.OnClickListe
         switch (view.getId()) {
             case R.id.fab_filter:
                 listener.selectItemList(selectedList);
+//                sendBroadCastManager(selectedList);
+                onBackPressListener.onBackPress();
                 break;
-
         }
+    }
+
+    private void sendBroadCastManager(List<SubCatList> selectedList) {
+        Intent intent = new Intent();
+        intent.setAction(CommonMethod.SELECT_LIST_BROADCAST);
+        intent.putParcelableArrayListExtra(CommonMethod.SELECT_LIST, (ArrayList<? extends Parcelable>) selectedList);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
 

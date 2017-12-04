@@ -2,13 +2,19 @@ package itg8.com.wmcapp.torisum;
 
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -23,6 +29,8 @@ import android.widget.TextView;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.gson.Gson;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -35,23 +43,26 @@ import itg8.com.wmcapp.common.OnRecyclerviewClickListener;
 import itg8.com.wmcapp.home.HomeActivity;
 import itg8.com.wmcapp.torisum.model.SubCatList;
 import itg8.com.wmcapp.torisum.model.TorisumModel;
+import itg8.com.wmcapp.torisum.model.TourismFilterCategoryModel;
 import itg8.com.wmcapp.torisum.model.TourismFilterModel;
 import itg8.com.wmcapp.torisum.mvp.TorisumPresenterImp;
 import itg8.com.wmcapp.torisum.mvp.TourismMVP;
 import itg8.com.wmcapp.widget.CustomFontTextView;
+import okhttp3.ResponseBody;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link TorisumFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TorisumFragment extends Fragment implements OnRecyclerviewClickListener<TorisumModel>, TourismMVP.TourismView, View.OnClickListener , TourismFilterFragment.FilterItemListener {
+public class TorisumFragment extends Fragment implements OnRecyclerviewClickListener<TorisumModel>, TourismMVP.TourismView, View.OnClickListener  , HomeActivity.OnSelectTourismList {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final int FROM_ERROR = 2;
     private static final int FROM_INTERNET = 1;
+    private static final String TOURISM_LIST = "TOURISM_LIST";
 
     Unbinder unbinder;
     @BindView(R.id.recyclerView)
@@ -66,7 +77,7 @@ public class TorisumFragment extends Fragment implements OnRecyclerviewClickList
     @BindView(R.id.lbl_filter_near)
     CustomFontTextView lblFilterNear;
     CommonMethod.onSetToolbarTitle listenerTitle;
-    TourismFilterFragment.FilterItemListener listenerFilter;
+    HomeActivity.OnSelectTourismList listenerFilter;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -79,6 +90,8 @@ public class TorisumFragment extends Fragment implements OnRecyclerviewClickList
     private Fragment fragment;
     private FragmentTransaction ft;
      private List<SubCatList> filetList;
+    private TorisumFragment OnSelectTourismList;
+    private List<TorisumModel> tourismList;
 
 
     public TorisumFragment() {
@@ -103,12 +116,51 @@ public class TorisumFragment extends Fragment implements OnRecyclerviewClickList
         return fragment;
     }
 
+
+    private ArrayList<SubCatList> listSelectSubCat;
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+         listSelectSubCat = intent.getParcelableArrayListExtra(CommonMethod.SELECT_LIST);
+         Logs.d("mMessageReceiver onRecived");
+            getSubCateList(listSelectSubCat);
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+
+//        LocalBroadcastManager.getInstance(mContext).registerReceiver(mMessageReceiver,
+//                new IntentFilter(CommonMethod.SELECT_LIST_BROADCAST));
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+       if(recyclerView!= null)
+       {
+           Logs.i("onSaveInstanceState");
+           outState.putParcelableArrayList(TOURISM_LIST, (ArrayList<? extends Parcelable>) tourismList);
+       //    outState.putParcelableArrayList(FILTER_LIST, (ArrayList<? extends Parcelable>) tourismList);
+
+       }
+
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+                if (savedInstanceState.getParcelableArrayList(TOURISM_LIST) != null) {
+                    tourismList = savedInstanceState.getParcelableArrayList(TOURISM_LIST);
+                    Logs.i("onSaveInstanceState");
+                }
         }
     }
 
@@ -124,6 +176,15 @@ public class TorisumFragment extends Fragment implements OnRecyclerviewClickList
 
         lblFilter.setOnClickListener(this);
         lblFilterNear.setOnClickListener(this);
+//        LocalBroadcastManager.getInstance(mContext).registerReceiver(mMessageReceiver, new IntentFilter(CommonMethod.SELECT_LIST_BROADCAST));
+
+        //getSubCateList(listSelectSubCat);
+         if(savedInstanceState!= null)
+         {
+             tourismList =savedInstanceState.getParcelableArrayList(TOURISM_LIST);
+             Logs.i("onSaveInstanceState");
+
+         }
 
         return view;
     }
@@ -146,12 +207,19 @@ public class TorisumFragment extends Fragment implements OnRecyclerviewClickList
     @Override
     public void onTourismListAvailable(List<TorisumModel> list) {
         presenter.onGetFilterCategoryList(getString(R.string.url_filter_category));
+        this.tourismList = list;
         init(list);
     }
 
     @Override
     public void onTourismCategoryFilterList(List<TourismFilterModel> tourismFilterModelList) {
         listOfTourismFilter = tourismFilterModelList;
+    }
+
+    @Override
+    public void onTourismFilterLister(ResponseBody body) {
+        Logs.d("onTourismFilterLister ResponseBody:"+new Gson().toJson(body));
+//        init(body);
     }
 
 
@@ -292,6 +360,7 @@ public class TorisumFragment extends Fragment implements OnRecyclerviewClickList
         super.onAttach(context);
         mContext = context;
         listenerTitle = (CommonMethod.onSetToolbarTitle) mContext;
+
     }
 
     @Override
@@ -303,10 +372,59 @@ public class TorisumFragment extends Fragment implements OnRecyclerviewClickList
         }
     }
 
-    @Override
-    public void selectItemList(List<SubCatList> selectedList) {
-        Logs.d("selectItemList:"+new Gson().toJson(selectedList));
 
+    @Override
+    public void onSendTourismList(List<SubCatList> list) {
+        getSubCateList(list);
+    }
+
+   private void  getSubCateList(List<SubCatList> listSelectSubCat){
+
+       Logs.d("onSendTourismList:"+new Gson().toJson(listSelectSubCat));
+       TourismFilterCategoryModel  torismFilterCategory;
+       List<TourismFilterCategoryModel> tourismFilterCategoryModelList = new ArrayList<>();
+       if(listSelectSubCat != null )
+       {
+           for (SubCatList subCat :listSelectSubCat) {
+               torismFilterCategory = new TourismFilterCategoryModel();
+               torismFilterCategory.setSubcategoryId(subCat.getPkid());
+               tourismFilterCategoryModelList.add(torismFilterCategory);
+
+           }
+           presenter.onGetTourismList(getString(R.string.url_filet_torism),tourismFilterCategoryModelList);
+
+       }
+   }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+//        IntentFilter iff= new IntentFilter(CommonMethod.SELECT_LIST_BROADCAST);
+//        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver, iff);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mMessageReceiver, new IntentFilter(CommonMethod.SELECT_LIST_BROADCAST));
+        Logs.d("onStart:"+new Gson().toJson(listSelectSubCat));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mMessageReceiver);
+        Logs.d("onStop:"+new Gson().toJson(listSelectSubCat));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(mMessageReceiver, new IntentFilter(CommonMethod.SELECT_LIST_BROADCAST));
+        Logs.d("onResume:"+new Gson().toJson(listSelectSubCat));
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mMessageReceiver);
+        Logs.d("onPause:"+new Gson().toJson(listSelectSubCat));
 
     }
 }

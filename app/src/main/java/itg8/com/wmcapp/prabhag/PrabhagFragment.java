@@ -109,8 +109,8 @@ public class PrabhagFragment extends Fragment implements PrabhagMVP.PrabhagView,
             isFrom = CommonMethod.WARD;
             setRecyclerView(list, wradList);
         }
+     //   titleListener.onSetTitle(getString(R.string.prabhag));
 
-        titleListener.onSetTitle(getString(R.string.prabhag));
             return view;
     }
 
@@ -119,14 +119,14 @@ public class PrabhagFragment extends Fragment implements PrabhagMVP.PrabhagView,
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
-        listener = context;
-        titleListener= (CommonMethod.onSetToolbarTitle) context;
+    //    titleListener= (CommonMethod.onSetToolbarTitle) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         listener = null;
+        titleListener=null;
     }
 
     @Override

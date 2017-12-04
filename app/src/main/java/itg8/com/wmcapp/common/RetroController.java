@@ -14,12 +14,15 @@ import itg8.com.wmcapp.prabhag.model.PrabhagModel;
 import itg8.com.wmcapp.profile.ProfileModel;
 import itg8.com.wmcapp.profile.model.UserLikeModel;
 import itg8.com.wmcapp.registration.RegistrationModel;
+import itg8.com.wmcapp.torisum.model.SubCatList;
 import itg8.com.wmcapp.torisum.model.TorisumModel;
+import itg8.com.wmcapp.torisum.model.TourismFilterCategoryModel;
 import itg8.com.wmcapp.torisum.model.TourismFilterModel;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -194,6 +197,10 @@ public interface RetroController {
 
     @GET()
     Call<List<DeleteNoticeModel>> getDeleteNBList(@Url String url);
+    @FormUrlEncoded
+    @POST()
+    @Headers("Content-Type:application/x-www-form-urlencoded")
+    Call<ResponseBody> getFilterTourismList(@Url String url,@Body List<TourismFilterCategoryModel> torismFilterCategory);
 //    @Field("Title") String title,
 
 

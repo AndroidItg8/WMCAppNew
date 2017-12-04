@@ -83,7 +83,7 @@ public class WardMemberFragment extends Fragment implements ContactRvAdapter.OnC
     private Context mContext;
     private boolean hasSMSPermission;
     private Snackbar snackbar;
-
+    private CommonMethod.onSetToolbarTitle listener;
 
 
     public WardMemberFragment() {
@@ -123,6 +123,7 @@ public class WardMemberFragment extends Fragment implements ContactRvAdapter.OnC
 
         checkCallPermission();
         init();
+        listener.onSetTitle(getString(R.string.ward_member));
 
         return view;
     }
@@ -245,13 +246,18 @@ public class WardMemberFragment extends Fragment implements ContactRvAdapter.OnC
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
+        listener = (CommonMethod.onSetToolbarTitle) mContext;
+
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        if (mContext != null)
+        if (mContext != null) {
             mContext = null;
+
+            listener = null;
+        }
     }
 
     private void showSnackerbar(String message) {

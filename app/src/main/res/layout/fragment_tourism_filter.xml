@@ -19,7 +19,7 @@
        android:layout_centerVertical="true"
        android:layout_centerHorizontal="true"
        android:backgroundTint="@color/colorPrimary"
-       app:srcCompat="@drawable/ic_dashboard_24dp"
+       app:srcCompat="@drawable/ic_correct"
        android:id="@+id/fab_filter"
        android:layout_margin="16dp"/>
 

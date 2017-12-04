@@ -229,5 +229,6 @@
     <string name="news">News and Event </string>
     <string name="security">Security and Privacy</string>
     <string name="title_activity_setting">Setting</string>
+    <string name="url_filet_torism">/api/CustomerApp/TourismFilterBySubcategory</string>
 
 </resources>

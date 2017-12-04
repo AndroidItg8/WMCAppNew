@@ -7,7 +7,9 @@ import java.util.List;
 import itg8.com.wmcapp.common.BaseWeakPresenter;
 import itg8.com.wmcapp.common.MyApplication;
 import itg8.com.wmcapp.torisum.model.TorisumModel;
+import itg8.com.wmcapp.torisum.model.TourismFilterCategoryModel;
 import itg8.com.wmcapp.torisum.model.TourismFilterModel;
+import okhttp3.ResponseBody;
 
 /**
  * Created by Android itg 8 on 11/8/2017.
@@ -66,6 +68,14 @@ public class TorisumPresenterImp extends BaseWeakPresenter<TourismMVP.TourismVie
         }
     }
 
+    @Override
+    public void onGetTourismList(String url, List<TourismFilterCategoryModel> torismFilterCategory) {
+        if (hasView()) {
+            getView().showProgress();
+            module.onLoadingFilterTourismList(MyApplication.getInstance().getRetroController(), url, torismFilterCategory,this);
+        }
+    }
+
 
     @Override
     public void onTourismListAvailable(List<TorisumModel> o) {
@@ -99,5 +109,13 @@ public class TorisumPresenterImp extends BaseWeakPresenter<TourismMVP.TourismVie
             getView().onError(message);
         }
 
+    }
+
+    @Override
+    public void onTourismFilterList(ResponseBody body) {
+        if (hasView()) {
+            getView().hideProgress();
+            getView().onTourismFilterLister(body);
+        }
     }
 }

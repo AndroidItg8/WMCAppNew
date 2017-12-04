@@ -244,12 +244,16 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
         else
             identity = "NO";
         outState.putString(IDENTITY, identity);
+        Logs.d("onSaveInstanceState");
+
     }
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
+            Logs.d("onViewStateRestored");
+
             if (savedInstanceState.getString(FILE_PATH, null) != null)
                 selectedFile = new File(savedInstanceState.getString(FILE_PATH, ""));
             if (savedInstanceState.getString(DESCRIPTION, null) != null)

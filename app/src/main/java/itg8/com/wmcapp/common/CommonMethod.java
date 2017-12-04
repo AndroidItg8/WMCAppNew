@@ -76,6 +76,8 @@ public final class CommonMethod {
     // FOR NOTIFICATION OF NEWS
     public static final String SETTING_NEWS_NOTIFICATION = "SETTING_NEWS_NOTIFICATION";
     public static final String SETTING_NOTICE_NOTIFICATION = "SETTING_NOTICE_NOTIFICATION";
+    public static final String SELECT_LIST_BROADCAST = "SELECT_LIST_BROADCAST";
+    public static final String SELECT_LIST = "SELECT_LIST";
 
 
 //    1) Complaint
