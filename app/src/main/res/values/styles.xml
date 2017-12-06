@@ -80,9 +80,9 @@
     <!--theme for Prefs-->
 
     <!--<style name="AppPreferenceFragmentCompatStyle" parent="AppTheme.NoActionBar">-->
-        <!--&lt;!&ndash; Custom layout for PreferenceFragmentCompat &ndash;&gt;-->
-        <!--&lt;!&ndash;<item name="android:layout">@layout/fragment_prefs_setting</item>&ndash;&gt;-->
-        <!--<item name="android:layout">@xml/app_preferences</item>-->
+    <!--&lt;!&ndash; Custom layout for PreferenceFragmentCompat &ndash;&gt;-->
+    <!--&lt;!&ndash;<item name="android:layout">@layout/fragment_prefs_setting</item>&ndash;&gt;-->
+    <!--<item name="android:layout">@xml/app_preferences</item>-->
     <!--</style>-->
 
     <style name="AppTheme.SettingsTheme" parent="AppTheme.NoActionBar">

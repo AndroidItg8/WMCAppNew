@@ -1,8 +1,10 @@
 package itg8.com.wmcapp.torisum.model;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mindorks.placeholderview.annotations.Layout;
@@ -33,7 +35,7 @@ public class HeadingView  {
     private ImageView toggleIcon;
 
     @Toggle(R.id.toggleView)
-    private LinearLayout toggleView;
+    private RelativeLayout toggleView;
 
     @ParentPosition
     private int mParentPosition;
@@ -54,12 +56,15 @@ public class HeadingView  {
 
     @Expand
     private void onExpand(){
-        toggleIcon.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_down_arrow));
+        toggleIcon.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_arrow_up));
     }
+
 
     @Collapse
     private void onCollapse(){
-        toggleIcon.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_arrow_up));
+        toggleIcon.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_down_arrow));
     }
+
+
 
 }

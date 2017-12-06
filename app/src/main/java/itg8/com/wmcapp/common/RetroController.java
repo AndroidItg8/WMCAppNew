@@ -197,10 +197,10 @@ public interface RetroController {
 
     @GET()
     Call<List<DeleteNoticeModel>> getDeleteNBList(@Url String url);
-    @FormUrlEncoded
+
     @POST()
-    @Headers("Content-Type:application/x-www-form-urlencoded")
-    Call<ResponseBody> getFilterTourismList(@Url String url,@Body List<TourismFilterCategoryModel> torismFilterCategory);
+    @Headers("Content-Type:application/json")
+    Call<List<TorisumModel>> getFilterTourismList(@Url String url,@Body List<TourismFilterCategoryModel> torismFilterCategory);
 //    @Field("Title") String title,
 
 

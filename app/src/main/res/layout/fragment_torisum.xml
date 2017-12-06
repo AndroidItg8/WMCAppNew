@@ -14,8 +14,7 @@
         android:layout_height="wrap_content">
         <!--<include layout="@layout/layout_tourism_filter" />-->
 
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardUseCompatPadding="true"
@@ -37,7 +36,7 @@
                     android:fontFamily="@font/roboto"
                     android:layout_gravity="center|start"
                     android:text="Filter BY"
-                    android:drawableLeft="@drawable/ic_filters"
+                    android:drawableStart="@drawable/ic_filters"
                     android:drawablePadding="5dp"
                     android:textAllCaps="true"
                     android:layout_marginBottom="5dp"
@@ -54,7 +53,7 @@
                     android:fontFamily="@font/roboto"
                     android:text="Filter NEAR BY"
                     android:layout_gravity="center|end"
-                    android:drawableLeft="@drawable/ic_near"
+                    android:drawableStart="@drawable/ic_near"
                     android:drawablePadding="5dp"
                     android:textAllCaps="true"
                     android:layout_marginBottom="5dp"
@@ -63,8 +62,6 @@
                     android:layout_marginTop="5dp"
                     app:font_value="ROBOTO_LIGHT" />
             </LinearLayout>
-
-
         </android.support.v7.widget.CardView>
 
     </RelativeLayout>

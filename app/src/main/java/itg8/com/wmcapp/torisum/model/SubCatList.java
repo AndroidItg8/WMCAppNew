@@ -36,6 +36,16 @@ public class SubCatList implements Parcelable
     @SerializedName("mdate")
     @Expose
     private Object mdate;
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
+
+    private boolean isChecked;
     public final static Parcelable.Creator<SubCatList> CREATOR = new Creator<SubCatList>() {
 
 

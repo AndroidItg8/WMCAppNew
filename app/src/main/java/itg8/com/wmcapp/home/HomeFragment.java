@@ -17,6 +17,7 @@ import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.board.NoticeBoardFragment;
 import itg8.com.wmcapp.common.CommonMethod;
+import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.complaint.AddComplaintFragment;
 import itg8.com.wmcapp.complaint.ComplaintFragment;
 import itg8.com.wmcapp.emergency.EmergencyFragment;
@@ -155,11 +156,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void callFragment(Fragment fragment) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-        ft.replace(R.id.frame_container, fragment);
-        ft.addToBackStack(fragment.getClass().getSimpleName());
-        ft.commit();
+        ((HomeActivity)getActivity()).callFragment(fragment);
+//        Logs.d("FragmentTAG:"+fragment.getClass().getSimpleName());
+//
+//        FragmentTransaction ft = getFragmentManager().beginTransaction();
+//        ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+//        ft.replace(R.id.frame_container, fragment);
+//        ft.addToBackStack(fragment.getClass().getSimpleName());
+//        ft.commit();
     }
 
     @Override

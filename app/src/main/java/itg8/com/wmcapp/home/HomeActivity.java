@@ -78,6 +78,7 @@ import itg8.com.wmcapp.suggestion.SuggestionFragment;
 import itg8.com.wmcapp.torisum.TorisumFragment;
 import itg8.com.wmcapp.torisum.TourismFilterFragment;
 import itg8.com.wmcapp.torisum.model.SubCatList;
+import itg8.com.wmcapp.torisum.model.TourismFilterModel;
 import itg8.com.wmcapp.widget.CircularImageView;
 
 public class HomeActivity extends BaseActivity
@@ -125,8 +126,9 @@ public class HomeActivity extends BaseActivity
     private int mItemToOpenWhenDrawerCloses = -1;
     private DrawerLayout drawer;
     private HomeFragment homeFragment;
-    OnSelectTourismList listenersTourism;
-    private List<SubCatList> selectedTourismList;
+    public List<SubCatList> selectedTourismList;
+    private List<TourismFilterModel> listofCategoryModel;
+    private boolean isDestroyed=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,8 +202,9 @@ public class HomeActivity extends BaseActivity
 
                 @Override
                 public void onFailed(String s) {
-
                     clearNLogout();
+
+
                 }
             });
         }
@@ -232,10 +235,8 @@ public class HomeActivity extends BaseActivity
     private void checkLogin() {
         if (Prefs.getString(CommonMethod.HEADER) == null) {
             callLoginActivity();
+            isDestroyed = true;
             finish();
-        } else {
-
-
         }
     }
 
@@ -259,16 +260,13 @@ public class HomeActivity extends BaseActivity
         switch (id) {
             case R.id.action_settings:
                 return true;
-
             case R.id.action_language:
                 openBottomSheetForLanguage();
                 return true;
-
             case R.id.action_city:
                 CityTableManipulate cityTableManipulate = new CityTableManipulate(this);
                 openBottomSheetForCity(cityTableManipulate.getAll());
                 return true;
-
             case android.R.id.home:
                 Logs.d("Home Clicked");
                 onBackPressed();
@@ -479,16 +477,21 @@ public class HomeActivity extends BaseActivity
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
     }
 
+
     public void clearNLogout() {
+
         Prefs.remove(CommonMethod.HEADER);
         Prefs.remove(CommonMethod.USER_NAME);
         Prefs.remove(CommonMethod.USER_MOBILE);
         FirebaseAuth.getInstance().signOut();
         Log.d(TAG, "Firebase User:" + FirebaseAuth.getInstance().getCurrentUser());
+        if(isDestroyed)
+            return;
 
         callLoginActivity();
         MyApplication.getInstance().deleteNoticeBoard();
         MyApplication.getInstance().setProfileModel(null);
+
         finish();
 
 
@@ -804,7 +807,7 @@ public class HomeActivity extends BaseActivity
         // Whenever the fragment back stack changes, we may need to update the
         // action bar toggle: only top level screens show the hamburger-like icon, inner
         // screens - either Activities or fragments - show the "Up" icon instead.
-        getSupportFragmentManager().addOnBackStackChangedListener(mBackStackChangedListener);
+      //  getSupportFragmentManager().addOnBackStackChangedListener(mBackStackChangedListener);
         Logs.d("onResume");
       //  sendListToTourismFragment(selectedTourismList);
 
@@ -816,7 +819,7 @@ public class HomeActivity extends BaseActivity
     public void onPause() {
         super.onPause();
         //sendListToTourismFragment(selectedTourismList);
-        getSupportFragmentManager().removeOnBackStackChangedListener(mBackStackChangedListener);
+//        getSupportFragmentManager().removeOnBackStackChangedListener(mBackStackChangedListener);
         Logs.d("OnPause");
 
     }
@@ -824,7 +827,6 @@ public class HomeActivity extends BaseActivity
     @Override
     protected void onStart() {
         super.onStart();
-        sendListToTourismFragment(selectedTourismList);
         Logs.d("onStart");
 
     }
@@ -845,32 +847,35 @@ public class HomeActivity extends BaseActivity
     @Override
     public void selectItemList(List<SubCatList> selectedList) {
        selectedTourismList= selectedList;
-       Logs.d("selectItemList"+new Gson().toJson(selectedTourismList));
-
-        sendListToTourismFragment(selectedTourismList);
+       Logs.d("selectItemList"+new Gson().toJson(selectedList));
 
     }
 
-    private void sendListToTourismFragment(List<SubCatList> selectedList) {
-//        Logs.d("sendListToTourismFragment:" + new Gson().toJson(selectedList));
+    @Override
+    public void saveCategoryTemp(List<TourismFilterModel> listofCategoryModel) {
 
-        if(selectedList!= null && selectedList.size()>0) {
-             Fragment f = getSupportFragmentManager().findFragmentById(R.id.frame_container);
-//             if (fragment != null) {
-//                 if (fragment instanceof TorisumFragment) {
-                     Logs.d("sendListToTourismFragment:" + new Gson().toJson(selectedList));
-
-            ((new TorisumFragment())).onSendTourismList(selectedList);
-//                 }
-//             }
-         }
+        this.listofCategoryModel = listofCategoryModel;
     }
 
-
-    public interface OnSelectTourismList{
-        void onSendTourismList(List<SubCatList> list);
+    @Override
+    public List<TourismFilterModel> getCategoryTemp() {
+        return listofCategoryModel;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    public List<SubCatList> getSubCatList()
+   {
+       return selectedTourismList;
+   }
+
+    public void removeSelectTepmList() {
+        selectedTourismList=null;
+        listofCategoryModel=null;
+    }
 }
 
 

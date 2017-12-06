@@ -6,6 +6,8 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -78,6 +80,7 @@ public final class CommonMethod {
     public static final String SETTING_NOTICE_NOTIFICATION = "SETTING_NOTICE_NOTIFICATION";
     public static final String SELECT_LIST_BROADCAST = "SELECT_LIST_BROADCAST";
     public static final String SELECT_LIST = "SELECT_LIST";
+    public static final String FROM_TOURISM = "FROM_TOURISM";
 
 
 //    1) Complaint
@@ -243,6 +246,11 @@ if(TextUtils.isEmpty(date))
             return name;
         } else
             return "NOT AVAILABLE";
+    }
+
+    public static double dipToPixels(Context context, float dipValue) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue, metrics);
     }
 
     public static void shareItem(Context context, String body, String title, Uri uri) {

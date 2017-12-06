@@ -2,12 +2,10 @@ package itg8.com.wmcapp.torisum;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +42,8 @@ public class TourismFilterFragment extends Fragment implements View.OnClickListe
     FloatingActionButton fabFilter;
     FilterItemListener listener;
     CommonMethod.OnBackPressListener onBackPressListener;
+    @BindView(R.id.fab_filter_clear)
+    FloatingActionButton fabFilterClear;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -51,6 +51,9 @@ public class TourismFilterFragment extends Fragment implements View.OnClickListe
     private Context mContext;
     private List<TourismFilterModel> listofCategoryModel;
     private List<SubCatList> selectedList;
+    private InfoView infoView;
+    private HeadingView header;
+
     public TourismFilterFragment() {
         // Required empty public constructor
     }
@@ -88,30 +91,35 @@ public class TourismFilterFragment extends Fragment implements View.OnClickListe
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tourism_filter, container, false);
         unbinder = ButterKnife.bind(this, view);
+
+        selectedList = new ArrayList<>();
+        if(listener.getCategoryTemp()!= null){
+            listofCategoryModel= listener.getCategoryTemp();
+
+        }
         if (listofCategoryModel != null) {
-            selectedList = new ArrayList<>();
             for (TourismFilterModel model : listofCategoryModel) {
-                expandableView.addView(new HeadingView(getActivity(), model.getCategoryName()));
+                header=new HeadingView(getActivity(), model.getCategoryName());
+                expandableView.addView(header);
                 for (SubCatList info : model.getSubCatList()) {
-                    expandableView.addView(new InfoView(getActivity(), info, this));
+                   infoView= new InfoView(getActivity(), info, this);
+                    expandableView.addView(infoView);
                 }
+                expandableView.expand(header);
             }
         }
-
-
         fabFilter.setOnClickListener(this);
+        fabFilterClear.setOnClickListener(this);
         return view;
     }
-///https://github.com/janishar/PlaceHolderView/blob/master/app/src/main/java/com/mindorks/test/ExpandableActivity.java
-    //https://blog.mindorks.com/android-expandable-news-feed-example-4b4544e1fe7e
 
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        if (mContext != null) ;
-        mContext = null;
+        if (mContext != null)
+            mContext = null;
     }
 
     @Override
@@ -125,8 +133,8 @@ public class TourismFilterFragment extends Fragment implements View.OnClickListe
     @Override
     public void onDetach() {
         super.onDetach();
-        if (mContext != null) ;
-        mContext = null;
+        if (mContext != null)
+            mContext = null;
     }
 
     @Override
@@ -134,30 +142,36 @@ public class TourismFilterFragment extends Fragment implements View.OnClickListe
         switch (view.getId()) {
             case R.id.fab_filter:
                 listener.selectItemList(selectedList);
-//                sendBroadCastManager(selectedList);
+                listener.saveCategoryTemp(listofCategoryModel);
                 onBackPressListener.onBackPress();
                 break;
+            case R.id.fab_filter_clear:
+                infoView.clearItem();
+                break;
         }
-    }
-
-    private void sendBroadCastManager(List<SubCatList> selectedList) {
-        Intent intent = new Intent();
-        intent.setAction(CommonMethod.SELECT_LIST_BROADCAST);
-        intent.putParcelableArrayListExtra(CommonMethod.SELECT_LIST, (ArrayList<? extends Parcelable>) selectedList);
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
 
     @Override
     public void onItemCheck(SubCatList info) {
-        selectedList.add(info);
+        info.setChecked(true);
+        if(!selectedList.contains(info))
+              selectedList.add(info);
+
     }
 
     @Override
     public void onItemUnCheck(SubCatList info) {
+        info.setChecked(false);
         selectedList.remove(info);
+
     }
-    public interface FilterItemListener{
+
+
+
+    public interface FilterItemListener {
         void selectItemList(List<SubCatList> selectedList);
+        void saveCategoryTemp(List<TourismFilterModel> listofCategoryModel);
+        List<TourismFilterModel> getCategoryTemp();
     }
 }

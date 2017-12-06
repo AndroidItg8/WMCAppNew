@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardUseCompatPadding="true"
+    app:cardPreventCornerOverlap="true">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+
+        <itg8.com.wmcapp.widget.CustomFontTextView
+            android:id="@+id/lbl_place_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:inputType="text"
+            android:lines="2"
+            android:maxLines="2"
+            android:text="Place Name"
+            android:textAllCaps="true"
+            android:textColor="@color/colorBlack"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:font_value="ROBOTO_MEDIUM" />
+        <itg8.com.wmcapp.widget.CustomFontTextView
+            android:id="@+id/lbl_place_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lbl_place_name"
+            android:text="Short Description of this place Short Description of this placeShort Description of this place Short Description of this placeShort Description of this place..."
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            app:font_value="ROBOTO_REGULAR" />
+
+
+
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

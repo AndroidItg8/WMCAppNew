@@ -3,17 +3,12 @@ package itg8.com.wmcapp.torisum.model;
 import android.content.Context;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.mindorks.placeholderview.annotations.Layout;
 import com.mindorks.placeholderview.annotations.Resolve;
 import com.mindorks.placeholderview.annotations.View;
 import com.mindorks.placeholderview.annotations.expand.ChildPosition;
 import com.mindorks.placeholderview.annotations.expand.ParentPosition;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.CommonMethod;
@@ -24,7 +19,7 @@ import itg8.com.wmcapp.widget.CustomFontTextView;
  */
 
 @Layout(R.layout.item_category_tourism)
-public class InfoView  {
+public class InfoView {
 
     @ParentPosition
     private int mParentPosition;
@@ -36,15 +31,10 @@ public class InfoView  {
     private CustomFontTextView titleTxt;
     @View(R.id.checkbox)
     private CheckBox checkBox;
-    private boolean ischeck;
-
-
-
-
-
     private SubCatList mInfo;
     private ItemCheckListener listener;
     private Context mContext;
+
 
     public InfoView(Context context, SubCatList info, ItemCheckListener listener) {
         mContext = context;
@@ -58,25 +48,33 @@ public class InfoView  {
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                if(b)
-                {
+                if (b) {
                     listener.onItemCheck(mInfo);
-                }else
-                {
+                } else {
                     listener.onItemUnCheck(mInfo);
-                }
 
+                }
 
 
             }
         });
-
+        if (mInfo.isChecked()) {
+            checkBox.setChecked(true);
+            listener.onItemCheck(mInfo);
+        }
 
     }
 
-    public interface ItemCheckListener{
+    public void clearItem() {
+        mInfo.setChecked(false);
+        checkBox.setChecked(false);
+    }
+
+    public interface ItemCheckListener {
         void onItemCheck(SubCatList info);
+
         void onItemUnCheck(SubCatList info);
+
     }
+
 }

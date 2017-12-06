@@ -383,4 +383,5 @@ public class TorisumModel implements Parcelable
         return  0;
     }
 
+
 }

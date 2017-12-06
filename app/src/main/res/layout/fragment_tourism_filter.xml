@@ -10,17 +10,28 @@
         android:id="@+id/expandableView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical" />
 
-   <android.support.design.widget.FloatingActionButton
-       android:layout_width="56dp"
-       android:layout_height="56dp"
-       android:layout_alignParentBottom="true"
-       android:layout_centerVertical="true"
-       android:layout_centerHorizontal="true"
-       android:backgroundTint="@color/colorPrimary"
-       app:srcCompat="@drawable/ic_correct"
-       android:id="@+id/fab_filter"
-       android:layout_margin="16dp"/>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
+        android:layout_centerVertical="true">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_filter"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            app:srcCompat="@drawable/ic_correct" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_filter_clear"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_close_black_24dp" />
+    </FrameLayout>
+
 
 </RelativeLayout>

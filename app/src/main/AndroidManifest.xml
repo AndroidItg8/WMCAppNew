@@ -28,9 +28,9 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".home.HomeActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|screenSize"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -117,9 +117,11 @@
         <activity
             android:name=".setting.SettingActivity"
             android:label="@string/title_activity_setting"
-            android:theme="@style/AppTheme.SettingsTheme"/>
-
-
+            android:theme="@style/AppTheme.SettingsTheme" />
+        <activity
+            android:name=".torisum.TourismNearByActivity"
+            android:label="@string/title_activity_tourism_near_by"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

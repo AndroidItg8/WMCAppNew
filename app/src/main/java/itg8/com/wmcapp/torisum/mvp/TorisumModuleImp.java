@@ -1,7 +1,10 @@
 package itg8.com.wmcapp.torisum.mvp;
 
+import com.google.gson.Gson;
+
 import java.util.List;
 
+import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.NoConnectivityException;
 import itg8.com.wmcapp.common.RetroController;
 import itg8.com.wmcapp.torisum.model.TorisumModel;
@@ -110,15 +113,16 @@ public class TorisumModuleImp implements TourismMVP.TourismModule {
 
     @Override
     public void onLoadingFilterTourismList(RetroController retroController, String url, List<TourismFilterCategoryModel> torismFilterCategory, final TourismMVP.TourismListener listener) {
-        Call<ResponseBody> call = retroController.getFilterTourismList(url,torismFilterCategory);
-         call.enqueue(new Callback<ResponseBody>() {
+        Logs.d("onLoadingFilterTourismList:"+new Gson().toJson(torismFilterCategory));
+        Call<List<TorisumModel>> call = retroController.getFilterTourismList(url,torismFilterCategory);
+         call.enqueue(new Callback<List<TorisumModel>>() {
              @Override
-             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+             public void onResponse(Call<List<TorisumModel>> call, Response<List<TorisumModel>> response) {
                  if(response.isSuccessful())
                  {
                      if(response.body()!= null)
                      {
-                         listener.onTourismFilterList(response.body());
+                         listener.onTourismListAvailable(response.body());
                      }else
                      {
                          listener.onError("DownLoad Failed");
@@ -130,7 +134,7 @@ public class TorisumModuleImp implements TourismMVP.TourismModule {
              }
 
              @Override
-             public void onFailure(Call<ResponseBody> call, Throwable t) {
+             public void onFailure(Call<List<TorisumModel>> call, Throwable t) {
                  t.printStackTrace();
                  if(t instanceof NoConnectivityException)
                  {

@@ -12,7 +12,8 @@
     <color name="colorPrimaryLight">#004D40</color>
     <!--<color name="colorPrimaryDark">#215624</color>-->
     <color name="colorPrimaryDark">#FF009688</color>
-    <color name="colorAccent">#FF4081</color>
+    <!--<color name="colorAccent">#FF4081</color>-->
+    <color name="colorAccent">#00bfa5</color>
     <color name="colorWhite">#fff</color>
     <color name="colorBlack">#000</color>
     <color name="colorGray">#6b6969</color>

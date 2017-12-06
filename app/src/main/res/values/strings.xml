@@ -230,5 +230,7 @@
     <string name="security">Security and Privacy</string>
     <string name="title_activity_setting">Setting</string>
     <string name="url_filet_torism">/api/CustomerApp/TourismFilterBySubcategory</string>
+    <string name="title_activity_tourism_near_by">Tourism</string>
+    <string name="show_list">Show List</string>
 
 </resources>
