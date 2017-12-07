@@ -5,12 +5,16 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +23,10 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import butterknife.BindView;
@@ -26,6 +34,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.CommonMethod;
+import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.ReceiveBroadcastReceiver;
 import itg8.com.wmcapp.common.SentBroadCastReceiver;
 import itg8.com.wmcapp.complaint.model.ComplaintModel;
@@ -129,47 +138,48 @@ public class OfflineComplaint extends Fragment implements ComplaintProfilOffline
     }
 
     @Override
-    public void onShareItemClicked(int position, Object model, ImageView view) {
-        if (model instanceof TempComplaintModel) {
-            TempComplaintModel complaintModel = (TempComplaintModel) model;
-            CommonMethod.shareItem(getActivity(), generateTextToshare(complaintModel), (complaintModel.getComplaintName()), getLocalBitmapUri(view, model));
-        } else if (model instanceof ComplaintModel) {
-            ComplaintModel complaintModels = (ComplaintModel) model;
-            CommonMethod.shareItem(getActivity(), generateTextToshare(complaintModels), (complaintModels.getComplaintName()), getLocalBitmapUri(view, model));
-
-        }
+    public void onShareItemClicked(int position, TempComplaintModel model, ImageView view) {
+            CommonMethod.shareItem(getActivity(), generateTextToshare(model), (model.getComplaintName()), getLocalBitmapUri(model.getFilePath()));
     }
 
 
-    public Uri getLocalBitmapUri(ImageView imageView, Object model) {
-        // Extract Bitmap from ImageView drawable
-        String path = "";
-        if (model instanceof TempComplaintModel) {
-            TempComplaintModel complaintModel = (TempComplaintModel) model;
-            path = complaintModel.getFilePath();
-        } else if (model instanceof ComplaintModel) {
-            ComplaintModel complaintModels = (ComplaintModel) model;
-            path = complaintModels.getImagePath();
+    public Uri getLocalBitmapUri( String path) {
+        if(!TextUtils.isEmpty(path)) {
+            Logs.d("Path:" + path);
 
+//            File file = null;
+//            String fileName = Uri.parse(CommonMethod.BASE_URL +path).getLastPathSegment();
+//            file = new File(mContext.getCacheDir(),fileName);
+//            Logs.d("Path:" + file.getAbsolutePath());
+
+
+            String paths = null;
+            try {
+                URL url = new URL(CommonMethod.BASE_URL+path);
+                Bitmap imag = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                paths = MediaStore.Images.Media.insertImage(mContext.getContentResolver(), imag, "", null);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return Uri.parse(paths);
+        }else
+        {
+            return null;
         }
-        Uri bmpUri = null;
-        File file = new File(path);
-        bmpUri = Uri.fromFile(file);
 
 
-        return bmpUri;
+
+
     }
 
-    private String generateTextToshare(Object model) {
-        if (model instanceof TempComplaintModel) {
-            TempComplaintModel models = (TempComplaintModel) model;
-            return "This  Complaint \n" + models.getComplaintName() + "\n Description: " + models.getDescription() + "Address:\n" + models.getCityName();
+    private String generateTextToshare(TempComplaintModel models) {
+            return "This  Complaint \n" + models.getComplaintName() + "\n Description: " + models.getDescription() + "\nAddress:" + models.getCityName();
 
-        } else {
-            ComplaintModel modelComplaint = (ComplaintModel) model;
-            return "This  Complaint \n" + modelComplaint.getComplaintName() + "\n Description: " + modelComplaint.getComplaintDescription() + "Address:\n" + modelComplaint.getCityName();
 
-        }
     }
 
     @Override

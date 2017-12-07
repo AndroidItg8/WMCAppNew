@@ -455,14 +455,14 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        if(e.equals("401"))
-                        {
-                            startActivity(new Intent(getActivity(), HomeActivity.class));
-                            onBackPressListener.onBackPress();
-                        }else
-                        {
+//                        if(e.getMessage().equals("Authorization has been denied for this request"))
+//                        {
+//                            startActivity(new Intent(getActivity(), HomeActivity.class));
+//                            onBackPressListener.onBackPress();
+//                        }else
+//                        {
                             setDataToModel(latitude, longitude, address, description, cityId, identity, selectedFile);
-                        }
+//                        }
                     }
 
                     @Override
@@ -536,6 +536,8 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
                         Logs.d("immediately ");
                         SendSMS("9823778532", generateSMSText(model));
                         dialog.dismiss();
+                        mComplaintlistener.moveComplaint();
+
 
                     }
                 })
@@ -545,6 +547,9 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
                         // the dialog box and do nothing
                         MyApplication.getInstance().saveComplaintModel(model);
                         dialog.dismiss();
+                        mComplaintlistener.moveComplaint();
+
+
                     }
                 });
 
@@ -621,6 +626,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     public void onDetach() {
         super.onDetach();
         listener = null;
+        onBackPressListener = null;
     }
 
     private void showDialog() {

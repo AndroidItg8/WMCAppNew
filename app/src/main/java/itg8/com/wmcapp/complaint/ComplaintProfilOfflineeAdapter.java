@@ -22,6 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.CommonMethod;
+import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.complaint.model.TempComplaintModel;
 import itg8.com.wmcapp.widget.CustomFontTextView;
 
@@ -53,6 +54,7 @@ public class ComplaintProfilOfflineeAdapter extends RecyclerView.Adapter<Complai
 
         holder.tempComplaintModel = complaintMergeList.get(position);
             if (holder.tempComplaintModel.getFilePath() != null) {
+                Logs.d("Offiline Image:"+holder.tempComplaintModel.getFilePath());
                 holder.imgGarbage.setVisibility(View.VISIBLE);
 
                 holder.tempCompliantUrl =  holder.tempComplaintModel.getFilePath();
@@ -84,9 +86,10 @@ public class ComplaintProfilOfflineeAdapter extends RecyclerView.Adapter<Complai
                 holder.imgGarbage.setVisibility(View.GONE);
             }
 
-            holder.lblProblemValue.setText((holder.tempComplaintModel.getComplaintName() + "\n " + (holder.tempComplaintModel.getDescription())));
-            holder.lblProblemValue.setText((holder.tempComplaintModel.getCityName()));
-            holder.lblAddressValue.setText((holder.tempComplaintModel.getAdd()));
+            holder.lblProblemValue.setText(CommonMethod.checkEmpty(holder.tempComplaintModel.getComplaintName()) + "\n " + CommonMethod.checkEmpty(holder.tempComplaintModel.getDescription()));
+            holder.lblProblemValue.setText(CommonMethod.checkEmpty(holder.tempComplaintModel.getCityName()));
+            holder.lblAddressValue.setText(CommonMethod.checkEmpty(holder.tempComplaintModel.getAdd()));
+            holder.lblCityName.setText(CommonMethod.checkEmpty(holder.tempComplaintModel.getCityName()));
 
         }
 
@@ -155,7 +158,7 @@ public class ComplaintProfilOfflineeAdapter extends RecyclerView.Adapter<Complai
     public interface UnSendItemClickedListner {
         void onSyncItemClicked(int position, TempComplaintModel model);
 
-        void onShareItemClicked(int position, Object model, ImageView view );
+        void onShareItemClicked(int position, TempComplaintModel model, ImageView view );
 
         void onSMSItemClicked(int position, TempComplaintModel model);
     }

@@ -131,6 +131,7 @@
                 android:inputType="text"
                 android:lines="2"
                 android:maxLines="2"
+
                 android:text="Problem "
                 android:textColor="@color/colorBlack"
                 android:textSize="14sp"

@@ -224,13 +224,14 @@ public class MyApplication extends Application {
                 Logs.d("Model" + new Gson().toJson(model));
             }
 
+//TODO Comment First Time
 
-            Observable.merge(requests).ignoreElements().subscribeOn(Schedulers.io()).doOnComplete(new Action() {
-                @Override
-                public void run() throws Exception {
-                    Log.d(TAG,"RequestCompleted:");
-                }
-            }).subscribe();
+//            Observable.merge(requests).ignoreElements().subscribeOn(Schedulers.io()).doOnComplete(new Action() {
+//                @Override
+//                public void run() throws Exception {
+//                    Log.d(TAG,"RequestCompleted:");
+//                }
+//            }).subscribe();
 
 
             //                }

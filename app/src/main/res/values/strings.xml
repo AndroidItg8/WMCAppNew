@@ -234,5 +234,7 @@
     <string name="title_activity_tourism_near_by">Tourism</string>
     <string name="show_list">Show List</string>
     <string name="invalid_pass_not_match">Password does not match</string>
+    <string name="description">Description</string>
+    <string name="address">Address</string>
 
 </resources>

@@ -255,9 +255,14 @@ if(TextUtils.isEmpty(date))
 
     public static void shareItem(Context context, String body, String title, Uri uri) {
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-        sharingIntent.setType("image/*");
-        if (uri != null)
+        if (uri != null) {
+            sharingIntent.setType("image/*");
             sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
+
+        }else
+        {
+            sharingIntent.setType("text/plain");
+        }
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, title);
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, body);
         sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

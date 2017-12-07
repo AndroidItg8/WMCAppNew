@@ -5,11 +5,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +23,22 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.common.CommonMethod;
@@ -134,35 +149,41 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
 
     }
 
-    public Uri getLocalBitmapUri(Object model) {
-        // Extract Bitmap from ImageView drawable
-        String path = "";
-        if (model instanceof TempComplaintModel) {
-            TempComplaintModel complaintModel = (TempComplaintModel) model;
-            path = complaintModel.getFilePath();
-        } else if (model instanceof ComplaintModel) {
-            ComplaintModel complaintModels = (ComplaintModel) model;
-            path = complaintModels.getImagePath();
+    public Uri getLocalBitmapUri(String path) {
 
+        if(!TextUtils.isEmpty(path)) {
+            Logs.d("Path:" + path);
+
+//            File file = null;
+//            String fileName = Uri.parse(CommonMethod.BASE_URL +path).getLastPathSegment();
+//            file = new File(mContext.getCacheDir(),fileName);
+//            Logs.d("Path:" + file.getAbsolutePath());
+
+
+            String paths = null;
+            try {
+                URL url = new URL(CommonMethod.BASE_URL+path);
+                Bitmap imag = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                paths = MediaStore.Images.Media.insertImage(mContext.getContentResolver(), imag, "", null);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return Uri.parse(paths);
+        }else
+        {
+            return null;
         }
 
-        Uri bmpUri = null;
-        Logs.d("Path:"+path);
-        File file = new File(path);
-        bmpUri = Uri.fromFile(file);
-        return bmpUri;
     }
 
-    private String generateTextToshare(Object model) {
-        if (model instanceof TempComplaintModel) {
-            TempComplaintModel models = (TempComplaintModel) model;
-            return "This  Complaint \n" + models.getComplaintName() + "\n Description: " + models.getDescription() + "Address:\n" + models.getCityName();
+    private String generateTextToshare(ComplaintModel modelComplaint) {
 
-        } else {
-            ComplaintModel modelComplaint = (ComplaintModel) model;
-            return "This  Complaint \n" + modelComplaint.getComplaintName() + "\n Description: " + modelComplaint.getComplaintDescription() + "Address:\n" + modelComplaint.getCityName();
+            return "This  Complaint \n" + modelComplaint.getComplaintName() + "\n Description: " + modelComplaint.getComplaintDescription() + "\nAddress:" + modelComplaint.getCityName();
 
-        }
     }
 
 
@@ -299,8 +320,37 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
     }
 
     @Override
-    public void onShareClicked(int position, ComplaintModel model) {
-        CommonMethod.shareItem(mContext, generateTextToshare(model), (model.getComplaintName()), getLocalBitmapUri(model));
+    public void onShareClicked(int position, final ComplaintModel model) {
+       // CommonMethod.shareItem(mContext, generateTextToshare(model), (model.getComplaintName()), getLocalBitmapUri(model));
+        Observable.create(new ObservableOnSubscribe<Uri>() {
+            @Override
+            public void subscribe(ObservableEmitter<Uri> e) throws Exception {
+                e.onNext( getLocalBitmapUri(model.getImagePath()));
+                e.onComplete();
+
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Uri>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Uri uri) {
+                CommonMethod.shareItem(mContext,(model.getComplaintName()),generateTextToshare(model), uri);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
 
     }
 

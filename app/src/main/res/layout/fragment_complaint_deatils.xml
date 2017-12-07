@@ -79,7 +79,6 @@
                 android:gravity="left"
                 android:inputType="text"
                 android:padding="10dp"
-                android:text="Problem Problem Problem Problem Problem Problem Problem Problem Problem Problem Problem"
                 android:textColor="@color/colorBlack"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -87,7 +86,7 @@
 
             <itg8.com.wmcapp.widget.CustomFontTextView
                 android:id="@+id/lbl_address_value"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/lbl_problem_value"
                 android:layout_marginTop="5dp"
