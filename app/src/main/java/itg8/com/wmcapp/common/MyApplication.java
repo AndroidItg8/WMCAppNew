@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.PersistableBundle;
+import android.os.StrictMode;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
 
@@ -26,6 +27,9 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import itg8.com.wmcapp.R;
@@ -82,7 +86,12 @@ public class MyApplication extends Application {
         retroController = mInstance.buildRetrofit();
         mContext = getApplicationContext();
         noticeTableManipute = new NBTableManipulate(getApplicationContext());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            myJobSchedular();
+        }
 
+//        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+//        StrictMode.setVmPolicy(builder.build());
 
     }
 
@@ -120,7 +129,7 @@ public class MyApplication extends Application {
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            myJobSchedular(getApplicationContext());
+            myJobSchedular();
         } else {
 
             NetworkChangeReceiver broadcast = new NetworkChangeReceiver();
@@ -137,20 +146,45 @@ public class MyApplication extends Application {
 
     @TargetApi(Build.VERSION_CODES.N)
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void myJobSchedular(Context context) {
+    private void myJobSchedular() {
         Log.d(" MyApplication ", "myJobSchedular");
 
         JobScheduler js =
-                (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+                (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
         JobInfo.Builder builder = new JobInfo.Builder(
                 MY_BACKGROUND_JOB,
-                new ComponentName(context, JobNetworkShedule.class));
+                new ComponentName(this, JobNetworkShedule.class));
         //MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
         if (js != null) {
             js.schedule(builder.build());
         }
     }
+
+//    public void uploadAllRemaining() {
+//        complaintTableManipute = new ComplaintTableManipute(getApplicationContext());
+//        final List<TempComplaintModel> listTempComplaintModel = complaintTableManipute.getAllComplaint();
+//        Log.d("MyApplication ", "uploadAllRemaining");
+//        if (listTempComplaintModel != null && listTempComplaintModel.size() > 0) {
+//
+//
+//            for (TempComplaintModel model : listTempComplaintModel) {
+//                sendModelToServer(
+//                        model.getDescription(),
+//                        model.getComplaintName(),
+//                        model.getAdd(),
+//                        model.getLatitude(),
+//                        model.getLongitude(),
+//                        model.getFilePath(),
+//                        model.getCityId(),
+//                        model.getTblId(),
+//                        model.getShowIdentity());
+//                Logs.d("Model" + new Gson().toJson(model));
+//            }
+//        }
+//
+//
+//    }
 
     public void uploadAllRemaining() {
         complaintTableManipute = new ComplaintTableManipute(getApplicationContext());
@@ -159,8 +193,14 @@ public class MyApplication extends Application {
         if (listTempComplaintModel != null && listTempComplaintModel.size() > 0) {
 
 
+//            Observable.create(new ObservableOnSubscribe<TempOfflineComplaintModel>() {
+//                @Override
+//                public void subscribe(ObservableEmitter<TempOfflineComplaintModel> e) throws Exception {
+//                    TempOfflineComplaintModel modelTemp;
+            List<Observable<ResponseBody>> requests = new ArrayList<>();
             for (TempComplaintModel model : listTempComplaintModel) {
-                sendModelToServer(
+
+                requests.add(sendModelToServer(
                         model.getDescription(),
                         model.getComplaintName(),
                         model.getAdd(),
@@ -169,20 +209,50 @@ public class MyApplication extends Application {
                         model.getFilePath(),
                         model.getCityId(),
                         model.getTblId(),
-                        model.getShowIdentity());
+                        model.getShowIdentity()));
+//                       modelTemp=new TempOfflineComplaintModel(sendModelToServer(
+//                                model.getDescription(),
+//                                model.getComplaintName(),
+//                                model.getAdd(),
+//                                model.getLatitude(),
+//                                model.getLongitude(),
+//                                model.getFilePath(),
+//                                model.getCityId(),
+//                                model.getTblId(),
+//                                model.getShowIdentity()),model.getTblId());
+//                       e.onNext(modelTemp);
                 Logs.d("Model" + new Gson().toJson(model));
             }
+
+
+            Observable.merge(requests).ignoreElements().subscribeOn(Schedulers.io()).doOnComplete(new Action() {
+                @Override
+                public void run() throws Exception {
+                    Log.d(TAG,"RequestCompleted:");
+                }
+            }).subscribe();
+
+
+            //                }
+//            }).concatMap(new Function<TempOfflineComplaintModel, ObservableSource<?>>() {
+//                @Override
+//                public Observable<TempOfflineComplaintModel> apply(TempOfflineComplaintModel tempOfflineComplaintModel) throws Exception {
+//                    return tempOfflineComplaintModel.responseBodyObservable;
+//                }
+//            });
+
         }
 
 
     }
+
 
     private Observable<ResponseBody> sendModelToServer(String description, String complaintName, String add, Double latitude, Double longitude, String filePath, int cityId, final long tblId, String showIdentity) {
         File file = new File(filePath);
         ProgressRequestBody prb = new ProgressRequestBody(file, new ProgressRequestBody.UploadCallbacks() {
             @Override
             public void onProgressUpdate(int percentage) {
-
+                Logs.d(TAG, "OnPrgressUpdate:" + percentage);
             }
 
             @Override
@@ -352,12 +422,12 @@ public class MyApplication extends Application {
     private void callRetryNoticeDelete() {
 //        Calendar cal = Calendar.getInstance();
 //        cal.add(Calendar.HOUR,1);
-        List<TempNoticeBoardModel> tempNoticeBoardModelList=noticeTableManipute.getNoticeBoardItem(CommonMethod.TYPE_NOTICE_UNSYNC,TempNoticeBoardModel.FIELD_TYPE);
+        List<TempNoticeBoardModel> tempNoticeBoardModelList = noticeTableManipute.getNoticeBoardItem(CommonMethod.TYPE_NOTICE_UNSYNC, TempNoticeBoardModel.FIELD_TYPE);
         String list = new Gson().toJson(tempNoticeBoardModelList);
         Logs.d("CallRetryNotice");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            myNoticeBoardJobSchedular(getApplicationContext(),list);
+            myNoticeBoardJobSchedular(getApplicationContext(), list);
         } else {
 //
 //            NetworkChangeReceiver broadcast = new NetworkChangeReceiver();
@@ -383,7 +453,7 @@ public class MyApplication extends Application {
         PersistableBundle persistableBundle = new PersistableBundle();
         persistableBundle.putString(CommonMethod.SYNC_NB_JOB, list);
         builder.setExtras(persistableBundle);
-        Logs.d("OnPut List:"+new Gson().toJson(list));
+        Logs.d("OnPut List:" + new Gson().toJson(list));
 //        builder.setPersisted(true); //Job scheduled to work after reboot
 //        builder.setPeriodic(Calendar.MINUTE * 30);
         builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
@@ -397,47 +467,45 @@ public class MyApplication extends Application {
         model.setNoticeId(pkid);
         if (from == FROM_SUCCESS) {
             model.setType(CommonMethod.TYPE_NOTICE_SYNC);
-            noticeTableManipute.deleteNBItem(pkid,TempNoticeBoardModel.FIELD_NOTICE_ID);
-        }
-        else {
+            noticeTableManipute.deleteNBItem(pkid, TempNoticeBoardModel.FIELD_NOTICE_ID);
+        } else {
             model.setType(CommonMethod.TYPE_NOTICE_UNSYNC);
         }
         noticeTableManipute.create(model);
 
     }
 
-     public void getDeletedNBList()
-     {
-         Call<List<DeleteNoticeModel>> call = getRetroController().getDeleteNBList(getString(R.string.url_delete_list));
-         call.enqueue(new Callback<List<DeleteNoticeModel>>() {
-             @Override
-             public void onResponse(Call<List<DeleteNoticeModel>> call, Response<List<DeleteNoticeModel>> response) {
-                 if(response.isSuccessful()) {
-                     if (response.body() != null) {
-                         saveTempSyncNoticeBoardModel(response.body());
+    public void getDeletedNBList() {
+        Call<List<DeleteNoticeModel>> call = getRetroController().getDeleteNBList(getString(R.string.url_delete_list));
+        call.enqueue(new Callback<List<DeleteNoticeModel>>() {
+            @Override
+            public void onResponse(Call<List<DeleteNoticeModel>> call, Response<List<DeleteNoticeModel>> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        saveTempSyncNoticeBoardModel(response.body());
 
-                     }
-                 }
-             }
+                    }
+                }
+            }
 
-             @Override
-             public void onFailure(Call<List<DeleteNoticeModel>> call, Throwable throwable) {
+            @Override
+            public void onFailure(Call<List<DeleteNoticeModel>> call, Throwable throwable) {
 
-                 if (throwable instanceof HttpException) {
-                     // We had non-2XX http error
-                     Logs.d("IN HTTPEXCEPTION: " + throwable.getMessage());
-                 }
-                 if (throwable instanceof IOException) {
-                     // A network or conversion error happened
-                     Logs.d("IN IOException: " + throwable.getMessage());
-                 }
+                if (throwable instanceof HttpException) {
+                    // We had non-2XX http error
+                    Logs.d("IN HTTPEXCEPTION: " + throwable.getMessage());
+                }
+                if (throwable instanceof IOException) {
+                    // A network or conversion error happened
+                    Logs.d("IN IOException: " + throwable.getMessage());
+                }
 
-             }
-         });
-     }
+            }
+        });
+    }
 
     private void saveTempSyncNoticeBoardModel(List<DeleteNoticeModel> body) {
-        if(noticeTableManipute.getAll().size()<=0) {
+        if (noticeTableManipute.getAll().size() <= 0) {
             TempNoticeBoardModel tempNBModel;
             for (DeleteNoticeModel modelDelete : body) {
                 tempNBModel = new TempNoticeBoardModel();
@@ -454,24 +522,21 @@ public class MyApplication extends Application {
 
     public List<Integer> setNBListToArray() {
 
-        if(nbID== null)
-        {
-            List<TempNoticeBoardModel> list =  noticeTableManipute.getAll();
-                nbID = new ArrayList<>(list.size());
-                for(int i =0; i<list.size();i++)
-                {
-                    nbID.add(list.get(i).getNoticeId());
-                }
+        if (nbID == null) {
+            List<TempNoticeBoardModel> list = noticeTableManipute.getAll();
+            nbID = new ArrayList<>(list.size());
+            for (int i = 0; i < list.size(); i++) {
+                nbID.add(list.get(i).getNoticeId());
+            }
 
         }
         return nbID;
 
     }
 
-     public void deleteNoticeBoard()
-     {
-         noticeTableManipute.getDeleteAll();
-     }
+    public void deleteNoticeBoard() {
+        noticeTableManipute.getDeleteAll();
+    }
 
 
 }

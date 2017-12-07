@@ -134,35 +134,8 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     ProgressBar progressView;
     @BindView(R.id.frame)
     FrameLayout frame;
-//    @BindView(R.id.edtAddress)
-//    EditText edtAddress;
-//    @BindView(R.id.edtDescription2)
-//    EditText edtDescription2;
-//    @BindView(R.id.rdoShowIdentity)
-//    RadioButton rdoShowIdentity;
-//    @BindView(R.id.rdoHideIdentity)
-//    RadioButton rdoHideIdentity;
-//    @BindView(R.id.rgIdentity)
-//    RadioGroup rgIdentity;
-//    @BindView(R.id.radioButton)
-//    RadioButton rdoCurrentAddress;
-//    @BindView(R.id.radioButton2)
-//    RadioButton rdoOtherAddress;
-//    @BindView(R.id.rgLocation)
-//    RadioGroup rgLocation;
-//    Unbinder unbinder;
-//    @BindView(R.id.imgAdd)
-//    ImageView imgAdd;
-//    @BindView(R.id.imgMoreMenu)
-//    ImageView imgMoreMenu;
-//    @BindView(R.id.imgPreview)
-//    ImageView imgPreview;
-//    @BindView(R.id.frmPreview)
-//    FrameLayout frmPreview;
-//    @BindView(R.id.progressBar)
-//    ProgressBar progressBar;
-//    @BindView(R.id.btn_submit)
-//    FloatingActionButton btnSubmit;
+     CommonMethod.OnBackPressListener onBackPressListener;
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -333,6 +306,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
             listener = (CommonCallback.OnImagePickListener) context;
         }
         mComplaintlistener = (CommonMethod.OnMoveComplaintListener) context;
+        onBackPressListener = (CommonMethod.OnBackPressListener) context;
 
     }
 
@@ -481,8 +455,14 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-
-                        setDataToModel(latitude, longitude, address, description, cityId, identity, selectedFile);
+                        if(e.equals("401"))
+                        {
+                            startActivity(new Intent(getActivity(), HomeActivity.class));
+                            onBackPressListener.onBackPress();
+                        }else
+                        {
+                            setDataToModel(latitude, longitude, address, description, cityId, identity, selectedFile);
+                        }
                     }
 
                     @Override

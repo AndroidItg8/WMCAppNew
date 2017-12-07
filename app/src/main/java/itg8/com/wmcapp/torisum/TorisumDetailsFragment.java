@@ -242,7 +242,7 @@ public class TorisumDetailsFragment extends Fragment implements OnMapReadyCallba
                 break;
             case R.id.lbl_share:
                 if (lastLatLng != null)
-                    //TODO Do It Properly  Share Itemn Tuorism
+//                    //TODO Do It Properly  Share Itemn Tuorism
                     CommonMethod.shareItem(getActivity(), generateTextToshare(), torisumModel.getName(), getLocalBitmapUri(torisumModel.getFileupload().get(0)));
                 break;
             case R.id.lbl_like:

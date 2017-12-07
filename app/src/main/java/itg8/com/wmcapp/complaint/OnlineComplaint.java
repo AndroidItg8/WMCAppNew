@@ -106,15 +106,21 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
         View view = inflater.inflate(R.layout.fragment_online_complaint, container, false);
         unbinder = ButterKnife.bind(this, view);
         presenter = new ComplaintPresenterImp(this);
+        init();
+        presenter.onLoadMoreItem(getString(R.string.url_complaint), CommonMethod.FROM_COMPLAINT_USER);
+
+
+        return view;
+    }
+
+    private void checkList() {
         if (listOfComplaint != null && listOfComplaint.size() > 0) {
             CommonMethod.showHideItem(recyclerView,rlNoItem );
-            init();
-            presenter.onLoadMoreItem(getString(R.string.url_complaint), CommonMethod.FROM_COMPLAINT_USER);
+
+
         } else {
             CommonMethod.showHideItem(rlNoItem,recyclerView);
         }
-
-        return view;
     }
 
 
@@ -141,6 +147,7 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
         }
 
         Uri bmpUri = null;
+        Logs.d("Path:"+path);
         File file = new File(path);
         bmpUri = Uri.fromFile(file);
         return bmpUri;
@@ -213,6 +220,8 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
 
         listOfComplaint = o;
         Logs.d("onComplaintListAvailable"+new Gson().toJson(listOfComplaint));
+        checkList();
+
         adapter.addItems(o);
     }
 
