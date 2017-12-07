@@ -111,6 +111,7 @@
     <string name="title_activity_profiles">Profile</string>
     <string name="url_delete_notice">/api/CustomerApp/NoticeDeleteByUser</string>
     <string name="no_list">You have not posted any complaint yet!!!!</string>
+    <string name="no_list_like">You have not Like any item yet!!!!</string>
     <string name="vote_list">Voted List</string>
     <string name="url_like_complaint_user">api/CustomerApp/UserLikeComplaintList</string>
     <string name="invalid_rating">Rating should be greater zero.</string>
@@ -232,5 +233,6 @@
     <string name="url_filet_torism">/api/CustomerApp/TourismFilterBySubcategory</string>
     <string name="title_activity_tourism_near_by">Tourism</string>
     <string name="show_list">Show List</string>
+    <string name="invalid_pass_not_match">Password does not match</string>
 
 </resources>

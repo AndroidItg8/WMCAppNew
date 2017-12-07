@@ -1,6 +1,7 @@
 package itg8.com.wmcapp.contact;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ public class ContactUsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
      CommonMethod.onSetToolbarTitle listener;
+    private Context mContext;
 
 
     public ContactUsFragment() {
@@ -67,4 +69,16 @@ public class ContactUsFragment extends Fragment {
          return view ;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+         mContext = context;
+         listener = (CommonMethod.onSetToolbarTitle) mContext;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+         listener=null;
+    }
 }

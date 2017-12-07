@@ -26,6 +26,8 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.board.JobNoticeBoardShedule;
 import itg8.com.wmcapp.board.model.DeleteNoticeModel;
@@ -94,25 +96,6 @@ public class MyApplication extends Application {
     }
 
     private RetroController buildRetrofit() {
-//         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-//         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-//         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-//         builder.connectTimeout(5, TimeUnit.MINUTES);
-//         builder.addInterceptor(interceptor);
-//         builder.readTimeout(5, TimeUnit.MINUTES);
-//         if(header!=null)
-//             builder.addInterceptor(getHeader(header));
-//
-//         OkHttpClient client=builder.build();
-//         Gson gson = new GsonBuilder().setLenient().create();
-//
-//         Retrofit retrofit = new Retrofit.Builder()
-//                 .baseUrl(CommonMethod.BASE_URL)
-//                 .addConverterFactory(GsonConverterFactory.create(gson))
-//                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-//                 .client(client)
-//                 .build();
-
         return Retro.getInstance().getController(Prefs.getString(CommonMethod.HEADER, null), getApplicationContext());
     }
 
@@ -224,6 +207,12 @@ public class MyApplication extends Application {
         RequestBody city = createPartFromInt(cityId);
         RequestBody ident = createPartFromString(showIdentity);
         Observable<ResponseBody> call = getRetroController().addComplaint(getString(R.string.url_add_complaint), part, lat, lang, name, desc, city, ident);
+        call.subscribeOn(Schedulers.io()).map(new Function<ResponseBody, TempComplaintModel>() {
+            @Override
+            public TempComplaintModel apply(ResponseBody responseBody) throws Exception {
+                return new TempComplaintModel(responseBody,tableId);
+            }
+        })
         return call;
 //        call.subscribeOn(Schedulers.io())
 //                .flatMap(new Function<ResponseBody, ObservableSource<Long>>() {
@@ -483,4 +472,15 @@ public class MyApplication extends Application {
      {
          noticeTableManipute.getDeleteAll();
      }
+
+     public static class TempComplaintModel{
+        ResponseBody responseBody;
+        long id;
+
+         public TempComplaintModel(ResponseBody responseBody, long id) {
+             this.responseBody = responseBody;
+             this.id = id;
+         }
+     }
 }
+

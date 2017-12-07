@@ -2,7 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="itg8.com.wmcapp.complaint.ComplaintVoteFragment">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
@@ -13,10 +17,36 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
+        android:layout_centerInParent="true"
         android:id="@+id/progressBar"
         android:visibility="gone"/>
+    </RelativeLayout>
 
 
+    <RelativeLayout
+        android:id="@+id/rl_no_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
 
+        <ImageView
+            android:id="@+id/img_no"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerInParent="true"
+            app:srcCompat="@drawable/bg_no_list" />
+
+        <itg8.com.wmcapp.widget.CustomFontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img_no"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="@string/no_list_like"
+            android:textColor="@color/colorBlack" />
+    </RelativeLayout>
 
 </FrameLayout>

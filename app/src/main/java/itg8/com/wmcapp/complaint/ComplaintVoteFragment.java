@@ -2,6 +2,7 @@ package itg8.com.wmcapp.complaint;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -23,6 +25,7 @@ import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.MyApplication;
 import itg8.com.wmcapp.common.NoConnectivityException;
+import itg8.com.wmcapp.home.HomeActivity;
 import itg8.com.wmcapp.profile.LikeProfileAdapter;
 import itg8.com.wmcapp.profile.model.UserLikeModel;
 import retrofit2.Call;
@@ -45,6 +48,8 @@ public class ComplaintVoteFragment extends Fragment {
     RecyclerView recyclerView;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
+    @BindView(R.id.rl_no_item)
+    RelativeLayout rlNoItem;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -104,6 +109,10 @@ public class ComplaintVoteFragment extends Fragment {
             @Override
             public void onResponse(Call<List<UserLikeModel>> call, Response<List<UserLikeModel>> response) {
                 progressBar.setVisibility(View.GONE);
+                if (response.code() == 401) {
+                    startActivity(new Intent(getActivity(), HomeActivity.class));
+                    showSnackbar(false, CommonMethod.FROM_ERROR, "Authorization has been denied for this request");
+                }
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         setRecyclerView(response.body());
@@ -130,9 +139,12 @@ public class ComplaintVoteFragment extends Fragment {
         });
     }
 
+
     private void showSnackbar(boolean b, int from, String message) {
         View sbView = snackbar.getView();
+        snackbar = Snackbar.make(recyclerView, message, Snackbar.LENGTH_INDEFINITE);
         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+
 
         int color = 0;
         if (from == CommonMethod.FROM_INTERNET) {
@@ -153,7 +165,6 @@ public class ComplaintVoteFragment extends Fragment {
             textView.setTextColor(color);
             textView.setMaxLines(2);
         }
-        snackbar = Snackbar.make(recyclerView, message, Snackbar.LENGTH_INDEFINITE);
         snackbar.show();
         snackbar.setAction("OK", new View.OnClickListener() {
             @Override
@@ -172,8 +183,13 @@ public class ComplaintVoteFragment extends Fragment {
 
 
     private void setRecyclerView(List<UserLikeModel> body) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        recyclerView.setAdapter(new LikeProfileAdapter(mContext, body));
+        if (body != null && body.size() > 0) {
+            CommonMethod.showHideItem(recyclerView,rlNoItem);
+            recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+            recyclerView.setAdapter(new LikeProfileAdapter(mContext, body));
+        } else {
+            CommonMethod.showHideItem(rlNoItem,recyclerView);
+        }
     }
 
     @Override

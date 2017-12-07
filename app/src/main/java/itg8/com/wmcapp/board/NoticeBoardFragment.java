@@ -101,23 +101,19 @@ public class NoticeBoardFragment extends Fragment implements View.OnClickListene
         rlInclude.setOnClickListener(this);
         presenter = new NBPresenterImp(this);
         init();
-        initPaginate();
         presenter.onLoadMoreItems(getString(R.string.url_notice_board));
         listenerTitle.onSetTitle(getString(R.string.notice_board));
         return view;
     }
 
-    private void initPaginate() {
 
-
-    }
 
     private void init() {
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         adapter = new NoticeBoardAdater(getActivity(), this);
-        recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(presenter.scrollListener(layoutManager));
+        recyclerView.setAdapter(adapter);
     }
 
     @Override

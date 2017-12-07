@@ -128,6 +128,16 @@ public interface RetroController {
                                           @Part("ComplaintDescription") RequestBody desc,
                                           @Part("City_fkid") RequestBody cityId,
                                           @Part("ShowIdentity") RequestBody identity);
+ @Multipart
+    @POST()
+    Observable<HashMap<Integer,ResponseBody>> addComplaintOffline(@Url String url,
+                                          @Part MultipartBody.Part file,
+                                          @Part("Latitude") RequestBody lat,
+                                          @Part("Longitutde") RequestBody lang,
+                                          @Part("ComplaintName") RequestBody addr,
+                                          @Part("ComplaintDescription") RequestBody desc,
+                                          @Part("City_fkid") RequestBody cityId,
+                                          @Part("ShowIdentity") RequestBody identity);
 
     @GET()
     Call<List<TorisumModel>> getTorisumList(@Url String loadUrl);

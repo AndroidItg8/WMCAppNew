@@ -54,7 +54,6 @@ public class ChangePswdPresenterImp extends BaseWeakPresenter<ChangePasswordMVP.
     }
 
     private boolean PasswordValidity(View view) {
-
         oldPassword = getView().getOldPassword();
         newPassword = getView().getNewPassword();
         confirmPassword = getView().getConfirmPassword();
@@ -67,29 +66,29 @@ public class ChangePswdPresenterImp extends BaseWeakPresenter<ChangePasswordMVP.
         if(TextUtils.isEmpty(newPassword))
         {
             isValid=false;
-            getView().onOldPswdInvalid(view.getContext().getString(R.string.empty));
+            getView().onNewPswdInvalid(view.getContext().getString(R.string.empty));
         }
         if(TextUtils.isEmpty(confirmPassword))
         {
             isValid=false;
-            getView().onOldPswdInvalid(view.getContext().getString(R.string.empty));
+            getView().onConfirmswdInvalid(view.getContext().getString(R.string.empty));
         }
 
         if (newPassword.length() < 6) {
             isValid = false;
-            getView().onNewPswdInvalid(view.getContext().getString(R.string.invalid_pass));
+            getView().onNewPswdInvalid(view.getContext().getString(R.string.invalid_pass_not));
         }
         if (oldPassword.length() < 6) {
             isValid = false;
-            getView().onOldPswdInvalid(view.getContext().getString(R.string.invalid_pass));
+            getView().onOldPswdInvalid(view.getContext().getString(R.string.invalid_pass_not));
         }
         if (confirmPassword.length() < 6) {
             isValid = false;
-            getView().onConfirmswdInvalid(view.getContext().getString(R.string.invalid_pass));
+            getView().onConfirmswdInvalid(view.getContext().getString(R.string.invalid_pass_not));
         } else if (!newPassword.equals(confirmPassword)) {
             isValid = false;
-            getView().onConfirmswdInvalid(view.getContext().getString(R.string.invalid_pass_not));
-            getView().onNewPswdInvalid(view.getContext().getString(R.string.invalid_pass_not));
+            getView().onConfirmswdInvalid(view.getContext().getString(R.string.invalid_pass_not_match));
+            getView().onNewPswdInvalid(view.getContext().getString(R.string.invalid_pass_not_match));
         }
         return isValid;
     }
@@ -99,7 +98,6 @@ public class ChangePswdPresenterImp extends BaseWeakPresenter<ChangePasswordMVP.
         if(hasView())
         {
             getView().hideProgress();
-
             getView().onSuccess(status);
         }
 

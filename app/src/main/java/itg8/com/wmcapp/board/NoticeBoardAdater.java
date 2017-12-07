@@ -85,7 +85,7 @@ class NoticeBoardAdater extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (holder instanceof NoticeBoardViewHolder) {
             ((NoticeBoardViewHolder) holder).lblTitleOnly.setText(models.get(position).getNoticeName());
             ((NoticeBoardViewHolder) holder).lblDescription.setText(models.get(position).getNoticeDescription());
-            ((NoticeBoardViewHolder) holder).lblDate.setText(CommonMethod.getFormattedDateTime(models.get(position).getAddedDate()));
+            ((NoticeBoardViewHolder) holder).lblDate.setText((CharSequence) CommonMethod.convertStringToDate(models.get(position).getAddedDate()));
             if (!TextUtils.isEmpty(models.get(position).getImagePath())) {
                 ((NoticeBoardViewHolder) holder).imgGarbage.setVisibility(View.VISIBLE);
 

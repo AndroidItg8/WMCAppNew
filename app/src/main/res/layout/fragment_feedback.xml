@@ -18,6 +18,7 @@
             app:cardCornerRadius="8dp"
             app:cardPreventCornerOverlap="true"
             app:cardUseCompatPadding="true">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,12 +72,23 @@
                         android:hint="Description"
                         android:inputType="textMultiLine"
                         android:lines="5"
+                        android:maxLength="260"
+                        android:maxLines="5"
                         android:singleLine="true"
                         android:textColor="@color/colorBlack"
                         android:textColorHint="@color/colorBlack"
                         android:textSize="14sp" />
 
                 </android.support.design.widget.TextInputLayout>
+
+                <itg8.com.wmcapp.widget.CustomFontTextView
+                    android:id="@+id/lbl_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    app:font_value="ROBOTO_LIGHT"
+                    android:textColor="@color/colorGray"
+                    android:textSize="12sp"/>
 
 
             </LinearLayout>

@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.io.File;
 import java.util.List;
 
@@ -25,6 +27,7 @@ import butterknife.Unbinder;
 import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.cilty.model.CityModel;
 import itg8.com.wmcapp.common.CommonMethod;
+import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.ReceiveBroadcastReceiver;
 import itg8.com.wmcapp.common.SentBroadCastReceiver;
 import itg8.com.wmcapp.complaint.model.ComplaintModel;
@@ -209,6 +212,7 @@ public class OnlineComplaint extends Fragment implements ComplaintMVP.ComplaintV
         }
 
         listOfComplaint = o;
+        Logs.d("onComplaintListAvailable"+new Gson().toJson(listOfComplaint));
         adapter.addItems(o);
     }
 

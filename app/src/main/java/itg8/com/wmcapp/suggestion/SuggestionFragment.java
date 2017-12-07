@@ -174,12 +174,12 @@ public class SuggestionFragment extends Fragment implements View.OnClickListener
 
 
         if (TextUtils.isEmpty(txtRatingDesc.getText().toString())) {
-            txtRatingDesc.setError("Please provide some description");
+            txtRatingDesc.setError(getString(R.string.empty));
             txtRatingDesc.requestFocus();
             isValidate = false;
         }
         if (TextUtils.isEmpty(txtTitle.getText().toString())) {
-            txtTitle.setError("Please provide address");
+            txtTitle.setError(getString(R.string.empty));
             txtTitle.requestFocus();
             isValidate = false;
         }

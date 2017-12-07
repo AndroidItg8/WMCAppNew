@@ -9,6 +9,8 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,14 +27,14 @@ import itg8.com.wmcapp.R;
 import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.feedback.MVP.FeedbackMVP;
 import itg8.com.wmcapp.feedback.MVP.FeedbackPresenterImp;
-import itg8.com.wmcapp.registration.RegistrationFragment;
+import itg8.com.wmcapp.widget.CustomFontTextView;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link FeedbackFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FeedbackFragment extends Fragment implements FeedbackMVP.FeedbackView, View.OnClickListener {
+public class FeedbackFragment extends Fragment implements FeedbackMVP.FeedbackView, View.OnClickListener, TextWatcher {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -57,15 +59,18 @@ public class FeedbackFragment extends Fragment implements FeedbackMVP.FeedbackVi
     ProgressBar progressView;
     @BindView(R.id.frame)
     FrameLayout frame;
+    @BindView(R.id.lbl_count)
+    CustomFontTextView lblCount;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private Snackbar snackbar;
-     CommonMethod.OnBackPressListener listener;
+    CommonMethod.OnBackPressListener listener;
     private Context mContext;
     private FeedbackMVP.FeedbackPresenter presenter;
     CommonMethod.onSetToolbarTitle titleListener;
+    private StringBuilder sb;
 
 
     public FeedbackFragment() {
@@ -105,8 +110,9 @@ public class FeedbackFragment extends Fragment implements FeedbackMVP.FeedbackVi
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_feedback, container, false);
         unbinder = ButterKnife.bind(this, view);
-         presenter = new FeedbackPresenterImp(this);
+        presenter = new FeedbackPresenterImp(this);
         titleListener.onSetTitle(getString(R.string.feedback));
+        inputLayoutDes.getEditText().addTextChangedListener(this);
         fabSubmit.setOnClickListener(this);
         return view;
     }
@@ -116,14 +122,14 @@ public class FeedbackFragment extends Fragment implements FeedbackMVP.FeedbackVi
         super.onDestroyView();
 
         presenter.onDestroy();
-        titleListener= null;
-        listener=null;
+        titleListener = null;
+        listener = null;
         unbinder.unbind();
     }
 
     @Override
     public String getTitle() {
-        return txtTitle.getText().toString().trim() ;
+        return txtTitle.getText().toString().trim();
     }
 
     @Override
@@ -138,23 +144,22 @@ public class FeedbackFragment extends Fragment implements FeedbackMVP.FeedbackVi
 
     @Override
     public void onSuccess(String message) {
-        showSnackbar(false, CommonMethod.FROM_ERROR,message);
-         listener.onBackPress();
+        showSnackbar(false, CommonMethod.FROM_ERROR, message);
+        listener.onBackPress();
 
 
     }
 
     @Override
     public void onFail(String message) {
-        showSnackbar(false, CommonMethod.FROM_ERROR,message);
+        showSnackbar(false, CommonMethod.FROM_ERROR, message);
 
 
     }
 
     @Override
     public void onError(Object t) {
-        showSnackbar(false, CommonMethod.FROM_ERROR,t.toString());
-
+        showSnackbar(false, CommonMethod.FROM_ERROR, t.toString());
 
 
     }
@@ -167,19 +172,19 @@ public class FeedbackFragment extends Fragment implements FeedbackMVP.FeedbackVi
 
     @Override
     public void onDescriptionInvalid(String err) {
-         inputLayoutDes.setError(err);
+        inputLayoutDes.setError(err);
 
     }
 
     @Override
     public void onRatingInvalid(String err) {
-        showSnackbar(false, CommonMethod.FROM_ERROR,err);
+        showSnackbar(false, CommonMethod.FROM_ERROR, err);
 
     }
 
     @Override
     public void showProgress() {
-         progressView.setVisibility(View.VISIBLE);
+        progressView.setVisibility(View.VISIBLE);
 
     }
 
@@ -190,7 +195,7 @@ public class FeedbackFragment extends Fragment implements FeedbackMVP.FeedbackVi
 
     @Override
     public void onNoInternetConnect(boolean b) {
-        showSnackbar(b, CommonMethod.FROM_INTERNET,getString(R.string.no_internet_title));
+        showSnackbar(b, CommonMethod.FROM_INTERNET, getString(R.string.no_internet_title));
     }
 
 
@@ -250,9 +255,27 @@ public class FeedbackFragment extends Fragment implements FeedbackMVP.FeedbackVi
 
     @Override
     public void onClick(View view) {
-        if(view==fabSubmit)
-        {
+        if (view == fabSubmit) {
             presenter.onFeedbackClicked(view);
         }
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
+
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+        sb =  new StringBuilder();
+        lblCount.setText(sb.append(charSequence.length()).append("/").append("260").toString());
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
+
     }
 }
