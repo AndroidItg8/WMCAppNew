@@ -207,12 +207,12 @@ public class MyApplication extends Application {
         RequestBody city = createPartFromInt(cityId);
         RequestBody ident = createPartFromString(showIdentity);
         Observable<ResponseBody> call = getRetroController().addComplaint(getString(R.string.url_add_complaint), part, lat, lang, name, desc, city, ident);
-        call.subscribeOn(Schedulers.io()).map(new Function<ResponseBody, TempComplaintModel>() {
-            @Override
-            public TempComplaintModel apply(ResponseBody responseBody) throws Exception {
-                return new TempComplaintModel(responseBody,tableId);
-            }
-        })
+//        call.subscribeOn(Schedulers.io()).map(new Function<ResponseBody, TempComplaintModel>() {
+//            @Override
+//            public TempComplaintModel apply(ResponseBody responseBody) throws Exception {
+//                return new TempComplaintModel(responseBody,tableId);
+//            }
+//        })
         return call;
 //        call.subscribeOn(Schedulers.io())
 //                .flatMap(new Function<ResponseBody, ObservableSource<Long>>() {
@@ -473,14 +473,6 @@ public class MyApplication extends Application {
          noticeTableManipute.getDeleteAll();
      }
 
-     public static class TempComplaintModel{
-        ResponseBody responseBody;
-        long id;
 
-         public TempComplaintModel(ResponseBody responseBody, long id) {
-             this.responseBody = responseBody;
-             this.id = id;
-         }
-     }
 }
 
