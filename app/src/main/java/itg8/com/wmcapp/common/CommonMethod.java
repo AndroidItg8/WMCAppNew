@@ -253,7 +253,7 @@ if(TextUtils.isEmpty(date))
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dipValue, metrics);
     }
 
-    public static void shareItem(Context context, String body, String title, Uri uri) {
+    public static void shareItem(Context context, String title,String body, Uri uri) {
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
         if (uri != null) {
             sharingIntent.setType("image/*");

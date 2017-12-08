@@ -1,14 +1,13 @@
 package itg8.com.wmcapp.complaint;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.squareup.picasso.Callback;
@@ -36,6 +35,7 @@ public class ComplaintProfilOfflineeAdapter extends RecyclerView.Adapter<Complai
     private final List<TempComplaintModel> complaintMergeList;
     UnSendItemClickedListner listner;
 
+
     public ComplaintProfilOfflineeAdapter(Context mContext, List<TempComplaintModel> complaintMergeList, UnSendItemClickedListner listner) {
         this.mContext = mContext;
         this.complaintMergeList = complaintMergeList;
@@ -45,7 +45,7 @@ public class ComplaintProfilOfflineeAdapter extends RecyclerView.Adapter<Complai
     @Override
     public UnSendComplaintViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_rv_unsend_complaint, parent, false);
-        ComplaintProfilOfflineeAdapter.UnSendComplaintViewHolder  holder = new ComplaintProfilOfflineeAdapter.UnSendComplaintViewHolder(view);
+        UnSendComplaintViewHolder holder = new UnSendComplaintViewHolder(view);
         return holder;
     }
 
@@ -53,50 +53,58 @@ public class ComplaintProfilOfflineeAdapter extends RecyclerView.Adapter<Complai
     public void onBindViewHolder(final UnSendComplaintViewHolder holder, int position) {
 
         holder.tempComplaintModel = complaintMergeList.get(position);
-            if (holder.tempComplaintModel.getFilePath() != null) {
-                Logs.d("Offiline Image:"+holder.tempComplaintModel.getFilePath());
-                holder.imgGarbage.setVisibility(View.VISIBLE);
+        if (holder.tempComplaintModel.getFilePath() != null) {
+            Logs.d("Offiline Image:" + holder.tempComplaintModel.getFilePath());
+            holder.imgGarbage.setVisibility(View.VISIBLE);
 
-                holder.tempCompliantUrl =  holder.tempComplaintModel.getFilePath();
+            holder.tempCompliantUrl = holder.tempComplaintModel.getFilePath();
 
-                Picasso.with(holder.imgGarbage.getContext())
-                        .load(Uri.fromFile(new File(holder.tempCompliantUrl)))
-                        .networkPolicy(NetworkPolicy.OFFLINE)
-                        .error(R.drawable.bpkuti)
-                        .into(holder.imgGarbage, new Callback() {
-                            @Override
-                            public void onSuccess() {
+            Picasso.with(holder.imgGarbage.getContext())
+                    .load(Uri.fromFile(new File(holder.tempCompliantUrl)))
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .error(R.drawable.bpkuti)
+                    .into(holder.imgGarbage, new Callback() {
+                        @Override
+                        public void onSuccess() {
 
-                            }
+                        }
 
-                            @Override
-                            public void onError() {
-                                // Try again online if cache failed
-                                Picasso.with(holder.imgGarbage.getContext())
-                                        .load(Uri.fromFile(new File(holder.tempCompliantUrl)))
-                                        .into(holder.imgGarbage);
-                            }
-                        });
-//
-
-
-            }
-
-            else {
-                holder.imgGarbage.setVisibility(View.GONE);
-            }
-
-            holder.lblProblemValue.setText(CommonMethod.checkEmpty(holder.tempComplaintModel.getComplaintName()) + "\n " + CommonMethod.checkEmpty(holder.tempComplaintModel.getDescription()));
-            holder.lblProblemValue.setText(CommonMethod.checkEmpty(holder.tempComplaintModel.getCityName()));
-            holder.lblAddressValue.setText(CommonMethod.checkEmpty(holder.tempComplaintModel.getAdd()));
-            holder.lblCityName.setText(CommonMethod.checkEmpty(holder.tempComplaintModel.getCityName()));
-
+                        @Override
+                        public void onError() {
+                            // Try again online if cache failed
+                            Picasso.with(holder.imgGarbage.getContext())
+                                    .load(Uri.fromFile(new File(holder.tempCompliantUrl)))
+                                    .into(holder.imgGarbage);
+                        }
+                    });
+        } else {
+            holder.imgGarbage.setVisibility(View.GONE);
         }
+
+        holder.lblProblemValue.setText(CommonMethod.checkEmpty(holder.tempComplaintModel.getComplaintName()) + "\n " + CommonMethod.checkEmpty(holder.tempComplaintModel.getDescription()));
+        holder.lblProblemValue.setText(CommonMethod.checkEmpty(holder.tempComplaintModel.getCityName()));
+        holder.lblAddressValue.setText(CommonMethod.checkEmpty(holder.tempComplaintModel.getAdd()));
+        holder.lblCityName.setText(CommonMethod.checkEmpty(holder.tempComplaintModel.getCityName()));
+
+        if(holder.tempComplaintModel.isProgress())
+        {
+            holder.progressBarSync.setVisibility(View.VISIBLE);
+            holder.lblSync.setVisibility(View.GONE);
+
+        }else
+        {
+            holder.progressBarSync.setVisibility(View.GONE);
+            holder.lblSync.setVisibility(View.VISIBLE);
+        }
+
+    }
 
     @Override
     public int getItemCount() {
         return complaintMergeList.size();
     }
+
+
 
     public class UnSendComplaintViewHolder extends RecyclerView.ViewHolder {
 
@@ -127,6 +135,9 @@ public class ComplaintProfilOfflineeAdapter extends RecyclerView.Adapter<Complai
         TempComplaintModel tempComplaintModel;
         String tempCompliantUrl;
 
+        @BindView(R.id.progressBar_Sync)
+        ProgressBar progressBarSync;
+
         public UnSendComplaintViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
@@ -134,8 +145,6 @@ public class ComplaintProfilOfflineeAdapter extends RecyclerView.Adapter<Complai
                 @Override
                 public void onClick(View view) {
                     listner.onShareItemClicked(getAdapterPosition(), tempComplaintModel, imgGarbage);
-
-
                 }
             });
 
@@ -158,9 +167,17 @@ public class ComplaintProfilOfflineeAdapter extends RecyclerView.Adapter<Complai
     public interface UnSendItemClickedListner {
         void onSyncItemClicked(int position, TempComplaintModel model);
 
-        void onShareItemClicked(int position, TempComplaintModel model, ImageView view );
+        void onShareItemClicked(int position, TempComplaintModel model, ImageView view);
 
         void onSMSItemClicked(int position, TempComplaintModel model);
     }
+    public void showProgress(int position) {
+        complaintMergeList.get(position).setProgress(true);
+        notifyItemChanged(position);
+    }
 
+    public void hideProgress(int position) {
+        complaintMergeList.get(position).setProgress(false);
+        notifyItemChanged(position);
+    }
 }

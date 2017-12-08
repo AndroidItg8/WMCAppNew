@@ -63,9 +63,11 @@ import itg8.com.wmcapp.common.CommonCallback;
 import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.common.MyApplication;
+import itg8.com.wmcapp.common.NoConnectivityException;
 import itg8.com.wmcapp.common.ProgressRequestBody;
 import itg8.com.wmcapp.common.ReceiveBroadcastReceiver;
 import itg8.com.wmcapp.common.SentBroadCastReceiver;
+import itg8.com.wmcapp.complaint.model.ComplaintCategoryModel;
 import itg8.com.wmcapp.complaint.model.TempComplaintModel;
 import itg8.com.wmcapp.database.CityTableManipulate;
 import itg8.com.wmcapp.home.HomeActivity;
@@ -167,6 +169,10 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
 
     private boolean isDestroyed = false;
     private Unbinder unbinder;
+    private boolean canPhoneState;
+    private String[] permissions;
+    private ComplaintCategoryModel modelCategory;
+
 
     public AddComplaintFragment() {
         // Required empty public constructor
@@ -176,15 +182,15 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
+     * @param categoryModel Parameter 1.
      * @param param2 Parameter 2.
      * @return A new instance of fragment AddComplaintFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AddComplaintFragment newInstance(String param1, String param2) {
+    public static AddComplaintFragment newInstance(ComplaintCategoryModel categoryModel, String param2) {
         AddComplaintFragment fragment = new AddComplaintFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putParcelable(ARG_PARAM1, categoryModel);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -195,7 +201,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            modelCategory = getArguments().getParcelable(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -432,7 +438,8 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
         //TODO changes: temporary city id;
         RequestBody city = createPartFromInt(cityId);
         RequestBody ident = createPartFromString(identity);
-        Observable<ResponseBody> call = MyApplication.getInstance().getRetroController().addComplaint(getString(R.string.url_add_complaint), part, lat, lang, addr, desc, city, ident);
+        RequestBody category = createPartFromInt(modelCategory.getPkid());
+        Observable<ResponseBody> call = MyApplication.getInstance().getRetroController().addComplaint(getString(R.string.url_add_complaint), part, lat, lang, addr, desc, city, ident, category);
         call.subscribeOn(Schedulers.io())
                 .flatMap(new Function<ResponseBody, ObservableSource<RegistrationModel>>() {
                     @Override
@@ -455,14 +462,12 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-//                        if(e.getMessage().equals("Authorization has been denied for this request"))
-//                        {
-//                            startActivity(new Intent(getActivity(), HomeActivity.class));
-//                            onBackPressListener.onBackPress();
-//                        }else
-//                        {
+                        if(e instanceof NoConnectivityException) {
                             setDataToModel(latitude, longitude, address, description, cityId, identity, selectedFile);
-//                        }
+                        }else
+                        {
+
+                        }
                     }
 
                     @Override
@@ -481,7 +486,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
         model.setLatitude(latitude);
         model.setLongitude(longitude);
         model.setShowIdentity(identity);
-        model.setComplaintName("Cleaning");
+        model.setComplaintName(modelCategory.getCategoryName());
         model.setLastModifiedDate(CommonMethod.formatter.format(Calendar.getInstance().getTime()));
 
         Logs.d("file:" + file);
@@ -534,9 +539,15 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
                         // if this button is clicked, close
                         // current activity
                         Logs.d("immediately ");
-                        SendSMS("9823778532", generateSMSText(model));
-                        dialog.dismiss();
-                        mComplaintlistener.moveComplaint();
+                         if(canSendSMS && canPhoneState)
+                         {
+                             SendSMS("9823778532", generateSMSText(model));
+                             dialog.dismiss();
+                             mComplaintlistener.moveComplaint();
+                         }else
+                         {
+                             checkStoragePerm();
+                         }
 
 
                     }
@@ -602,6 +613,7 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
     private ObservableSource<RegistrationModel> createRegModelFromResponse(ResponseBody body) {
         try {
             String s = body.string();
+
             JSONObject object = new JSONObject(s);
             if (object.getBoolean("flag")) {
                 return Observable.just(new RegistrationModel());
@@ -653,12 +665,27 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
 
     @AfterPermissionGranted(RC_STORAGE_CAMERA)
     private void checkStoragePerm() {
-        String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.SEND_SMS};
-        if (EasyPermissions.hasPermissions(getActivity(), permissions)) {
+     permissions =new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.SEND_SMS, Manifest.permission.READ_PHONE_STATE};
+        if (EasyPermissions.hasPermissions(getActivity(), permissions[0])
+        && (EasyPermissions.hasPermissions(getActivity(), permissions[1]))) {
             canAccessCamera = true;
+
+        }
+        if((EasyPermissions.hasPermissions(getActivity(), permissions[2]))){
+
             canAccessLocation = true;
-            canSendSMS = true;
-        } else {
+        }
+        if((EasyPermissions.hasPermissions(getActivity(), permissions[3])))
+        {canSendSMS = true;
+
+        }
+         if((EasyPermissions.hasPermissions(getActivity(), permissions[4])))
+         {
+             canPhoneState = true;
+         }
+
+          if(!canPhoneState || !canSendSMS || !canAccessCamera || !canAccessLocation)
+        {
             EasyPermissions.requestPermissions(this, getString(R.string.rationale_no_permission), RC_STORAGE_CAMERA, permissions);
         }
     }
@@ -669,34 +696,46 @@ public class AddComplaintFragment extends Fragment implements EasyPermissions.Pe
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         // EasyPermissions handles the request result.
+
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+
+
+
     }
 
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
-        for (String perm :
-                perms) {
-            if (!perm.equalsIgnoreCase(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                canAccessCamera = false;
+
+            checkPrems(perms, true);
+    }
+
+    private void checkPrems(List<String> perms, boolean isGranted) {
+
+
+            if (perms.contains(permissions[0])
+                    && perms.contains(permissions[1])) {
+                canAccessCamera = isGranted;
+
             }
-            if (!perm.equalsIgnoreCase(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                canAccessCamera = false;
+            if (perms.contains(permissions[2])) {
+
+                canAccessLocation = isGranted;
             }
-            if (!perm.equalsIgnoreCase(Manifest.permission.ACCESS_FINE_LOCATION)) {
-                canAccessLocation = false;
+            if (perms.contains(permissions[3])) {
+                canSendSMS = isGranted;
+
             }
-            if (!perm.equalsIgnoreCase(Manifest.permission.SEND_SMS)) {
-                canSendSMS = false;
+            if (perms.contains(permissions[4])) {
+                canPhoneState = isGranted;
             }
-        }
+
     }
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        canAccessCamera = false;
-        canAccessLocation = false;
-        canSendSMS = false;
+
+         checkPrems(perms,false);
     }
 
     @Override

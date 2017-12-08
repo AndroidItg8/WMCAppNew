@@ -19,6 +19,7 @@ import itg8.com.wmcapp.board.NoticeBoardFragment;
 import itg8.com.wmcapp.common.CommonMethod;
 import itg8.com.wmcapp.common.Logs;
 import itg8.com.wmcapp.complaint.AddComplaintFragment;
+import itg8.com.wmcapp.complaint.ComplaintCategoryFragment;
 import itg8.com.wmcapp.complaint.ComplaintFragment;
 import itg8.com.wmcapp.emergency.EmergencyFragment;
 import itg8.com.wmcapp.news.NewsFragment;
@@ -146,7 +147,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 fragment = PrabhagFragment.newInstance(1);
                 break;
             case R.id.rl_include:
-                fragment = AddComplaintFragment.newInstance("", "");
+                fragment = ComplaintCategoryFragment.newInstance("", "");
                 break;
         }
 
@@ -157,13 +158,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private void callFragment(Fragment fragment) {
         ((HomeActivity)getActivity()).callFragment(fragment);
-//        Logs.d("FragmentTAG:"+fragment.getClass().getSimpleName());
-//
-//        FragmentTransaction ft = getFragmentManager().beginTransaction();
-//        ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
-//        ft.replace(R.id.frame_container, fragment);
-//        ft.addToBackStack(fragment.getClass().getSimpleName());
-//        ft.commit();
+
     }
 
     @Override

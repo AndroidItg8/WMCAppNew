@@ -24,7 +24,6 @@ public class PrabhagItemRecyclerViewAdapter extends RecyclerView.Adapter<Prabhag
 
     private final List<PrabhagModel> list;
     private final Context context;
-
     private List<WardList> wradList;
     public ItemClickedListener listener;
     private int isFrom;

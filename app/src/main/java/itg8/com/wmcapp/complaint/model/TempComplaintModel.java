@@ -44,6 +44,18 @@ public class TempComplaintModel implements Parcelable {
     @Expose
     private int cityId;
 
+    public boolean isProgress() {
+        return progress;
+    }
+
+    private boolean progress;
+
+    public boolean isSync() {
+        return sync;
+    }
+
+    private boolean sync;
+
     public String getCityName() {
         return cityName;
     }
@@ -218,4 +230,12 @@ public class TempComplaintModel implements Parcelable {
             return new TempComplaintModel[size];
         }
     };
+
+    public void setSync(boolean sync) {
+        this.sync = sync;
+    }
+
+    public void setProgress(boolean progress) {
+        this.progress = progress;
+    }
 }

@@ -22,6 +22,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -48,6 +55,7 @@ import itg8.com.wmcapp.complaint.model.TempComplaintModel;
 import itg8.com.wmcapp.complaint.mvp.ComplaintMVP;
 import itg8.com.wmcapp.complaint.mvp.ComplaintPresenterImp;
 import itg8.com.wmcapp.database.CityTableManipulate;
+import itg8.com.wmcapp.registration.RegistrationModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,6 +68,7 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final int VOTED = 1;
+    private static final java.lang.String TAG = ComplaintFragment.class.getSimpleName();
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     Unbinder unbinder;
@@ -163,6 +172,35 @@ public class ComplaintFragment extends Fragment implements ComplaintMVP.Complain
 
     @Override
     public void onComplaintListAvailable(List<ComplaintModel> o) {
+        ComplaintModel complaintModel = o.get(0);
+        String stringJson = new Gson().toJson(complaintModel);
+        Logs.d(TAG,"we are converting complaint to json:"+stringJson);
+        complaintModel = new Gson().fromJson(stringJson,new TypeToken<ComplaintModel>(){}.getType());
+        Logs.d(TAG,"we are converting String json to Compliant Model:"+complaintModel);
+        try {
+            RegistrationModel registrationModel = new Gson().fromJson(stringJson, new TypeToken<RegistrationModel>(){}.getType());
+            Logs.d(TAG,"Successfully converted Complaint To Registration Model:"+registrationModel);
+
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+            Logs.d(TAG,"We can not convert Complaint to RegistrationModel because both have diff feild :");
+        }
+        JSONObject object = null;
+        try {
+            object = new JSONObject(stringJson);
+            if (object.getBoolean("flag")) {
+
+                Logs.d(TAG,"Json ComplaintModel have flag:");
+            }else
+            {
+                Logs.d(TAG,"Json ComplaintModel can not have flag:");
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+        }
+
         for (ComplaintModel model : o
                 ) {
             city = cityManipulate.getCity(String.valueOf(model.getCityFkid()), CityModel.FIELD_ID);

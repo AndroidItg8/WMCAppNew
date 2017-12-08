@@ -7,6 +7,7 @@ import java.util.Map;
 import io.reactivex.Observable;
 import itg8.com.wmcapp.board.model.DeleteNoticeModel;
 import itg8.com.wmcapp.cilty.model.CityModel;
+import itg8.com.wmcapp.complaint.model.ComplaintCategoryModel;
 import itg8.com.wmcapp.complaint.model.LikeModel;
 import itg8.com.wmcapp.emergency.model.EmergencyModel;
 import itg8.com.wmcapp.news.model.NewsModel;
@@ -127,7 +128,9 @@ public interface RetroController {
                                           @Part("ComplaintName") RequestBody addr,
                                           @Part("ComplaintDescription") RequestBody desc,
                                           @Part("City_fkid") RequestBody cityId,
-                                          @Part("ShowIdentity") RequestBody identity);
+                                          @Part("ShowIdentity") RequestBody identity,
+                                          @Part("Category_fkid") RequestBody categoryId
+                                          );
  @Multipart
     @POST()
     Observable<HashMap<Integer,ResponseBody>> addComplaintOffline(@Url String url,
@@ -211,6 +214,8 @@ public interface RetroController {
     @POST()
     @Headers("Content-Type:application/json")
     Call<List<TorisumModel>> getFilterTourismList(@Url String url,@Body List<TourismFilterCategoryModel> torismFilterCategory);
+    @GET()
+    Call<List<ComplaintCategoryModel>> getComplaintCategory(@Url String url);
 //    @Field("Title") String title,
 
 
